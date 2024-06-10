@@ -1,7 +1,5 @@
 {% extends 'index.html' %}
 {% block content %}
-
-<html>
 <html>
 <head>
     <title>Employee</title>
@@ -31,18 +29,34 @@
             background-color: #f2f2f2;
         }
 
-        a {
+        a.button {
             display: inline-block;
-            padding: 8px 16px;
-            background-color: #4CAF50;
+            padding: 10px 20px;
+            background-color: #007BFF;
             color: white;
             text-decoration: none;
             border-radius: 4px;
             margin-bottom: 10px;
+            transition: background-color 0.3s ease;
         }
 
-        a:hover {
-            background-color: #45a049;
+        a.button:hover {
+            background-color: #0056b3;
+        }
+
+        a.button-grey {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.button-grey:hover {
+            background-color: #5a6268;
         }
 
         form {
@@ -53,25 +67,45 @@
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            margin-right: 8px;
         }
 
         input[type="submit"] {
-            background-color: #4CAF50;
+            background-color: #007BFF;
             color: white;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
+        }
+
+        form.delete-form {
+            display: inline;
+        }
+
+        button.delete-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button.delete-button:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
 <body>
     <h1>IT FIRM</h1>
-    <a href="{% url 'employee_add' %}">Add Employee</a>
+    <a href="{% url 'employee_add' %}" class="button">Add Employee</a>
 
     <!-- Search Form -->
     <form method="post" action="{% url 'employee_search' %}">
@@ -79,7 +113,7 @@
         <label for="search_term">Search by ID or Name:</label>
         <input type="text" id="search_term" name="search_term">
         <input type="submit" value="Search">
-        <a href="{% url 'employee_list' %}">Clear</a>
+        <a href="{% url 'employee_list' %}" class="button-grey">Clear</a>
     </form>
 
     <table>
@@ -94,6 +128,7 @@
                 <th>Phone</th>
                 <th>Salary</th>
                 <th>Promotion Details</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -108,11 +143,16 @@
                 <td>{{ employee.phone }}</td>
                 <td>{{ employee.salary }}</td>
                 <td>{{ employee.promotion_details }}</td>
+                <td>
+                    <form method="post" action="{% url 'employee_delete' employee.id %}" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </body>
 </html>
-
 {% endblock %}

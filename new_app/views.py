@@ -1,5 +1,5 @@
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from new_app.forms import EmployeeForm
 from new_app.models import Employee
 
@@ -37,3 +37,11 @@ def employee_search(request):
         )
         return render(request, 'employee_list.html', {'employees': employees})
     return render(request, 'employee_search.html')
+
+
+def employee_delete(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
+    if request.method == 'POST':
+        employee.delete()
+        return redirect('employee_list')
+    return redirect('employee_list')
