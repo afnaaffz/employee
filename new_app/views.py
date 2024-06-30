@@ -7,6 +7,8 @@ from new_app.models import Employee
 
 def index(request):
     return render(request,"index.html")
+
+
 def employee_list(request):
     employees = Employee.objects.all()
     if request.method == 'POST':
@@ -39,9 +41,3 @@ def employee_search(request):
     return render(request, 'employee_search.html')
 
 
-def employee_delete(request, pk):
-    employee = get_object_or_404(Employee, pk=pk)
-    if request.method == 'POST':
-        employee.delete()
-        return redirect('employee_list')
-    return redirect('employee_list')

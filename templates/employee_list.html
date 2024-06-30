@@ -128,7 +128,6 @@
                 <th>Phone</th>
                 <th>Salary</th>
                 <th>Promotion Details</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -144,9 +143,8 @@
                 <td>{{ employee.salary }}</td>
                 <td>{{ employee.promotion_details }}</td>
                 <td>
-                    <form method="post" action="{% url 'employee_delete' employee.id %}" class="delete-form">
+                    <form method="post">
                         {% csrf_token %}
-                        <button type="submit" class="delete-button">Delete</button>
                     </form>
                 </td>
             </tr>
