@@ -1,0 +1,14 @@
+{% extends "indexx.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<form method="post">
+    {% csrf_token %}
+    {{form1|crispy}}
+    {{form2|crispy}}
+    <button type="submit" class="btn btn-primary">SUBMIT</button>
+</form>
+
+
+
+{% endblock %}

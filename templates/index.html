@@ -1,942 +1,676 @@
 <!DOCTYPE html>
 {% load static %}
+<html lang="en-US" dir="ltr">
 
-<html lang="en">
-
-<head>
-   <title>Quantum Able Bootstrap 4 Admin Dashboard Template</title>
-   <!-- HTML5 Shim and Respond.js IE9 support of HTML5 elements and media queries -->
-   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-   <!--[if lt IE 9]>
-     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-     <![endif]-->
-
-   <meta charset="utf-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-   <!-- Favicon icon -->
-   <link rel="shortcut icon" href=" {% static 'assets/images/favicon.png' %} " type="image/x-icon">
-   <link rel="icon" href=" {% static 'assets/images/favicon.ico' %} " type="image/x-icon">
-
-   <!-- Google font-->
-   <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
-
-   <!-- themify -->
-   <link rel="stylesheet" type="text/css" href=" {% static 'assets/icon/themify-icons/themify-icons.css' %} ">
-
-   <!-- iconfont -->
-   <link rel="stylesheet" type="text/css" href=" {% static 'assets/icon/icofont/css/icofont.css' %} ">
-
-   <!-- simple line icon -->
-   <link rel="stylesheet" type="text/css" href=" {% static 'assets/icon/simple-line-icons/css/simple-line-icons.css' %} ">
-
-   <!-- Required Fremwork -->
-   <link rel="stylesheet" type="text/css" href=" {% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %} ">
-
-   <!-- Chartlist chart css -->
-   <link rel="stylesheet" href=" {% static 'assets/plugins/chartist/dist/chartist.css' %} " type="text/css" media="all">
-
-   <!-- Weather css -->
-   <link href=" {% static 'assets/css/svg-weather.css' %} " rel="stylesheet">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-   <!-- Style.css -->
-   <link rel="stylesheet" type="text/css" href=" {% static 'assets/css/main.css' %} ">
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>Panchayat Cottage Industry Locator</title>
 
-   <!-- Responsive.css-->
-   <link rel="stylesheet" type="text/css" href=" {% static 'assets/css/responsive.css' %} ">
 
-</head>
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href=" {% static 'assets/img/favicons/apple-touch-icon.png' %} ">
+    <link rel="icon" type="image/png" sizes="32x32" href=" {% static 'assets/img/favicons/favicon-32x32.png' %} ">
+    <link rel="icon" type="image/png" sizes="16x16" href=" {% static 'assets/img/favicons/favicon-16x16.png' %} ">
+    <link rel="shortcut icon" type="image/x-icon" href=" {% static 'assets/img/favicons/favicon.ico' %} ">
+    <link rel="manifest" href=" {% static 'assets/img/favicons/manifest.json' %} ">
+    <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
+    <meta name="theme-color" content="#ffffff">
 
-<body class="sidebar-mini fixed">
-   <div class="loader-bg">
-      <div class="loader-bar">
-      </div>
-   </div>
-   <div class="wrapper">
-      <!-- Navbar-->
-      <header class="main-header-top hidden-print">
-<!--         <a href=" {% static 'index.html' %} " class="logo"><img class="img-fluid able-logo" src=" {% static 'assets/images/logo.png' %} " alt="Theme-logo"></a>-->
-         <nav class="navbar navbar-static-top">
-            <!-- Sidebar toggle button-->
-            <a href=" {% static '#!' %} " data-toggle="offcanvas" class="sidebar-toggle"></a>
-            <ul class="top-nav lft-nav">
-               <li>
-<!--                  <a href=" {% static '#!' %} " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">-->
-<!--                     <i class="ti-files"> </i><span> Files</span>-->
-<!--                  </a>-->
-               </li>               
-               <li class="dropdown">
-<!--                  <a href=" {% static '#!' %} " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">-->
-<!--                     <span>Dropdown </span><i class=" icofont icofont-simple-down"></i>-->
-<!--                  </a>-->
-<!--                  <ul class="dropdown-menu settings-menu">-->
-<!--                     <li><a href="#">List item 1</a></li>-->
-<!--                     <li><a href="#">List item 2</a></li>-->
-<!--                     <li><a href="#">List item 3</a></li>-->
-<!--                     <li><a href="#">List item 4</a></li>-->
-<!--                     <li><a href="#">List item 5</a></li>-->
-<!--                  </ul>-->
-               </li>
-               <li class="dropdown pc-rheader-submenu message-notification search-toggle">
-<!--                  <a href=" {% static '#!' %} " id="morphsearch-search" class="drop icon-circle txt-white">-->
-                     <i class="ti-search"></i>
-                  </a>
-               </li>
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link href=" {% static 'assets/css/theme.css' %} " rel="stylesheet" />
+
+  </head>
+
+
+  <body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block" data-navbar-on-scroll="data-navbar-on-scroll">
+        <div class="container"><a class="navbar-brand" href="#"><img src=" {% static 'assets/img/gallery/ohs1.jpg' %} " height="80" alt="logo" /></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"> </span></button>
+          <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base">
+              <li class="nav-item px-2"><a class="nav-link" aria-current="page" href=" {% url 'index'  %} ">Home</a></li>
+              <li class="nav-item px-2"><a class="nav-link" href=" {% url 'industry_registration' %} ">Industry Registration</a></li>
+              <li class="nav-item px-2"><a class="nav-link" href=" {% url 'consumer_registration' %} ">Consumer Registration</a></li>
             </ul>
-            <!-- Navbar Right Menu-->
-            <div class="navbar-custom-menu f-right">
-              <div class="upgrade-button">
-<!--                <a href="#" class="icon-circle txt-white btn btn-sm btn-primary upgrade-button">-->
-<!--                    <span>Upgrade To Pro</span>-->
-<!--                </a>-->
+            <div class="dropdown d-none d-lg-block">
+<!--              <button class="btn bg-soft-warning ms-2" id="dropdownMenuButton1" type="submit" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-search text-warning"></i></button>-->
+              <div class="dropdown-menu dropdown-menu-lg-end p-0 rounded" aria-labelledby="dropdownMenuButton1" style="top:55px">
+                <form>
+                  <input class="form-control border-200" type="search" placeholder="Search" aria-label="Search" style="background:#FDF1DF;" />
+                </form>
               </div>
-
-               <ul class="top-nav">
-                  <!--Notification Menu-->
-                    
-                  <li class="dropdown notification-menu">
-<!--                     <a href=" {% static '#!' %} " data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">-->
-<!--                        <i class="icon-bell"></i>-->
-<!--                        <span class="badge badge-danger header-badge">9</span>-->
-<!--                     </a>-->
-                     <ul class="dropdown-menu">
-<!--                        <li class="not-head">You have <b class="text-primary">4</b> new notifications.</li>-->
-                        <li class="bell-notification">
-                           <a href=" {% static 'javascript:;' %} " class="media">
-<!--                              <span class="media-left media-icon">-->
-<!--                    <img class="img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="User Image">-->
-<!--                  </span>-->
-<!--                              <div class="media-body"><span class="block">Lisa sent you a mail</span><span class="text-muted block-time">2min ago</span></div>-->
-                           </a>
-                        </li>
-                        <li class="bell-notification">
-                           <a href=" {% static 'javascript:;' %} " class="media">
-                              <span class="media-left media-icon">
-                    <img class="img-circle" src=" {% static 'assets/images/avatar-2.png' %} " alt="User Image">
-                  </span>
-                              <div class="media-body"><span class="block">Server Not Working</span><span class="text-muted block-time">20min ago</span></div>
-                           </a>
-                        </li>
-                        <li class="bell-notification">
-                           <a href=" {% static 'javascript:;' %} " class="media"><span class="media-left media-icon">
-                    <img class="img-circle" src=" {% static 'assets/images/avatar-3.png' %} " alt="User Image">
-                  </span>
-                                    <div class="media-body"><span class="block">Transaction xyz complete</span><span class="text-muted block-time">3 hours ago</span></div></a>
-                        </li>
-                        <li class="not-footer">
-                           <a href=" {% static '#!' %} ">See all notifications.</a>
-                        </li>
-                     </ul>
-                  </li>
-                  <!-- chat dropdown -->
-<!--                  <li class="pc-rheader-submenu ">-->
-<!--                     <a href=" {% static '#!' %} " class="drop icon-circle displayChatbox">-->
-<!--                        <i class="icon-bubbles"></i>-->
-<!--                        <span class="badge badge-danger header-badge">5</span>-->
-<!--                     </a>-->
-
-<!--                  </li>-->
-<!--                  &lt;!&ndash; window screen &ndash;&gt;-->
-<!--                  <li class="pc-rheader-submenu">-->
-<!--                     <a href=" {% static '#!' %} " class="drop icon-circle" onclick="javascript:toggleFullScreen()">-->
-<!--                        <i class="icon-size-fullscreen"></i>-->
-<!--                     </a>-->
-
-<!--                  </li>-->
-                  <!-- User Menu-->
-                  <li class="dropdown">
-<!--                     <a href=" {% static '#!' %} " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">-->
-<!--                        <span><img class="img-circle " src=" {% static 'assets/images/avatar-1.png' %} " style="width:40px;" alt="User Image"></span>-->
-<!--                        <span>John <b>Doe</b> <i class=" icofont icofont-simple-down"></i></span>-->
-
-                     </a>
-<!--                     <ul class="dropdown-menu settings-menu">-->
-<!--                        <li><a href=" {% static '#!' %} "><i class="icon-settings"></i> Settings</a></li>-->
-<!--                        <li><a href="#"><i class="icon-user"></i> Profile</a></li>-->
-<!--                        <li><a href="#"><i class="icon-envelope-open"></i> My Messages</a></li>-->
-<!--                        <li class="p-0">-->
-<!--                           <div class="dropdown-divider m-0"></div>-->
-<!--                        </li>-->
-<!--                        <li><a href="#"><i class="icon-lock"></i> Lock Screen</a></li>-->
-<!--                        <li><a href=" {% static 'login1.html' %} "><i class="icon-logout"></i> Logout</a></li>-->
-
-<!--                     </ul>-->
-                  </li>
-               </ul>
-
-               <!-- search -->
-<!--               <div id="morphsearch" class="morphsearch">-->
-<!--                  <form class="morphsearch-form">-->
-
-<!--                     <input class="morphsearch-input" type="search" placeholder="Search..." />-->
-
-<!--                     <button class="morphsearch-submit" type="submit">Search</button>-->
-
-<!--                  </form>-->
-<!--                  <div class="morphsearch-content">-->
-<!--                     <div class="dummy-column">-->
-<!--                        <h2>People</h2>-->
-<!--                        <a class="dummy-media-object" href=" {% static '#!' %} ">-->
-<!--                           <img class="round" src="http://0.gravatar.com/avatar/81b58502541f9445253f30497e53c280?s=50&d=identicon&r=G" alt="Sara Soueidan" />-->
-<!--                           <h3>Sara Soueidan</h3>-->
-<!--                        </a>-->
-
-<!--                        <a class="dummy-media-object" href=" {% static '#!' %} ">-->
-<!--                           <img class="round" src="http://1.gravatar.com/avatar/9bc7250110c667cd35c0826059b81b75?s=50&d=identicon&r=G" alt="Shaun Dona" />-->
-<!--                           <h3>Shaun Dona</h3>-->
-<!--                        </a>-->
-<!--                     </div>-->
-<!--                     <div class="dummy-column">-->
-<!--                        <h2>Popular</h2>-->
-<!--                        <a class="dummy-media-object" href=" {% static '#!' %} ">-->
-<!--                           <img src=" {% static 'assets/images/avatar-1.png' %} " alt="PagePreloadingEffect" />-->
-<!--                           <h3>Page Preloading Effect</h3>-->
-<!--                        </a>-->
-
-<!--                        <a class="dummy-media-object" href=" {% static '#!' %} ">-->
-<!--                           <img src=" {% static 'assets/images/avatar-1.png' %} " alt="DraggableDualViewSlideshow" />-->
-<!--                           <h3>Draggable Dual-View Slideshow</h3>-->
-<!--                        </a>-->
-<!--                     </div>-->
-<!--                     <div class="dummy-column">-->
-<!--                        <h2>Recent</h2>-->
-<!--                        <a class="dummy-media-object" href=" {% static '#!' %} ">-->
-<!--                           <img src=" {% static 'assets/images/avatar-1.png' %} " alt="TooltipStylesInspiration" />-->
-<!--                           <h3>Tooltip Styles Inspiration</h3>-->
-<!--                        </a>-->
-<!--                        <a class="dummy-media-object" href=" {% static '#!' %} ">-->
-<!--                           <img src=" {% static 'assets/images/avatar-1.png' %} " alt="NotificationStyles" />-->
-<!--                           <h3>Notification Styles Inspiration</h3>-->
-<!--                        </a>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--                  &lt;!&ndash; /morphsearch-content &ndash;&gt;-->
-<!--                  <span class="morphsearch-close"><i class="icofont icofont-search-alt-1"></i></span>-->
-<!--               </div>-->
-               <!-- search end -->
-            </div>
-         </nav>
-
-      </header>
-      <!-- Side-Nav-->
-      <aside class="main-sidebar hidden-print ">
-         <section class="sidebar" id="sidebar-scroll">
-            <!-- Sidebar Menu-->
-            <ul class="sidebar-menu">
-                <li class="nav-level">--- Employee</li>
-                <li class="active treeview">
-                    <a class="waves-effect waves-dark" href=" {% url 'employee_list' %} ">
-                        <i class="icon-speedometer"></i><span> Dashboard</span>
-                    </a>
-                </li>
-<!--                <li class="nav-level">-&#45;&#45; Components</li>-->
-<!--                <li class="treeview"><a class="waves-effect waves-dark" href=" {% static '#!' %} "><i class="icon-briefcase"></i><span> UI Elements</span><i class="icon-arrow-down"></i></a>-->
-<!--                    <ul class="treeview-menu">-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'accordion.html' %} "><i class="icon-arrow-right"></i> Accordion</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'button.html' %} "><i class="icon-arrow-right"></i> Button</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'label-badge.html' %} "><i class="icon-arrow-right"></i> Label Badge</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'bootstrap-ui.html' %} "><i class="icon-arrow-right"></i> Grid system</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'box-shadow.html' %} "><i class="icon-arrow-right"></i> Box Shadow</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'color.html' %} "><i class="icon-arrow-right"></i> Color</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'light-box.html' %} "><i class="icon-arrow-right"></i> Light Box</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'notification.html' %} "><i class="icon-arrow-right"></i> Notification</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'panels-wells.html' %} "><i class="icon-arrow-right"></i> Panels-Wells</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'tabs.html' %} "><i class="icon-arrow-right"></i> Tabs</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'tooltips.html' %} "><i class="icon-arrow-right"></i> Tooltips</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'typography.html' %} "><i class="icon-arrow-right"></i> Typography</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-
-<!--                <li class="treeview"><a class="waves-effect waves-dark" href=" {% static '#!' %} "><i class="icon-chart"></i><span> Charts &amp; Maps</span><span class="label label-success menu-caption">New</span><i class="icon-arrow-down"></i></a>-->
-<!--                    <ul class="treeview-menu">-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'float-chart.html' %} "><i class="icon-arrow-right"></i> Float Charts</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'morris-chart.html' %} "><i class="icon-arrow-right"></i> Morris Charts</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-
-<!--                <li class="treeview"><a class="waves-effect waves-dark" href=" {% static '#!' %} "><i class="icon-book-open"></i><span> Forms</span><i class="icon-arrow-down"></i></a>-->
-<!--                    <ul class="treeview-menu">-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'form-elements-bootstrap.html' %} "><i class="icon-arrow-right"></i> Form Elements Bootstrap</a></li>-->
-<!--                        -->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'form-elements-advance.html' %} "><i class="icon-arrow-right"></i> Form Elements Advance</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-                
-<!--                <li class="treeview">-->
-<!--                    <a class="waves-effect waves-dark" href=" {% static 'basic-table.html' %} ">-->
-<!--                        <i class="icon-list"></i><span> Table</span>-->
-<!--                    </a>                -->
-<!--                </li>-->
-
-
-<!--                <li class="nav-level">-&#45;&#45; More</li>-->
-
-<!--                <li class="treeview"><a class="waves-effect waves-dark" href=" {% static '#!' %} "><i class="icon-docs"></i><span>Pages</span><i class="icon-arrow-down"></i></a>-->
-<!--                    <ul class="treeview-menu">-->
-<!--                        <li class="treeview"><a href=" {% static '#!' %} "><i class="icon-arrow-right"></i><span> Authentication</span><i class="icon-arrow-down"></i></a>-->
-<!--                            <ul class="treeview-menu">-->
-<!--                                <li><a class="waves-effect waves-dark" href=" {% static 'register1.html' %} " target="_blank"><i class="icon-arrow-right"></i> Register 1</a></li>-->
-<!--                                -->
-<!--                                <li><a class="waves-effect waves-dark" href=" {% static 'login1.html' %} " target="_blank"><i class="icon-arrow-right"></i><span> Login 1</span></a></li>-->
-<!--                                <li><a class="waves-effect waves-dark" href=" {% static 'forgot-password.html' %} " target="_blank"><i class="icon-arrow-right"></i><span> Forgot Password</span></a></li>-->
-<!--                                -->
-<!--                            </ul>-->
-<!--                        </li>-->
-<!--                        -->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static '404.html' %} " target="_blank"><i class="icon-arrow-right"></i> Error 404</a></li>-->
-<!--                        <li><a class="waves-effect waves-dark" href=" {% static 'sample-page.html' %} "><i class="icon-arrow-right"></i> Sample Page</a></li>-->
-<!--                        -->
-<!--                    </ul>-->
-<!--                </li>-->
-
-
-<!--                <li class="nav-level">-&#45;&#45; Menu Level</li>-->
-
-<!--                <li class="treeview"><a class="waves-effect waves-dark" href=" {% static '#!' %} "><i class="icofont icofont-company"></i><span>Menu Level 1</span><i class="icon-arrow-down"></i></a>-->
-<!--                    <ul class="treeview-menu">-->
-<!--                        <li>-->
-<!--                            <a class="waves-effect waves-dark" href=" {% static '#!' %} ">-->
-<!--                                <i class="icon-arrow-right"></i>-->
-<!--                                Level Two-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="treeview">-->
-<!--                            <a class="waves-effect waves-dark" href=" {% static '#!' %} ">-->
-<!--                                <i class="icon-arrow-right"></i>-->
-<!--                                <span>Level Two</span>-->
-<!--                                <i class="icon-arrow-down"></i>-->
-<!--                            </a>-->
-<!--                            <ul class="treeview-menu">-->
-<!--                                <li>-->
-<!--                                    <a class="waves-effect waves-dark" href=" {% static '#!' %} ">-->
-<!--                                        <i class="icon-arrow-right"></i>-->
-<!--                                        Level Three-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a class="waves-effect waves-dark" href=" {% static '#!' %} ">-->
-<!--                                        <i class="icon-arrow-right"></i>-->
-<!--                                        <span>Level Three</span>-->
-<!--                                        <i class="icon-arrow-down"></i>-->
-<!--                                    </a>-->
-<!--                                    <ul class="treeview-menu">-->
-<!--                                        <li>-->
-<!--                                            <a class="waves-effect waves-dark" href=" {% static '#!' %} ">-->
-<!--                                                <i class="icon-arrow-right"></i>-->
-<!--                                                Level Four-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                        <li>-->
-<!--                                            <a class="waves-effect waves-dark" href=" {% static '#!' %} ">-->
-<!--                                                <i class="icon-arrow-right"></i>-->
-<!--                                                Level Four-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                    </ul>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-            </ul>
-         </section>
-      </aside>
-      <!-- Sidebar chat start -->
-      <div id="sidebar" class="p-fixed header-users showChat">
-         <div class="had-container">
-            <div class="card card_main header-users-main">
-               <div class="card-content user-box">
-                  <div class="md-group-add-on p-20">
-                     <span class="md-add-on">
-                                    <i class="icofont icofont-search-alt-2 chat-search"></i>
-                                 </span>
-                     <div class="md-input-wrapper">
-                        <input type="text" class="md-form-control" name="username" id="search-friends">
-                        <label>Search</label>
-                     </div>
-
-                  </div>
-                  <div class="media friendlist-main">
-
-                     <h6>Friend List</h6>
-
-                  </div>
-                  <div class="main-friend-list">
-                     <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Josephin Doe</div>
-                           <span>20min ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="3" data-status="online" data-username="Alice" data-toggle="tooltip" data-placement="left" title="Alice">
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-2.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Alice</div>
-                           <span>1 hour ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="7" data-status="offline" data-username="Michael Scofield" data-toggle="tooltip" data-placement="left" title="Michael Scofield">
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-3.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-danger"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Michael Scofield</div>
-                           <span>3 hours ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="5" data-status="online" data-username="Irina Shayk" data-toggle="tooltip" data-placement="left" title="Irina Shayk">
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-4.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Irina Shayk</div>
-                           <span>1 day ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="6" data-status="offline" data-username="Sara Tancredi" data-toggle="tooltip" data-placement="left" title="Sara Tancredi">
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-5.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-danger"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Sara Tancredi</div>
-                           <span>2 days ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Josephin Doe</div>
-                           <span>20min ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="3" data-status="online" data-username="Alice" data-toggle="tooltip" data-placement="left" title="Alice">
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-2.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Alice</div>
-                           <span>1 hour ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Josephin Doe</div>
-                           <span>20min ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="3" data-status="online" data-username="Alice" data-toggle="tooltip" data-placement="left" title="Alice">
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-2.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Alice</div>
-                           <span>1 hour ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Josephin Doe</div>
-                           <span>20min ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="3" data-status="online" data-username="Alice" data-toggle="tooltip" data-placement="left" title="Alice">
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-2.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Alice</div>
-                           <span>1 hour ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Josephin Doe</div>
-                           <span>20min ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Josephin Doe</div>
-                           <span>20min ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Josephin Doe</div>
-                           <span>20min ago</span>
-                        </div>
-                     </div>
-                     <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-
-                        <a class="media-left" href=" {% static '#!' %} ">
-                           <img class="media-object img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-                           <div class="live-status bg-success"></div>
-                        </a>
-                        <div class="media-body">
-                           <div class="friend-header">Josephin Doe</div>
-                           <span>20min ago</span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-
-      </div>
-      <div class="showChat_inner">
-         <div class="media chat-inner-header">
-            <a class="back_chatBox">
-               <i class="icofont icofont-rounded-left"></i> Josephin Doe
-            </a>
-         </div>
-         <div class="media chat-messages">
-            <a class="media-left photo-table" href=" {% static '#!' %} ">
-               <img class="media-object img-circle m-t-5" src=" {% static 'assets/images/avatar-1.png' %} " alt="Generic placeholder image">
-               <div class="live-status bg-success"></div>
-            </a>
-            <div class="media-body chat-menu-content">
-               <div class="">
-                  <p class="chat-cont">I'm just looking around. Will you tell me something about yourself?</p>
-                  <p class="chat-time">8:20 a.m.</p>
-               </div>
-            </div>
-         </div>
-         <div class="media chat-messages">
-            <div class="media-body chat-menu-reply">
-               <div class="">
-                  <p class="chat-cont">I'm just looking around. Will you tell me something about yourself?</p>
-                  <p class="chat-time">8:20 a.m.</p>
-               </div>
-            </div>
-            <div class="media-right photo-table">
-               <a href=" {% static '#!' %} ">
-                  <img class="media-object img-circle m-t-5" src=" {% static 'assets/images/avatar-2.png' %} " alt="Generic placeholder image">
-                  <div class="live-status bg-success"></div>
-               </a>
-            </div>
-         </div>
-         <div class="media chat-reply-box">
-            <div class="md-input-wrapper">
-               <input type="text" class="md-form-control" id="inputEmail" name="inputEmail">
-               <label>Share your thoughts</label>
-               <span class="highlight"></span>
-               <span class="bar"></span> <button type="button" class="chat-send waves-effect waves-light">
-                     <i class="icofont icofont-location-arrow f-20 "></i>
-                 </button>
-
-               <button type="button" class="chat-send waves-effect waves-light">
-                    <i class="icofont icofont-location-arrow f-20 "></i>
-                </button>
-            </div>
-
-         </div>
-      </div>
-      <!-- Sidebar chat end-->
-      <div class="content-wrapper">
-         <!-- Container-fluid starts -->
-         <!-- Main content starts -->
-         <div class="container-fluid">
-            <div class="row">
-               <div class="main-header">
-                  <h4>Dashboard</h4>
-               </div>
-            </div>
-            <!-- 4-blocks row start -->
-<!--            <div class="row dashboard-header">-->
-<!--               <div class="col-lg-3 col-md-6">-->
-<!--                  <div class="card dashboard-product">-->
-<!--                     <span>Products</span>-->
-<!--                     <h2 class="dashboard-total-products">4500</h2>-->
-<!--                     <span class="label label-warning">Sales</span>Arriving Today-->
-<!--                     <div class="side-box">-->
-<!--                        <i class="ti-signal text-warning-color"></i>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--               <div class="col-lg-3 col-md-6">-->
-<!--                  <div class="card dashboard-product">-->
-<!--                     <span>Products</span>-->
-<!--                     <h2 class="dashboard-total-products">37,500</h2>-->
-<!--                     <span class="label label-primary">Views</span>View Today-->
-<!--                     <div class="side-box ">-->
-<!--                        <i class="ti-gift text-primary-color"></i>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--               <div class="col-lg-3 col-md-6">-->
-<!--                  <div class="card dashboard-product">-->
-<!--                     <span>Products</span>-->
-<!--                     <h2 class="dashboard-total-products">$<span>30,780</span></h2>-->
-<!--                     <span class="label label-success">Sales</span>Reviews-->
-<!--                     <div class="side-box">-->
-<!--                        <i class="ti-direction-alt text-success-color"></i>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--               <div class="col-lg-3 col-md-6">-->
-<!--                  <div class="card dashboard-product">-->
-<!--                     <span>Products</span>-->
-<!--                     <h2 class="dashboard-total-products">$<span>30,780</span></h2>-->
-<!--                     <span class="label label-danger">Sales</span>Reviews-->
-<!--                     <div class="side-box">-->
-<!--                        <i class="ti-rocket text-danger-color"></i>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--            </div>-->
-            <!-- 4-blocks row end -->
-
-            <!-- 1-3-block row start -->
-<!--            <div class="row">-->
-<!--               <div class="col-lg-4">-->
-<!--                  <div class="card">-->
-<!--                     <div class="user-block-2">-->
-<!--                        <img class="img-fluid" src=" {% static 'assets/images/widget/user-1.png' %} " alt="user-header">-->
-<!--                        <h5>Josephin Villa</h5>-->
-<!--                        <h6>Software Engineer</h6>-->
-<!--                     </div>-->
-<!--                     <div class="card-block">-->
-<!--                        <div class="user-block-2-activities">-->
-<!--                           <div class="user-block-2-active">-->
-<!--                              <i class="icofont icofont-clock-time"></i> Recent Activities-->
-<!--                              <label class="label label-primary">480</label>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                        <div class="user-block-2-activities">-->
-<!--                           <div class="user-block-2-active">-->
-<!--                              <i class="icofont icofont-users"></i> Current Employees-->
-<!--                              <label class="label label-primary">390</label>-->
-<!--                           </div>-->
-<!--                        </div>-->
-
-<!--                        <div class="user-block-2-activities">-->
-<!--                           <div class="user-block-2-active">-->
-<!--                              <i class="icofont icofont-ui-user"></i> Following-->
-<!--                              <label class="label label-primary">485</label>-->
-<!--                           </div>-->
-
-<!--                        </div>-->
-<!--                        <div class="user-block-2-activities">-->
-<!--                           <div class="user-block-2-active">-->
-<!--                              <i class="icofont icofont-picture"></i> Pictures-->
-<!--                              <label class="label label-primary">506</label>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                        <div class="text-center">-->
-<!--                           <button type="button" class="btn btn-warning waves-effect waves-light text-uppercase m-r-30">-->
-<!--                                    Follows-->
-<!--                                </button>-->
-<!--                           <button type="button" class="btn btn-primary waves-effect waves-light text-uppercase">-->
-<!--                                    Message-->
-<!--                                </button>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--               <div class="col-lg-8">-->
-<!--                  <div class="card">-->
-<!--                     <div class="card-header">-->
-<!--                        <h5 class="card-header-text">Bar chart</h5>-->
-<!--                     </div>-->
-<!--                     <div class="card-block">-->
-<!--                        <div id="barchart" style="min-width: 250px; height: 330px; margin: 0 auto"></div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--               <div class="col-xl-4 col-lg-12 grid-item">-->
-<!--                  <div class="card">-->
-<!--                     <div class="card-block horizontal-card-img d-flex">-->
-<!--                        <img class="media-object img-circle" src=" {% static 'assets/images/avatar-3.png' %} " alt="Generic placeholder image">-->
-<!--                        <div class="d-inlineblock  p-l-20">-->
-<!--                          <h6>Josephin Doe</h6>-->
-<!--                          <a href="#">contact@admin.com</a>-->
-<!--                       </div>-->
-<!--                        <h6 class="txt-warning rotate-txt">Designer</h6>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--               <div class="col-xl-4 col-lg-12 grid-item">-->
-<!--                  <div class="card">-->
-<!--                     <div class="card-block horizontal-card-img d-flex">-->
-<!--                        <img class="media-object img-circle" src=" {% static 'assets/images/lockscreen.png' %} " alt="Generic placeholder image">-->
-<!--                        <div class="d-inlineblock  p-l-20">-->
-<!--                          <h6>Josephin Doe</h6>-->
-<!--                          <a href="#">contact@admin.com</a>-->
-<!--                       </div>-->
-<!--                        <h6 class="txt-danger rotate-txt">Developer</h6>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--            </div>-->
-            <!-- 1-3-block row end -->
-
-            <!-- 2-1 block start -->
-<!--            <div class="row">-->
-<!--               <div class="col-xl-8 col-lg-12">-->
-<!--                  <div class="card">-->
-<!--                     <div class="card-block">-->
-<!--                        <div class="table-responsive">-->
-<!--                           <table class="table m-b-0 photo-table">-->
-<!--                              <thead>-->
-<!--                                 <tr class="text-uppercase">-->
-<!--                                    <th>Photo</th>-->
-<!--                                    <th>Project</th>-->
-<!--                                    <th>Completed</th>-->
-<!--                                    <th>Status</th>-->
-<!--                                    <th>Date</th>-->
-<!--                                 </tr>-->
-<!--                              </thead>-->
-<!--                              <tbody>-->
-<!--                                 <tr>-->
-<!--                                    <th>-->
-<!--                                       <img class="img-fluid img-circle" src=" {% static 'assets/images/avatar-2.png' %} " alt="User">-->
-<!--                                    </th>-->
-<!--                                    <td>Appestia Project-->
-<!--                                       <p><i class="icofont icofont-clock-time"></i>Created 14.9.2016</p>-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                       <span class="pie" style="display: none;">226,134</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 1 1 4.209902994920235 25.41987555688496 L 15 15" fill="#2196F3"></path><path d="M 4.209902994920235 25.41987555688496 A 15 15 0 0 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>-->
-<!--                                    </td>-->
-<!--                                    <td>50%</td>-->
-<!--                                    <td>October 21, 2015</td>-->
-<!--                                 </tr>-->
-<!--                                 <tr>-->
-<!--                                    <th>-->
-<!--                                       <img class="img-fluid img-circle" src=" {% static 'assets/images/avatar-4.png' %} " alt="User">-->
-<!--                                    </th>-->
-<!--                                    <td>Contract with belife Company-->
-<!--                                       <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                       <span class="pie" style="display: none;">0.52/1.561</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15" fill="#2196F3"></path><path d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>-->
-<!--                                    </td>-->
-<!--                                    <td>70%</td>-->
-<!--                                    <td>November 21, 2015</td>-->
-<!--                                 </tr>-->
-<!--                                 <tr>-->
-<!--                                    <th>-->
-<!--                                       <img class="img-fluid img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="User">-->
-<!--                                    </th>-->
-<!--                                    <td>Web Consultancy project-->
-<!--                                       <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                       <span class="pie" style="display: none;">1,4</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 29.265847744427305 10.36474508437579 L 15 15" fill="#2196F3"></path><path d="M 29.265847744427305 10.36474508437579 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>-->
-<!--                                    </td>-->
-<!--                                    <td>40%</td>-->
-<!--                                    <td>September 21, 2015</td>-->
-<!--                                 </tr>-->
-<!--                                 <tr>-->
-<!--                                    <th>-->
-<!--                                       <img class="img-fluid img-circle" src=" {% static 'assets/images/avatar-3.png' %} " alt="User">-->
-<!--                                    </th>-->
-<!--                                    <td>Contract with belife Company-->
-<!--                                       <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                       <span class="pie" style="display: none;">0.52/1.561</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15" fill="#2196F3"></path><path d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>-->
-<!--                                    </td>-->
-<!--                                    <td>70%</td>-->
-<!--                                    <td>November 21, 2015</td>-->
-<!--                                 </tr>-->
-<!--                                 <tr>-->
-<!--                                    <th>-->
-<!--                                       <img class="img-fluid img-circle" src=" {% static 'assets/images/avatar-1.png' %} " alt="User">-->
-<!--                                    </th>-->
-<!--                                    <td>Contract with belife Company-->
-<!--                                       <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                       <span class="pie" style="display: none;">0.52/1.561</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15" fill="#2196F3"></path><path d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>-->
-<!--                                    </td>-->
-<!--                                    <td>70%</td>-->
-<!--                                    <td>November 21, 2015</td>-->
-<!--                                 </tr>-->
-<!--                                 <tr>-->
-<!--                                    <th>-->
-<!--                                       <img class="img-fluid img-circle" src=" {% static 'assets/images/avatar-2.png' %} " alt="User">-->
-<!--                                    </th>-->
-<!--                                    <td>Contract with belife Company-->
-<!--                                       <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                       <span class="pie" style="display: none;">0.52/1.561</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15" fill="#2196F3"></path><path d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>-->
-<!--                                    </td>-->
-<!--                                    <td>70%</td>-->
-<!--                                    <td>November 21, 2015</td>-->
-<!--                                 </tr>-->
-
-<!--                              </tbody>-->
-<!--                           </table>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--               <div class="col-xl-4 col-lg-12">-->
-<!--                  <div class="card">-->
-<!--                     <div class="card-header">-->
-<!--                        <h5 class="card-header-text">Bar chart</h5>-->
-<!--                     </div>-->
-<!--                     <div class="card-block">-->
-<!--                        <div id="piechart" style="min-width: 250px; height: 460px; margin: 0 auto"></div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--            </div>-->
-               {% block content %}
-        {% endblock %}
-<!--            &lt;!&ndash; 2-1 block end &ndash;&gt;-->
-<!--         </div>-->
-<!--         &lt;!&ndash; Main content ends &ndash;&gt;-->
-<!--         &lt;!&ndash; Container-fluid ends &ndash;&gt;-->
-<!--         <div class="fixed-button">-->
-<!--            <a href=" {% static '#!' %} " class="btn btn-md btn-primary">-->
-<!--              <i class="fa fa-shopping-cart" aria-hidden="true"></i> Upgrade To Pro-->
-<!--            </a>-->
-<!--         </div>-->
-<!--      </div>-->
-<!--   </div>-->
-
-
-   <!-- Warning Section Starts -->
-   <!-- Older IE warning message -->
-   <!--[if lt IE 9]>
-      <div class="ie-warning">
-          <h1>Warning!!</h1>
-          <p>You are using an outdated version of Internet Explorer, please upgrade <br/>to any of the following web browsers to access this website.</p>
-          <div class="iew-container">
-              <ul class="iew-download">
-                  <li>
-                      <a href="http://www.google.com/chrome/">
-                          <img src=" {% static 'assets/images/browser/chrome.png' %} " alt="Chrome">
-                          <div>Chrome</div>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://www.mozilla.org/en-US/firefox/new/">
-                          <img src=" {% static 'assets/images/browser/firefox.png' %} " alt="Firefox">
-                          <div>Firefox</div>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="http://www.opera.com">
-                          <img src=" {% static 'assets/images/browser/opera.png' %} " alt="Opera">
-                          <div>Opera</div>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://www.apple.com/safari/">
-                          <img src=" {% static 'assets/images/browser/safari.png' %} " alt="Safari">
-                          <div>Safari</div>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                          <img src=" {% static 'assets/images/browser/ie.png' %} " alt="">
-                          <div>IE (9 & above)</div>
-                      </a>
-                  </li>
-              </ul>
+            </div><a class="btn btn-primary order-1 order-lg-0 ms-lg-3" href=" {% url 'login' %} ">LOGIN</a>
+            <form class="d-flex my-3 d-block d-lg-none">
+              <input class="form-control me-2 border-200 bg-light" type="search" placeholder="Search" aria-label="Search" />
+              <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
           </div>
-          <p>Sorry for the inconvenience!</p>
-      </div>
-      <![endif]-->
-   <!-- Warning Section Ends -->
+        </div>
+      </nav>
+      <section class="py-xxl-10 pb-0" id="home">
+        <div class="bg-holder bg-size" style="background-image:url( {% static 'assets/img/gallery/hero-header-bg.png' %} );background-position:top center;background-size:cover;">
+        </div>
+        <!--/.bg-holder-->
 
-   <!-- Required Jqurey -->
-   <script src=" {% static 'assets/plugins/Jquery/dist/jquery.min.js' %} "></script>
-   <script src=" {% static 'assets/plugins/jquery-ui/jquery-ui.min.js' %} "></script>
-   <script src=" {% static 'assets/plugins/tether/dist/js/tether.min.js' %} "></script>
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-md-5 col-xl-6 col-xxl-7 order-0 order-md-1 text-end"><img class="pt-7 pt-md-0 w-100" src=" {% static 'assets/img/illustrations/hero.png' %} " alt="hero-header" /></div>
+            <div class="col-md-75 col-xl-6 col-xxl-5 text-md-start text-center py-8">
+              <h1 class="fw-normal fs-6 fs-xxl-7">Panchayat Cottage </h1>
+              <h1 class="fw-bolder fs-6 fs-xxl-7 mb-2">Industry Locator</h1>
+              <p class="fs-1 mb-5"> </p></i>
+            </div>
+          </div>
+        </div>
+      </section>
 
-   <!-- Required Fremwork -->
-   <script src=" {% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %} "></script>
 
-   <!-- Scrollbar JS-->
-   <script src=" {% static 'assets/plugins/jquery-slimscroll/jquery.slimscroll.js' %} "></script>
-   <script src=" {% static 'assets/plugins/jquery.nicescroll/jquery.nicescroll.min.js' %} "></script>
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+<!--      <section class="py-7" id="services" container-xl="container-xl">-->
 
-   <!--classic JS-->
-   <script src=" {% static 'assets/plugins/classie/classie.js' %} "></script>
+<!--        <div class="container">-->
+<!--          <div class="row justify-content-center">-->
+<!--            <div class="col-md-8 col-lg-5 text-center mb-3">-->
+<!--              <h5 class="text-danger">SERVICES</h5>-->
+<!--              <h2>Our services for you</h2>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row h-100 justify-content-center">-->
+<!--            <div class="col-md-4 pt-4 px-md-2 px-lg-3">-->
+<!--              <div class="card h-100 px-lg-5 card-span">-->
+<!--                <div class="card-body d-flex flex-column justify-content-around">-->
+<!--                  <div class="text-center pt-5"><img class="img-fluid" src=" {% static 'assets/img/icons/services-1.svg' %} " alt="..." />-->
+<!--                    <h5 class="my-4">Business Services</h5>-->
+<!--                  </div>-->
+<!--                  <p>Offering home delivery around the city, where your products will be at your doorstep within 48-72 hours.</p>-->
+<!--                  <ul class="list-unstyled">-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Corporate goods-->
+<!--                    </li>-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Shipment-->
+<!--                    </li>-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Accesories-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                  <div class="text-center my-5">-->
+<!--                    <div class="d-grid">-->
+<!--                      <button class="btn btn-outline-danger" type="submit">Learn more </button>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 pt-4 px-md-2 px-lg-3">-->
+<!--              <div class="card h-100 px-lg-5 card-span">-->
+<!--                <div class="card-body d-flex flex-column justify-content-around">-->
+<!--                  <div class="text-center pt-5"><img class="img-fluid" src=" {% static 'assets/img/icons/services-2.svg' %} " alt="..." />-->
+<!--                    <h5 class="my-4">Statewide Services</h5>-->
+<!--                  </div>-->
+<!--                  <p>Offering home delivery around the city, where your products will be at your doorstep within 48-72 hours.</p>-->
+<!--                  <ul class="list-unstyled">-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Unlimited Bandwidth-->
+<!--                    </li>-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Encrypted Connection-->
+<!--                    </li>-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Yes Traffic Logs-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                  <div class="text-center my-5">-->
+<!--                    <div class="d-grid">-->
+<!--                      <button class="btn btn-danger hover-top btn-glow border-0" type="submit">Learn more</button>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 pt-4 px-md-2 px-lg-3">-->
+<!--              <div class="card h-100 px-lg-5 card-span">-->
+<!--                <div class="card-body d-flex flex-column justify-content-around">-->
+<!--                  <div class="text-center pt-5"><img class="img-fluid" src=" {% static 'assets/img/icons/services-3.svg' %} " alt="..." />-->
+<!--                    <h5 class="my-4">Personal Services</h5>-->
+<!--                  </div>-->
+<!--                  <p>You can trust us to safely deliver your most sensitive documents to the specific area in a short time.</p>-->
+<!--                  <ul class="list-unstyled">-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Unlimited Bandwidth-->
+<!--                    </li>-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Encrypted Connection-->
+<!--                    </li>-->
+<!--                    <li class="mb-2"><span class="me-2"><i class="fas fa-circle text-primary" style="font-size:.5rem"></i></span>Yes Traffic Logs-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                  <div class="text-center my-5">-->
+<!--                    <div class="d-grid">-->
+<!--                      <button class="btn btn-outline-danger" type="submit">Learn more </button>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- end of .container-->
 
-   <!-- notification -->
-   <script src=" {% static 'assets/plugins/notification/js/bootstrap-growl.min.js' %} "></script>
+<!--      </section>-->
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
 
-   <!-- Sparkline charts -->
-   <script src=" {% static 'assets/plugins/jquery-sparkline/dist/jquery.sparkline.js' %} "></script>
 
-   <!-- Counter js  -->
-   <script src=" {% static 'assets/plugins/waypoints/jquery.waypoints.min.js' %} "></script>
-   <script src=" {% static 'assets/plugins/countdown/js/jquery.counterup.js' %} "></script>
 
-   <!-- Echart js -->
-   <script src=" {% static 'assets/plugins/charts/echarts/js/echarts-all.js' %} "></script>
 
-   <script src="https://code.highcharts.com/highcharts.js"></script>
-   <script src="https://code.highcharts.com/modules/exporting.js"></script>
-   <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+<!--      <section class="pt-7 pb-0">-->
 
-   <!-- custom js -->
-   <script type="text/javascript" src=" {% static 'assets/js/main.min.js' %} "></script>
-   <script type="text/javascript" src=" {% static 'assets/pages/dashboard.js' %} "></script>
-   <script type="text/javascript" src=" {% static 'assets/pages/elements.js' %} "></script>
-   <script src=" {% static 'assets/js/menu.min.js' %} "></script>
-<script>
-var $window = $(window);
-var nav = $('.fixed-button');
-$window.scroll(function(){
-    if ($window.scrollTop() >= 200) {
-       nav.addClass('active');
-    }
-    else {
-       nav.removeClass('active');
-    }
-});
-</script>
-</body>
+<!--        <div class="container">-->
+<!--          <div class="row">-->
+<!--            <div class="col-6 col-lg mb-5">-->
+<!--              <div class="text-center"><img src=" {% static 'assets/img/icons/awards.png' %} " alt="..." />-->
+<!--                <h1 class="text-primary mt-4">26+</h1>-->
+<!--                <h5 class="text-800">Awards won</h5>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-6 col-lg mb-5">-->
+<!--              <div class="text-center"><img src=" {% static 'assets/img/icons/states.png' %} " alt="..." />-->
+<!--                <h1 class="text-primary mt-4">65+</h1>-->
+<!--                <h5 class="text-800">States covered</h5>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-6 col-lg mb-5">-->
+<!--              <div class="text-center"><img src=" {% static 'assets/img/icons/clients.png' %} " alt="..." />-->
+<!--                <h1 class="text-primary mt-4">689K+</h1>-->
+<!--                <h5 class="text-800">Happy clients</h5>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-6 col-lg mb-5">-->
+<!--              <div class="text-center"><img src=" {% static 'assets/img/icons/goods.png' %} " alt="..." />-->
+<!--                <h1 class="text-primary mt-4">130M+</h1>-->
+<!--                <h5 class="text-800">Goods delivered</h5>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-6 col-lg mb-5">-->
+<!--              <div class="text-center"><img src=" {% static 'assets/img/icons/business.png' %} " alt="..." />-->
+<!--                <h1 class="text-primary mt-4">130M+</h1>-->
+<!--                <h5 class="text-800">Business hours</h5>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- end of .container-->
+
+<!--      </section>-->
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
+
+
+
+
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+<!--      <section>-->
+
+<!--        <div class="container">-->
+<!--          <div class="row">-->
+<!--            <div class="col-12">-->
+<!--              <div class="card bg-dark text-white py-4 py-sm-0"><img class="w-100" src=" {% static 'assets/img/gallery/video.png' %} " alt="video" />-->
+<!--                <div class="card-img-overlay bg-dark-gradient d-flex flex-column flex-center"><img src=" {% static 'assets/img/icons/play.png' %} " width="80" alt="play" />-->
+<!--                  <h5 class="text-primary">FASTEST DELIVERY</h5>-->
+<!--                  <p class="text-center">You can get your valuable item in the fastest period of<br class="d-none d-sm-block" />time with safety. Because your emergency<br class="d-none d-sm-block" />is our first priority.</p><a class="stretched-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"></a>-->
+<!--                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--                    <div class="modal-dialog modal-lg modal-dialog-centered">-->
+<!--                      <div class="modal-content overflow-hidden">-->
+<!--                        <div class="modal-header p-0">-->
+<!--                          <div class="ratio ratio-16x9" id="exampleModalLabel">-->
+<!--                            <iframe src="https://www.youtube.com/embed/TlcP2aTOp-Q" title="YouTube video" allowfullscreen="allowfullscreen"></iframe>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                        <div class="modal-footer">-->
+<!--                          <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Close</button>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- end of .container-->
+
+      </section>
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
+
+
+
+
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+      <section class="py-7">
+
+        <div class="container-fluid">
+          <div class="row flex-center">
+            <div class="bg-holder bg-size" style="background-image:url( {% static 'assets/img/gallery/quote.png' %} );background-position:top;background-size:auto;margin-left:-270px;margin-top:-45px;">
+            </div>
+            <!--/.bg-holder-->
+
+<!--            <div class="col-md-8 col-lg-5 text-center">-->
+<!--              <h5 class="text-danger">TESTIMONIAL</h5>-->
+<!--              <h2>Our Awesome Clients</h2>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="carousel slide pt-6" id="carouselExampleDark" data-bs-ride="carousel">-->
+<!--            <div class="carousel-inner">-->
+<!--              <div class="carousel-item active" data-bs-interval="10000">-->
+<!--                <div class="row h-100">-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it. </p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Yves Tanguy</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it.</p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Kim Young Jou</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it. .</p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Yves Tanguy</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="carousel-item" data-bs-interval="2000">-->
+<!--                <div class="row h-100">-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it. </p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Yves Tanguy</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it. </p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Kim Young Jou</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it. .</p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Yves Tanguy</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="carousel-item">-->
+<!--                <div class="row h-100">-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it. </p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Yves Tanguy</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">“I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it. </p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Kim Young Jou</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 mb-3 mb-md-0">-->
+<!--                    <div class="card h-100 card-span p-3">-->
+<!--                      <div class="card-body">-->
+<!--                        <h5 class="mb-0 text-primary">Fantastic service!</h5>-->
+<!--                        <p class="card-text pt-3">I purchased a phone from an e-commerce site, and this courier service provider assisted me in getting it delivered to my home. I received my phone within one day, and I was really satisfied with their service when I received it. .</p>-->
+<!--                        <div class="d-xl-flex justify-content-between align-items-center">-->
+<!--                          <div class="d-flex align-items-center mb-3"><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i><i class="fas fa-star text-primary me-1"></i></div>-->
+<!--                          <div class="d-flex align-items-center"><img class="img-fluid" src=" {% static 'assets/img/icons/avatar.png' %} " alt="" />-->
+<!--                            <div class="flex-1 ms-3">-->
+<!--                              <h6 class="mb-0 fs&#45;&#45;1 text-1000 fw-medium">Yves Tanguy</h6>-->
+<!--                              <p class="fs&#45;&#45;2 fw-normal mb-0">Chief Executive, DLF</p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="row px-3 px-md-0 mt-6">-->
+<!--              <div class="col-12 position-relative">-->
+<!--                <ol class="carousel-indicators">-->
+<!--                  <li class="active" data-bs-target="#carouselExampleDark" data-bs-slide-to="0"></li>-->
+<!--                  <li data-bs-target="#carouselExampleDark" data-bs-slide-to="1"></li>-->
+<!--                  <li data-bs-target="#carouselExampleDark" data-bs-slide-to="2"></li>-->
+<!--                </ol>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- end of .container-->
+
+      </section>
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
+
+
+
+
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+      <section>
+
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5 col-xl-4"><img src=" {% static 'assets/img/illustrations/callback.png' %} " alt="..." />
+              <h5 class="text-danger">REQUEST A CALLBACK</h5>
+              <h2>We will contact in the shortest time.</h2>
+              <p class="text-muted">Monday to Friday, 9am-5pm.</p>
+            </div>
+            <div class="col-md-6 col-lg-5 col-xl-4">
+              <form class="row">
+                <div class="mb-3">
+                  <label class="form-label visually-hidden" for="inputName">Name</label>
+                  <input class="form-control form-quriar-control" id="inputName" type="text" placeholder="Name" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label visually-hidden" for="inputEmail">Another label</label>
+                  <input class="form-control form-quriar-control" id="inputEmail" type="email" placeholder="Email" />
+                </div>
+                <div class="mb-5">
+                  <label class="form-label visually-hidden" for="validationTextarea">Message</label>
+                  <textarea class="form-control form-quriar-control is-invalid border-400" id="validationTextarea" placeholder="Message" style="height: 150px" required="required"></textarea>
+                </div>
+                <div class="d-grid">
+                  <button class="btn btn-primary" type="submit">Send Message<i class="fas fa-paper-plane ms-2"></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- end of .container-->
+
+      </section>
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
+
+
+
+
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+<!--      <section id="findUs">-->
+
+<!--        <div class="container">-->
+<!--          <div class="row justify-content-center">-->
+<!--            <div class="col-md-8 col-lg-5 mb-6 text-center">-->
+<!--              <h5 class="text-danger">FIND US</h5>-->
+<!--              <h2>Access us easily</h2>-->
+<!--            </div>-->
+<!--            <div class="col-12">-->
+<!--              <div class="card card-span rounded-2 mb-3">-->
+<!--                <div class="row">-->
+<!--                  <div class="col-md-6 col-lg-7 d-flex"><img class="w-100 fit-cover rounded-md-start rounded-top rounded-md-top-0" src=" {% static 'assets/img/gallery/map.svg' %} " alt="map" /></div>-->
+<!--                  <div class="col-md-6 col-lg-5 d-flex flex-center">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5>Contact with us</h5>-->
+<!--                      <p class="text-700 my-4"> <i class="fas fa-map-marker-alt text-warning me-3"></i><span>2277 Lorem Ave, San Diego, CA 22553</span></p>-->
+<!--                      <p><i class="fas fa-phone-alt text-warning me-3"></i><span class="text-700">Monday - Friday: 10 am - 10pm<br/><span class="ps-4">Sunday: 11 am - 9pm  </span></span></p>-->
+<!--                      <p><i class="fas fa-envelope text-warning me-3"> </i><a class="text-700" href=" {% static 'mailto:vctung@outlook.com' %} "> info@quriarbox.com</a></p>-->
+<!--                      <ul class="list-unstyled list-inline mt-5">-->
+<!--                        <li class="list-inline-item"><a class="text-decoration-none" href=" {% static '#!' %} "><i class="fab fa-facebook-square fs-2"></i></a></li>-->
+<!--                        <li class="list-inline-item"><a class="text-decoration-none" href=" {% static '#!' %} "><i class="fab fa-instagram-square fs-2"></i></a></li>-->
+<!--                        <li class="list-inline-item"><a class="text-decoration-none" href=" {% static '#!' %} "><i class="fab fa-twitter-square fs-2"></i></a></li>-->
+<!--                      </ul>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="text-center">-->
+<!--                <button class="btn btn-primary px-5" type="submit"><i class="fas fa-phone-alt me-2"></i><a class="text-light" href=" {% static 'tel:123-456789' %} ">Call us to delivery 123-456789</a></button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- end of .container-->
+
+      </section>
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
+
+
+
+
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+<!--      <section class="bg-1000">-->
+
+<!--        <div class="container">-->
+<!--          <div class="row">-->
+<!--            <div class="col-lg-6">-->
+<!--              <h2 class="fw-bold text-white">Get an update every week</h2>-->
+<!--              <p class="text-300">We ensure that your product is delivered in the safest possible<br />manner, at the correct location, at the right time.</p>-->
+<!--            </div>-->
+<!--            <div class="col-lg-6">-->
+<!--              <h5 class="text-primary mb-3">SUBSCRIBE TO NEWSLETTER </h5>-->
+<!--              <form class="row gx-2 gy-2 align-items-center">-->
+<!--                <div class="col">-->
+<!--                  <div class="input-group-icon">-->
+<!--                    <label class="visually-hidden" for="inputEmailCta">Address</label>-->
+<!--                    <input class="form-control input-box form-quriar-control text-light" id="inputEmailCta" type="email" placeholder="Enter your mail" />-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="d-grid gap-3 col-sm-auto">-->
+<!--                  <button class="btn btn-danger" type="submit">Subscribe</button>-->
+<!--                </div>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- end of .container-->
+
+<!--      </section>-->
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
+
+
+
+
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+<!--      <section class="bg-900 pb-0 pt-5">-->
+
+<!--        <div class="container">-->
+<!--          <div class="row">-->
+<!--            <div class="col-12 col-sm-12 col-lg-6 mb-4 order-0 order-sm-0"><a class="text-decoration-none" href="#"><img src=" {% static 'assets/img/gallery/footer-logo.png' %} " height="51" alt="" /></a>-->
+<!--              <p class="text-500 my-4">The most trusted Courier<br />company in your area.</p>-->
+<!--            </div>-->
+<!--            <div class="col-6 col-sm-4 col-lg-2 mb-3 order-2 order-sm-1">-->
+<!--              <h5 class="lh-lg fw-bold mb-4 text-light font-sans-serif">Other links </h5>-->
+<!--              <ul class="list-unstyled mb-md-4 mb-lg-0">-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">Blogs</a></li>-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">Movers website</a></li>-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">Traffic Update</a></li>-->
+<!--              </ul>-->
+<!--            </div>-->
+<!--            <div class="col-6 col-sm-4 col-lg-2 mb-3 order-3 order-sm-2">-->
+<!--              <h5 class="lh-lg fw-bold text-light mb-4 font-sans-serif">Services</h5>-->
+<!--              <ul class="list-unstyled mb-md-4 mb-lg-0">-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">Corporate goods</a></li>-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">Artworks</a></li>-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">Documents</a></li>-->
+<!--              </ul>-->
+<!--            </div>-->
+<!--            <div class="col-6 col-sm-4 col-lg-2 mb-3 order-3 order-sm-2">-->
+<!--              <h5 class="lh-lg fw-bold text-light mb-4 font-sans-serif"> Customer Care</h5>-->
+<!--              <ul class="list-unstyled mb-md-4 mb-lg-0">-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">About Us</a></li>-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">Contact US</a></li>-->
+<!--                <li class="lh-lg"><a class="text-500" href=" {% static '#!' %} ">Get Update</a></li>-->
+<!--              </ul>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- end of .container-->
+
+      </section>
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
+
+
+
+
+      <!-- ============================================-->
+      <!-- <section> begin ============================-->
+<!--      <section class="py-0 bg-1000">-->
+
+<!--        <div class="container">-->
+<!--          <div class="row justify-content-md-between justify-content-evenly py-4">-->
+<!--            <div class="col-12 col-sm-8 col-md-6 col-lg-auto text-center text-md-start">-->
+<!--              <p class="fs&#45;&#45;1 my-2 fw-bold text-200">All rights Reserved &copy; Your Company, 2021</p>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-8 col-md-6">-->
+<!--              <p class="fs&#45;&#45;1 my-2 text-center text-md-end text-200"> Made with&nbsp;-->
+<!--                <svg class="bi bi-suit-heart-fill" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="#F95C19" viewBox="0 0 16 16">-->
+<!--                  <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path>-->
+<!--                </svg>&nbsp;by&nbsp;<a class="fw-bold text-primary" href="https://themewagon.com/" target="_blank">ThemeWagon </a>-->
+<!--              </p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- end of .container-->
+
+      </section>
+      <!-- <section> close ============================-->
+      <!-- ============================================-->
+
+
+    </main>
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+
+
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <script src=" {% static 'vendors/@popperjs/popper.min.js' %} "></script>
+    <script src=" {% static 'vendors/bootstrap/bootstrap.min.js' %} "></script>
+    <script src=" {% static 'vendors/is/is.min.js' %} "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src=" {% static 'vendors/fontawesome/all.min.js' %} "></script>
+    <script src=" {% static 'assets/js/theme.js' %} "></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  </body>
+
 </html>
-
-
