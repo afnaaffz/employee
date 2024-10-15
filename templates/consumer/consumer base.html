@@ -69,27 +69,28 @@
 <!--          </div>-->
 <!--        </div>-->
       </li>
-<!--       <li class="nav-item">-->
-<!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"-->
-<!--          aria-expanded="true" aria-controls="collapseBootstrap">-->
-<!--          <i class="far fa-fw fa-window-maximize"></i>-->
-<!--          <span>Appointment</span>-->
-<!--        </a>-->
-<!--        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">-->
-<!--          <div class="bg-white py-2 collapse-inner rounded">-->
-<!--            <a class="collapse-item" href="# ">View</a>-->
-<!--          </div>-->
-<!--        </div>-->
+       <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
+          aria-expanded="true" aria-controls="collapseBootstrap">
+          <i class="far fa-fw fa-window-maximize"></i>
+          <span>Notification</span>
+        </a>
+        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href=" {% url 'consumer_notifications' %} ">View</a>
+          </div>
+        </div>
       </li>
        <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
           aria-expanded="true" aria-controls="collapseBootstrap">
           <i class="far fa-fw fa-window-maximize"></i>
-          <span>Payment</span>
+          <span>Feedback</span>
         </a>
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href=" #">View</a>
+            <a class="collapse-item" href=" {% url 'feedback' %} ">Add</a>
+            <a class="collapse-item" href=" {% url 'view' %} ">View</a>
           </div>
         </div>
       </li>

@@ -1,0 +1,16 @@
+{% extends "industry/industry base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<div class="col-lg-4 grid-margin stretch-card">
+    <div class="card" style="width: 40rem;"><br>
+        <h4><u><center>PRODUCT ADD</center></u></h4><br>
+  <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

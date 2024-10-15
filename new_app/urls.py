@@ -1,5 +1,7 @@
+from django.conf.urls.static import static
 from django.urls import path
 
+from Cottage import settings
 from new_app import views
 
 urlpatterns = [
@@ -31,4 +33,20 @@ urlpatterns = [
 
 
 
+    path('industry_notifications/', views.industry_notifications, name='industry_notifications'),
+    path('consumer_notifications/', views.consumer_notifications, name='consumer_notifications'),
+    path('add_notifications', views.add_notifications, name='add_notifications'),
+    path('admin_view_notifications', views.admin_view_notifications, name='admin_view_notifications'),
+
+    path("feedback", views.feedback, name="feedback"),
+    path("view", views.view, name="view"),
+    path('feedbacks', views.feedbacks, name='feedbacks'),
+    path("reply_feedback/<int:id>/", views.reply_feedback, name="reply_feedback"),
+
+    path('add_product', views.add_product, name='add_product'),
+    path('product_list', views.product_list, name='product_list'),
+    path("update_product/<int:id>/", views.update_product, name="update_product"),
+
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

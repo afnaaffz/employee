@@ -35,19 +35,7 @@
 <!--      <div class="sidebar-heading">-->
 <!--        Features-->
 <!--      </div>-->
-<!--      <li class="nav-item">-->
-<!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"-->
-<!--          aria-expanded="true" aria-controls="collapseBootstrap">-->
-<!--          <i class="far fa-fw fa-window-maximize"></i>-->
-<!--          <span>Worker</span>-->
-<!--        </a>-->
-<!--        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">-->
-<!--          <div class="bg-white py-2 collapse-inner rounded">-->
-<!--&lt;!&ndash;            <h6 class="collapse-header">Dashboard</h6>&ndash;&gt;-->
-<!--            <a class="collapse-item" href=" # ">View</a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </li>-->
+
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
           aria-expanded="true" aria-controls="collapseBootstrap">
@@ -64,13 +52,26 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
           aria-expanded="true" aria-controls="collapseBootstrap">
           <i class="far fa-fw fa-window-maximize"></i>
-          <span>Payment</span>
+          <span>Notification</span>
         </a>
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
 <!--            <h6 class="collapse-header">Dashboard</h6>-->
-            <a class="collapse-item" href=" # ">Add</a>
-            <a class="collapse-item" href=" # ">View</a>
+            <a class="collapse-item" href=" {% url 'industry_notifications' %} ">View</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
+          aria-expanded="true" aria-controls="collapseBootstrap">
+          <i class="far fa-fw fa-window-maximize"></i>
+          <span>Product</span>
+        </a>
+        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+<!--            <h6 class="collapse-header">Dashboard</h6>-->
+            <a class="collapse-item" href=" {% url 'add_product' %} ">Add</a>
+            <a class="collapse-item" href=" {% url 'product_list' %} ">View</a>
 <!--            <a class="collapse-item" href=" # ">View all Workers Schedule</a>-->
 
           </div>

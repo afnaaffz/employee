@@ -94,7 +94,8 @@
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
 <!--            <h6 class="collapse-header">Dashboard</h6>-->
-            <a class="collapse-item" href=" # ">Add</a>
+            <a class="collapse-item" href=" {% url 'add_notifications' %}  ">Add</a>
+            <a class="collapse-item" href=" {% url 'admin_view_notifications' %}  ">View</a>
           </div>
         </div>
       </li>
@@ -107,7 +108,7 @@
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
 <!--            <h6 class="collapse-header">Dashboard</h6>-->
-            <a class="collapse-item" href="# ">View</a>
+            <a class="collapse-item" href=" {% url 'feedbacks' %} ">View</a>
           </div>
         </div>
       </li>
@@ -348,6 +349,7 @@
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
+
               </div>
             </li>
           </ul>
@@ -355,6 +357,11 @@
          {% block content %}
         {% endblock %}
         <!-- Topbar -->
+
+
+
+
+
 
         <!-- Container Fluid-->
 <!--        <div class="container-fluid" id="container-wrapper">-->

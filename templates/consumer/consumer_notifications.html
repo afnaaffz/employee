@@ -1,0 +1,24 @@
+{% extends "industry/industry base.html" %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consumer Notifications</title>
+</head>
+<body>
+<h2>Consumer Notifications</h2>
+{% if notifications %}
+    <ul>
+        {% for notification in notifications %}
+            <li><strong>{{ notification.title }}</strong> - {{ notification.message }}</li>
+        {% endfor %}
+    </ul>
+{% elif error %}
+    <p>{{ error }}</p>
+{% else %}
+    <p>No notifications available.</p>
+{% endif %}
+</body>
+</html>
+{% endblock %}

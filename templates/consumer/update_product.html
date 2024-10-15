@@ -1,0 +1,15 @@
+{% extends "industry/industry base.html" %}
+
+{% block content %}
+<div class="card" style="width: 50rem;">
+  <div class="card-body">
+    <h5 class="card-title">Update Product: {{ product.name }}</h5>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit" class="btn btn-success">Save Changes</button>
+      <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

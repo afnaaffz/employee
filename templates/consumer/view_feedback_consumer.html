@@ -1,0 +1,32 @@
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">My Feedback</h2>
+    <br>
+
+    {% if feedback_list %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Description</th>
+                    <th>Rating</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedback_list %}
+                    <tr>
+                        <td>{{ feedback.subject }}</td>
+                        <td>{{ feedback.description }}</td>
+                        <td>{{ feedback.rating }}</td>
+                        <td>{{ feedback.created_at|date:"d M Y, H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center">You have not submitted any feedback yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

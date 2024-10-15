@@ -1,0 +1,46 @@
+{% extends "industry/industry base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="card" style="width: 65rem;">
+  <div class="card-body">
+    <h5 class="card-title">Product List</h5>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Image</th>
+          <th scope="col">Name</th>
+          <th scope="col">Description</th>
+          <th scope="col">Price</th>
+          <th scope="col">Industry</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+        <tr>
+          <td>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100px; height: auto;">
+            {% else %}
+                No Image
+            {% endif %}
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.description }}</td>
+          <td>${{ product.price }}</td>
+          <td>{{ product.industry.name }}</td>
+          <td>
+            <a href="{% url 'update_product' product.id %}" class="btn btn-warning btn-sm">Update</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5">No products available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{% url 'add_product' %}" class="btn btn-primary">Add New Product</a>
+  </div>
+</div>
+{% endblock %}

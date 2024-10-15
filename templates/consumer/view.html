@@ -1,0 +1,51 @@
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--</body>-->
+<!--</html>-->
+<div class="card" style="width: 65rem;">
+  <div class="card-body">
+    <h5 class="card-title">Feedback Data</h5>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">SL</th>
+      <th scope="col">USER</th>
+      <th scope="col">SUBJECT</th>
+      <th scope="col">DESCRIPTION</th>
+      <th scope="col">RATING</th>
+        <th scope="col">REPLY</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for i in data %}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td>{{i.user}}</td>
+        <td>{{i.subject}}</td>
+         <td>{{i.description}}</td>
+      <td>{{i.rating}}</td>
+       <td>
+        {% if i.reply == None %}
+        <p>No reply yet..</p>
+        {% else %}
+        {{i.reply}}
+        {% endif %}
+      </td>
+    </tr>
+{% endfor %}
+  </tbody>
+  </table>
+
+{% endblock %}
+        </div>
+</div>
