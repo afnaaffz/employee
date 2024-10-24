@@ -1,0 +1,50 @@
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+
+<div class="card" style="width: 65rem;">
+  <div class="card-body">
+    <h5 class="card-title">Industry Data</h5>
+
+    <!-- Search form with dropdown for location -->
+    <form method="GET" action="">
+      <div class="form-group">
+        <label for="location">Search by Location</label>
+        <select id="location" name="location" class="form-control">
+          <option value="">-- Select Location --</option>
+          {% for location in locations %}
+          <option value="{{ location }}" {% if location == selected_location %}selected{% endif %}>
+            {{ location }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+      <a href="{% url 'consumer_view_industry' %}" class="btn btn-secondary">Clear</a>  <!-- Clear button -->
+    </form>
+
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th scope="col">SL</th>
+          <th scope="col">NAME</th>
+          <th scope="col">MOBILE</th>
+          <th scope="col">EMAIL</th>
+          <th scope="col">ADDRESS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in data %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ i.name }}</td>
+          <td>{{ i.mobile }}</td>
+          <td>{{ i.email }}</td>
+          <td>{{ i.address }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

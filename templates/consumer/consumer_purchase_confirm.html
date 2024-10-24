@@ -1,0 +1,10 @@
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+<div class="card" style="width: 65rem;">
+  <div class="card-body">
+    <h5 class="card-title">Thank you for purchasing {{ product.name }}!</h5>
+    <p>You will receive an email confirmation shortly.</p>
+    <a href="{% url 'product_list' %}" class="btn btn-primary">Back to Products</a>
+  </div>
+</div>
+{% endblock %}

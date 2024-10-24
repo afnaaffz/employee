@@ -1,0 +1,37 @@
+{% extends "consumer/consumer base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <!-- Product Image -->
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+          {% else %}
+            <img src="https://via.placeholder.com/200" class="card-img-top" alt="No Image" style="height: 200px; object-fit: cover;">
+          {% endif %}
+
+          <!-- Product Details -->
+          <h5 class="card-title mt-3">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text"><strong>Price:</strong> Rs.{{ product.price }}</p>
+          <p class="card-text"><strong>Industry:</strong> {{ product.industry.name }}</p>
+
+          <!-- Action Buttons -->
+          <a href="{% url 'update_product' product.id %}" class="btn btn-warning btn-sm">Update</a>
+    <a href="{% url 'purchase_product' product.id %}" class="btn btn-success btn-sm">Purchase</a> <!-- Purchase Button -->
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-md-12">
+      <p>No products available.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

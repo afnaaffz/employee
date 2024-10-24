@@ -4,13 +4,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from new_app.forms import Login_Form, Consumer_Register_Form, Industry_Register_Form, Notification_Form, Feedback_Form, \
     Product_Form
-from new_app.models import ConsumerRegister, IndustryRegister, Login, Notification, Feedback, Product
+from new_app.models import ConsumerRegister, IndustryRegister, Login, Notification, Feedback, Product, Purchase, Order
 
 
 # Create your views here.
 
 def index(request):
-    return render(request,"index.html")
+    products = Product.objects.all()
+    return render(request, "index.html", {'products': products})
 
 def indexx(request):
     return render(request,"indexx.html")
@@ -83,11 +84,30 @@ def industry_registration(request):
             return redirect("login")
     return render(request,"industry/industry.html", {'form1':form1, 'form2':form2})
 
+
 def view_industry(request):
     data = IndustryRegister.objects.all()
-    print(data)
-    return render(request,"industry/view_industry.html",{'data':data})
+    return render(request, "industry/view_industry.html", {'data': data})
 
+
+def consumer_view_industry(request):
+    # Get distinct locations
+    locations = IndustryRegister.objects.values_list('location', flat=True).distinct()
+
+    # Get the selected location from the dropdown
+    selected_location = request.GET.get('location')
+
+    # Filter the data based on the selected location
+    if selected_location:
+        data = IndustryRegister.objects.filter(location=selected_location)
+    else:
+        data = IndustryRegister.objects.all()
+
+    return render(request, "consumer/consumer_view_industry.html", {
+        'data': data,
+        'locations': locations,  # Pass the list of locations to the template
+        'selected_location': selected_location,  # Pass the selected location to the template
+    })
 
 
 def add_industry(request):
@@ -121,18 +141,22 @@ def delete_industry(request, id):
 
 # Admin approves industry user
 def approve_industry(request, user_id):
-    user = get_object_or_404(Login, id=user_id)
-    user.is_approved = True
-    user.save()
-    messages.success(request, f"Industry {user.username} has been approved.")
+    user = get_object_or_404(Login, pk=user_id)
+    if not user.is_approved:
+        user.is_approved = True
+        user.is_rejected = False
+        user.save()
+        messages.success(request, f'{user.username} has been approved.')
     return redirect('admin_view_industry')
 
 # Admin rejects industry user
 def reject_industry(request, user_id):
-    user = get_object_or_404(Login, id=user_id)
-    user.is_rejected = True
-    user.save()
-    messages.success(request, f"Industry {user.username} has been rejected.")
+    user = get_object_or_404(Login, pk=user_id)
+    if not user.is_rejected:
+        user.is_rejected = True
+        user.is_approved = False
+        user.save()
+        messages.success(request, f'{user.username} has been rejected.')
     return redirect('admin_view_industry')
 
 def admin_view_industry(request):
@@ -167,7 +191,7 @@ def consumer_registration(request):
 def view_consumer(request):
     data = ConsumerRegister.objects.all()
     print(data)
-    return render(request,"consumer/view_consumer.html",{'data':data})
+    return render(request,"consumer/consumer_view_industry.html",{'data':data})
 
 
 # Admin approves consumer user
@@ -256,7 +280,7 @@ def view(request):
 
 def feedbacks(request):
     feedbacks = Feedback.objects.all()
-    return render(request, 'admin/feedbacks.html', {'feedbacks': feedbacks})
+    return render(request, 'industry/feedbacks.html', {'feedbacks': feedbacks})
 
 
 def reply_feedback(request,id):
@@ -267,7 +291,7 @@ def reply_feedback(request,id):
         feedback.save()
         messages.info(request,' Reply send for complaint')
         return redirect('feedbacks')
-    return render(request, 'admin/reply_feedback.html',{'feedback':feedback})
+    return render(request, 'industry/reply_feedback.html',{'feedback':feedback})
 
 
 def add_product(request):
@@ -297,3 +321,41 @@ def update_product(request,id):
             return redirect("product_list")
 
     return render(request, "industry/update_product.html", {'form': form})
+
+
+def consumer_view_products(request):
+    products = Product.objects.all()
+    return render(request, 'consumer/consumer_view_products.html', {'products': products})
+
+
+def purchase_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        total_price = product.price * quantity
+
+        user = request.user
+
+        # Debugging: Log the user making the purchase
+        print(f'Current User: {user.username} (ID: {user.id})')
+
+        # Create the Purchase entry
+        purchase = Purchase.objects.create(product=product, user=user, quantity=quantity)
+
+        # Create the Order entry
+        order = Order.objects.create(
+            user=user,
+            product=product,
+            quantity=quantity,
+            total_price=total_price
+        )
+
+        return redirect('consumer/consumer_purchase_confirm', product_id=product.id)
+
+    return render(request, 'consumer/consumer_purchase_product.html', {'product': product})
+
+
+def consumer_purchase_confirm(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'consumer/consumer_purchase_confirm.html', {'product': product})

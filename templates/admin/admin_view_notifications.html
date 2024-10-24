@@ -5,37 +5,42 @@
     <div class="card-body">
         <h5 class="card-title">View Notifications</h5>
 
-
-
         <table class="table">
-    <thead>
-        <tr>
-            <th scope="col">SL</th>
-            <th scope="col">TITLE</th>
-            <th scope="col">MESSAGE</th>
-                        <th scope="col">INDUSTRY</th>
-            <th scope="col">CONSUMER</th>
+            <thead>
+                <tr>
+                    <th scope="col">SL</th>
+                    <th scope="col">TITLE</th>
+                    <th scope="col">MESSAGE</th>
+                    <th scope="col">INDUSTRIES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.message }}</td>
 
-        </tr>
-    </thead>
-    <tbody>
-        {% for i in data %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ i.title }}</td>
-            <td>{{ i.message }}</td>
-                        <td>{{ i.industries }}</td>
-            <td>{{ i.consumers }}</td>
+                    <!-- Check if there are industries -->
+                    <td>
+                        {% if i.industries.all %}
+                            {% for industry in i.industries.all %}
+                                {{ industry.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No industries
+                        {% endif %}
+                    </td>
 
 
-        </tr>
-        {% empty %}
-
-        {% endfor %}
-    </tbody>
-</table>
-
-
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5"><center>No notifications available.</center></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 

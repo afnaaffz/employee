@@ -14,3 +14,6 @@ admin.site.register(Notification, NotificationAdmin)
 admin.site.register(models.Feedback, FeedbackAdmin)  # FeedbackAdmin is now defined
 admin.site.register(models.IndustryProfile)
 admin.site.register(models.Product)
+admin.site.register(models.Purchase)
+admin.site.register(models.Order)
+

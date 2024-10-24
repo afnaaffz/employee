@@ -27,15 +27,16 @@
             <td>{{ i.name }}</td>
             <td>{{ i.mobile }}</td>
             <td>{{ i.email }}</td>
-            <td>
-                {% if i.user.is_approved %}
-                    Approved
-                {% elif i.user.is_rejected %}
-                    Rejected
-                {% else %}
-                    Awaiting Approval
-                {% endif %}
-            </td>
+           <td>
+    {% if i.user.is_approved %}
+        Approved
+    {% elif i.user.is_rejected %}
+        Rejected
+    {% else %}
+        Awaiting Approval
+    {% endif %}
+</td>
+
             <td>
                 {% if not i.user.is_approved and not i.user.is_rejected %}
                     <a href="{% url 'approve_industry' i.user.id %}" class="btn btn-success">Approve</a>
