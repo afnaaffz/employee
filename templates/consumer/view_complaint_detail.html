@@ -1,0 +1,37 @@
+<!-- view_complaint_detail.html -->
+
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complaint Details</title>
+</head>
+<body>
+
+<div class="container">
+    <h2>Complaint Details</h2>
+    <p><strong>Complaint ID:</strong> {{ complaint.id }}</p>
+    <p><strong>Message:</strong> {{ complaint.message }}</p>
+    <p><strong>Submitted At:</strong> {{ complaint.created_at }}</p>
+    {% if complaint.image %}
+        <p><strong>Uploaded Image:</strong></p>
+        <img src="{{ complaint.image.url }}" alt="Complaint Image" style="max-width: 500px;">
+    {% endif %}
+
+    <h3>Admin Response</h3>
+    {% if complaint.response %}
+        <p><strong>Response:</strong> {{ complaint.response }}</p>
+        <p><strong>Response Date:</strong> {{ complaint.response_date }}</p>
+    {% else %}
+        <p>No response from the admin yet.</p>
+    {% endif %}
+
+    <a href="{% url 'view_complaints' %}">Back to Complaints List</a>
+</div>
+
+</body>
+</html>
+{% endblock %}
+

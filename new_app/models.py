@@ -9,6 +9,7 @@ class Login(AbstractUser):
     is_consumer = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     is_rejected = models.BooleanField(default=False)
+    has_logged_in = models.BooleanField(default=False)  # New field to track login status
 
 class IndustryRegister(models.Model):
     user = models.OneToOneField(Login, on_delete=models.CASCADE)
@@ -21,11 +22,17 @@ class IndustryRegister(models.Model):
     def __str__(self):
         return self.name
 
-
 class IndustryProfile(models.Model):
-    user = models.OneToOneField(IndustryRegister,on_delete=models.CASCADE)
-    profile_pic = models.FileField(upload_to='profilepic/')
-    cover_image = models.FileField(upload_to='industry_covers/')
+    user = models.OneToOneField(Login, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    mobile = models.CharField(max_length=10)
+    email = models.EmailField()
+    address = models.TextField()
+    location = models.CharField(max_length=100)  # Add location field
+
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     industry = models.ForeignKey(IndustryRegister,on_delete=models.CASCADE)
@@ -103,3 +110,12 @@ class Order(models.Model):
     @property
     def calculate_total_price(self):
         return self.product.price * self.quantity
+
+
+class Complaint(models.Model):
+    message = models.TextField()
+    image = models.ImageField(upload_to='complaints/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Complaint {self.id} - {self.message[:30]}"

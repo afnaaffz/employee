@@ -1,0 +1,27 @@
+{% extends "admin/admin base.html" %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin View Complaints</title>
+</head>
+<body>
+
+<div class="container">
+    <h2>Admin - Complaints List</h2>
+    <ul>
+        {% for complaint in complaints %}
+            <li>
+                <a href="{% url 'admin_view_complaint_detail' complaint.id %}">
+                    Complaint {{ complaint.id }} - {{ complaint.created_at }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No complaints submitted yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>
+{% endblock %}

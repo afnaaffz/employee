@@ -1,10 +1,14 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
 from new_app.forms import Login_Form, Consumer_Register_Form, Industry_Register_Form, Notification_Form, Feedback_Form, \
-    Product_Form
-from new_app.models import ConsumerRegister, IndustryRegister, Login, Notification, Feedback, Product, Purchase, Order
+    Product_Form, Industry_Profile_Form, Complaint_Form
+from new_app.models import ConsumerRegister, IndustryRegister, Login, Notification, Feedback, Product, Purchase, Order, \
+    IndustryProfile, Complaint
 
 
 # Create your views here.
@@ -26,8 +30,14 @@ def login(request):
         username = request.POST.get("uname")
         password = request.POST.get("pass")
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
+            if user.is_industry and user.is_approved and not user.has_logged_in:
+                user.has_logged_in = True
+                user.save()  # Update the user’s `has_logged_in` field
+
             auth_login(request, user)
+
             if user.is_staff:
                 return redirect("adminbase")
             elif user.is_consumer:
@@ -37,7 +47,6 @@ def login(request):
         else:
             messages.error(request, "Invalid credentials")
     return render(request, "login.html")
-
 
 #admin
 def adminbase(request):
@@ -70,43 +79,59 @@ def industrybase(request):
 def industry_registration(request):
     form1 = Login_Form()
     form2 = Industry_Register_Form()
+
     if request.method == "POST":
         form1 = Login_Form(request.POST)
         form2 = Industry_Register_Form(request.POST)
 
         if form1.is_valid() and form2.is_valid():
-            a = form1.save(commit=False)
-            a.is_industry = True
-            a.save()
-            user1 = form2.save(commit=False)
-            user1.user = a
-            user1.save()
+            # Save the login form (Login model)
+            user = form1.save(commit=False)
+            user.is_industry = True
+            user.save()
+
+            # Save the industry registration form (IndustryRegister model)
+            industry_register = form2.save(commit=False)
+            industry_register.user = user
+            industry_register.save()
+
+            # Notify user to wait for approval
+            messages.info(request, "Registration successful. Please wait for admin approval to log in.")
             return redirect("login")
-    return render(request,"industry/industry.html", {'form1':form1, 'form2':form2})
+
+    return render(request, "industry/industry.html", {'form1': form1, 'form2': form2})
 
 
 def view_industry(request):
-    data = IndustryRegister.objects.all()
-    return render(request, "industry/view_industry.html", {'data': data})
+    # Ensure that the user is an approved industry user
+    if request.user.is_industry and request.user.is_approved:
+        try:
+            # Filter the data to show only the current logged-in user's industry details
+            data = IndustryRegister.objects.filter(user=request.user)
+            return render(request, "industry/view_industry.html", {'data': data})
+        except IndustryRegister.DoesNotExist:
+            # If no IndustryRegister entry is found, you can handle it here (e.g., show a message)
+            return render(request, "industry/view_industry.html", {'error': 'No industry record found.'})
+    else:
+        # Redirect or show a message if the user is not authorized or approved
+        return render(request, "industry/view_industry.html", {'error': 'You are not authorized to view this page.'})
 
 
 def consumer_view_industry(request):
-    # Get distinct locations
-    locations = IndustryRegister.objects.values_list('location', flat=True).distinct()
+    selected_name = request.GET.get('name', '')
+    data = IndustryRegister.objects.all()
 
-    # Get the selected location from the dropdown
-    selected_location = request.GET.get('location')
+    # Filter by selected name if provided
+    if selected_name:
+        data = data.filter(name=selected_name)
 
-    # Filter the data based on the selected location
-    if selected_location:
-        data = IndustryRegister.objects.filter(location=selected_location)
-    else:
-        data = IndustryRegister.objects.all()
+    # Get distinct names for the dropdown menu
+    names = IndustryRegister.objects.values_list('name', flat=True).distinct()
 
     return render(request, "consumer/consumer_view_industry.html", {
         'data': data,
-        'locations': locations,  # Pass the list of locations to the template
-        'selected_location': selected_location,  # Pass the selected location to the template
+        'names': names,
+        'selected_name': selected_name,
     })
 
 
@@ -141,17 +166,27 @@ def delete_industry(request, id):
 
 # Admin approves industry user
 def approve_industry(request, user_id):
-    user = get_object_or_404(Login, pk=user_id)
+    # Fetch the user and verify they are an industry user
+    user = get_object_or_404(Login, pk=user_id, is_industry=True)
     if not user.is_approved:
         user.is_approved = True
         user.is_rejected = False
         user.save()
+
+        # Send email notification
+        send_mail(
+            'Account Approved',
+            f'Hello {user.username}, your account has been approved. You can now log in.',
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email]
+        )
+
         messages.success(request, f'{user.username} has been approved.')
     return redirect('admin_view_industry')
 
-# Admin rejects industry user
 def reject_industry(request, user_id):
-    user = get_object_or_404(Login, pk=user_id)
+    # Fetch the user and verify they are an industry user
+    user = get_object_or_404(Login, pk=user_id, is_industry=True)
     if not user.is_rejected:
         user.is_rejected = True
         user.is_approved = False
@@ -192,6 +227,7 @@ def view_consumer(request):
     data = ConsumerRegister.objects.all()
     print(data)
     return render(request,"consumer/consumer_view_industry.html",{'data':data})
+
 
 
 # Admin approves consumer user
@@ -359,3 +395,54 @@ def purchase_product(request, product_id):
 def consumer_purchase_confirm(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'consumer/consumer_purchase_confirm.html', {'product': product})
+
+
+def profile(request, id):
+    industry_register = IndustryRegister.objects.get(id=id)
+    form = Industry_Profile_Form(instance=industry_register)
+    if request.method == 'POST':
+        form = Industry_Profile_Form(request.POST, request.FILES, instance=industry_register)
+        if form.is_valid():
+            form.save()
+            return redirect("view_industry")
+
+
+    return render(request, "industry/profile.html", {'form': form})
+
+def submit_complaint(request):
+    if request.method == 'POST':
+        form = Complaint_Form(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Complaint submitted successfully.")
+            return redirect('view_complaints')
+    else:
+        form = Complaint_Form()
+    return render(request, 'consumer/submit_complaint.html', {'form': form})
+
+def view_complaints(request):
+    complaints = Complaint.objects.all()
+    return render(request, 'consumer/view_complaints.html', {'complaints': complaints})
+
+def view_complaint_detail(request, complaint_id):
+    # Fetch complaint including response details
+    complaint = get_object_or_404(Complaint, id=complaint_id)
+    return render(request, 'consumer/view_complaint_detail.html', {'complaint': complaint})
+
+
+def admin_view_complaints(request):
+    complaints = Complaint.objects.all()
+    return render(request, 'admin/admin_view_complaints.html', {'complaints': complaints})
+
+def admin_view_complaint_detail(request, complaint_id):
+    complaint = get_object_or_404(Complaint, id=complaint_id)
+
+    if request.method == 'POST':
+        response = request.POST.get('response')
+        complaint.response = response
+        complaint.response_date = timezone.now()  # Set the response date
+        complaint.save()
+        messages.success(request, "Response submitted successfully.")
+        return redirect('admin_view_complaints')  # Redirect to admin complaints list after saving response
+
+    return render(request, 'admin/admin_view_complaint_detail.html', {'complaint': complaint})

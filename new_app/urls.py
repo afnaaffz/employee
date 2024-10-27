@@ -15,16 +15,20 @@ urlpatterns = [
     path('adminbase', views.adminbase, name='adminbase'),
     path('consumerbase', views.consumerbase, name='consumerbase'),
     path('industrybase', views.industrybase, name='industrybase'),
-    path('view_consumer', views.view_consumer, name='view_consumer'),
     path('view_industry', views.view_industry, name='view_industry'),
     path('admin_view_industry', views.admin_view_industry, name='admin_view_industry'),
     path('admin_view_consumer', views.admin_view_consumer, name='admin_view_consumer'),
-    path('consumer_view_industry', views.consumer_view_industry, name='consumer_view_industry'),
+    path('consumer_view_industry/', views.consumer_view_industry, name='consumer_view_industry'),
     path('consumer_view_products', views.consumer_view_products, name='consumer_view_products'),
     path('purchase/<int:product_id>/', views.purchase_product, name='purchase_product'),
     path('purchase/<int:product_id>/consumer/consumer_purchase_confirm/', views.consumer_purchase_confirm, name='consumer_purchase_confirm'),
-
-
+    path('view_consumer', views.view_consumer, name='view_consumer'),
+    path('submit_complaint/', views.submit_complaint, name='submit_complaint'),
+    path('view_complaints/', views.view_complaints, name='view_complaints'),
+    path('complaint/<int:complaint_id>/', views.view_complaint_detail, name='view_complaint_detail'),
+    path('admin_view_complaints/', views.admin_view_complaints, name='admin_view_complaints'),  # Admin complaints view
+    path('admin_view_complaint_detail/<int:complaint_id>/', views.admin_view_complaint_detail, name='admin_view_complaint_detail'),
+    # Admin complaint detail
     path('add_industry', views.add_industry, name='add_industry'),
     path("update_industry/<int:id>/", views.update_industry, name="update_industry"),
     path('delete_industry/<int:id>/', views.delete_industry, name='delete_industry'),
@@ -46,8 +50,9 @@ urlpatterns = [
     path("view", views.view, name="view"),
     path('feedbacks', views.feedbacks, name='feedbacks'),
     path("reply_feedback/<int:id>/", views.reply_feedback, name="reply_feedback"),
-
     path('add_product', views.add_product, name='add_product'),
+
+    path('profile/<int:id>', views.profile, name='profile'),
     path('product_list', views.product_list, name='product_list'),
     path("update_product/<int:id>/", views.update_product, name="update_product"),
 
