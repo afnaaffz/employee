@@ -1,0 +1,22 @@
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+
+<div class="container my-5">
+  <div class="card mx-auto" style="max-width: 50rem;">
+    <div class="card-body">
+      <h5 class="card-title text-center">Update Product: {{ product.name }}</h5>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="d-flex justify-content-between mt-4">
+          <button type="submit" class="btn btn-success">Save Changes</button>
+          <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

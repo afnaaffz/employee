@@ -1,5 +1,3 @@
-<!-- view_complaint_detail.html -->
-
 {% extends "consumer/consumer base.html" %}
 {% block content %}
 
@@ -7,31 +5,152 @@
 <head>
     <meta charset="UTF-8">
     <title>Complaint Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #444;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            font-size: 30px;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        h2:before {
+            content: "📄";
+            position: absolute;
+            left: -35px;
+            font-size: 30px;
+            color: #3498db;
+        }
+
+        .complaint-table {
+            width: 100%;
+            border-spacing: 0;
+            margin-bottom: 25px;
+        }
+
+        .complaint-table th, .complaint-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .complaint-table th {
+            background-color: #ecf3fa;
+            color: #3498db;
+            font-weight: 600;
+            text-align: left;
+            width: 150px;
+        }
+
+        .complaint-table td {
+            background-color: #fcfcfc;
+            color: #555;
+        }
+
+        .complaint-image {
+            display: block;
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .complaint-image:hover {
+            transform: scale(1.05);
+        }
+
+        .response-section h3 {
+            color: #2980b9;
+            font-size: 22px;
+            margin-top: 20px;
+        }
+
+        .no-response {
+            color: #e74c3c;
+            font-style: italic;
+            margin-top: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
     <h2>Complaint Details</h2>
-    <p><strong>Complaint ID:</strong> {{ complaint.id }}</p>
-    <p><strong>Message:</strong> {{ complaint.message }}</p>
-    <p><strong>Submitted At:</strong> {{ complaint.created_at }}</p>
-    {% if complaint.image %}
-        <p><strong>Uploaded Image:</strong></p>
-        <img src="{{ complaint.image.url }}" alt="Complaint Image" style="max-width: 500px;">
-    {% endif %}
 
-    <h3>Admin Response</h3>
-    {% if complaint.response %}
-        <p><strong>Response:</strong> {{ complaint.response }}</p>
-        <p><strong>Response Date:</strong> {{ complaint.response_date }}</p>
-    {% else %}
-        <p>No response from the admin yet.</p>
-    {% endif %}
+    <table class="complaint-table">
+        <tr>
+            <th>Complaint ID</th>
+            <td>{{ complaint.id }}</td>
+        </tr>
+        <tr>
+            <th>Message</th>
+            <td>{{ complaint.message }}</td>
+        </tr>
+        <tr>
+            <th>Submitted At</th>
+            <td>{{ complaint.created_at|date:"F j, Y, g:i a" }}</td>
+        </tr>
+        {% if complaint.image %}
+        <tr>
+            <th>Uploaded Image</th>
+            <td><img src="{{ complaint.image.url }}" alt="Complaint Image" class="complaint-image"></td>
+        </tr>
+        {% endif %}
+    </table>
 
-    <a href="{% url 'view_complaints' %}">Back to Complaints List</a>
+    <div class="response-section">
+        <h3>Admin Response</h3>
+        {% if complaint_response %}
+            <table class="complaint-table">
+                <tr>
+                    <th>Response</th>
+                    <td>{{ complaint_response.response }}</td>
+                </tr>
+                <tr>
+                    <th>Response Date</th>
+                    <td>{{ complaint_response.response_date|date:"F j, Y, g:i a" }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <p class="no-response">No response from the admin yet.</p>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'view_complaints' %}" class="back-link">Back to Complaints List</a>
 </div>
 
 </body>
 </html>
 {% endblock %}
-

@@ -17,7 +17,6 @@ urlpatterns = [
     path('industrybase', views.industrybase, name='industrybase'),
     path('view_industry', views.view_industry, name='view_industry'),
     path('admin_view_industry', views.admin_view_industry, name='admin_view_industry'),
-    path('admin_view_consumer', views.admin_view_consumer, name='admin_view_consumer'),
     path('consumer_view_industry/', views.consumer_view_industry, name='consumer_view_industry'),
     path('consumer_view_products', views.consumer_view_products, name='consumer_view_products'),
     path('purchase/<int:product_id>/', views.purchase_product, name='purchase_product'),
@@ -43,8 +42,6 @@ urlpatterns = [
 
     path('industry_notifications/', views.industry_notifications, name='industry_notifications'),
     path('consumer_notifications/', views.consumer_notifications, name='consumer_notifications'),
-    path('add_notifications', views.add_notifications, name='add_notifications'),
-    path('admin_view_notifications', views.admin_view_notifications, name='admin_view_notifications'),
 
     path("feedback", views.feedback, name="feedback"),
     path("view", views.view, name="view"),
@@ -55,6 +52,7 @@ urlpatterns = [
     path('profile/<int:id>', views.profile, name='profile'),
     path('product_list', views.product_list, name='product_list'),
     path("update_product/<int:id>/", views.update_product, name="update_product"),
+    path('update_products/<int:product_id>/', views.update_products, name='update_products'),
 
 ]
 if settings.DEBUG:

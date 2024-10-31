@@ -1,51 +1,110 @@
 {% extends "consumer/consumer base.html" %}
 {% block content %}
 
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Title</title>-->
-<!--</head>-->
-<!--<body>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Data</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
 
-<!--</body>-->
-<!--</html>-->
-<div class="card" style="width: 65rem;">
-  <div class="card-body">
-    <h5 class="card-title">Feedback Data</h5>
+        .card {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">SL</th>
-      <th scope="col">USER</th>
-      <th scope="col">SUBJECT</th>
-      <th scope="col">DESCRIPTION</th>
-      <th scope="col">RATING</th>
-        <th scope="col">REPLY</th>
-    </tr>
-  </thead>
-  <tbody>
-      {% for i in data %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td>{{i.user}}</td>
-        <td>{{i.subject}}</td>
-         <td>{{i.description}}</td>
-      <td>{{i.rating}}</td>
-       <td>
-        {% if i.reply == None %}
-        <p>No reply yet..</p>
-        {% else %}
-        {{i.reply}}
-        {% endif %}
-      </td>
-    </tr>
-{% endfor %}
-  </tbody>
-  </table>
+        .card-body {
+            padding: 30px;
+        }
 
-{% endblock %}
-        </div>
+        .card-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table thead {
+            background-color: #3498db;
+            color: #ffffff;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+        }
+
+        .no-reply {
+            color: #e74c3c;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Feedback Data</h5>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">SL</th>
+                    <th scope="col">USER</th>
+                    <th scope="col">SUBJECT</th>
+                    <th scope="col">DESCRIPTION</th>
+                    <th scope="col">RATING</th>
+                    <th scope="col">REPLY</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.user }}</td>
+                    <td>{{ i.subject }}</td>
+                    <td>{{ i.description }}</td>
+                    <td>{{ i.rating }}</td>
+                    <td>
+                        {% if i.reply == None %}
+                            <p class="no-reply">No reply yet..</p>
+                        {% else %}
+                            {{ i.reply }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No feedback data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
+</body>
+</html>
+{% endblock %}

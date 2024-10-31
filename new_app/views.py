@@ -5,10 +5,10 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
-from new_app.forms import Login_Form, Consumer_Register_Form, Industry_Register_Form, Notification_Form, Feedback_Form, \
+from new_app.forms import Login_Form, Consumer_Register_Form, Industry_Register_Form, Feedback_Form, \
     Product_Form, Industry_Profile_Form, Complaint_Form
-from new_app.models import ConsumerRegister, IndustryRegister, Login, Notification, Feedback, Product, Purchase, Order, \
-    IndustryProfile, Complaint
+from new_app.models import ConsumerRegister, IndustryRegister, Login, Feedback, Product, Purchase, Order, \
+    IndustryProfile, Complaint, ComplaintResponse
 
 
 # Create your views here.
@@ -57,13 +57,12 @@ def admin_view_consumer(request):
     data = ConsumerRegister.objects.select_related('user').all()
     return render(request, "admin/admin_view_consumers.html", {'data': data})
 
+
+
 def admin_view_industry(request):
     data = IndustryRegister.objects.select_related('user').all()
     return render(request, "admin/admin_view_industry.html", {'data': data})
 
-def admin_view_consumer(request):
-    data = ConsumerRegister.objects.filter(user__is_approved=False)
-    return render(request, "admin/admin_view_consumers.html", {'data': data})
 
 
 
@@ -128,6 +127,10 @@ def consumer_view_industry(request):
     # Get distinct names for the dropdown menu
     names = IndustryRegister.objects.values_list('name', flat=True).distinct()
 
+    # Check for a message flag in the request
+    if 'added' in request.GET:
+        messages.success(request, "Product added successfully!")
+
     return render(request, "consumer/consumer_view_industry.html", {
         'data': data,
         'names': names,
@@ -140,10 +143,11 @@ def add_industry(request):
     if request.method == 'POST':
         form = Industry_Register_Form(request.POST)
         if form.is_valid():
-            form.save()
+            industry = form.save(commit=False)  # Don't save to DB yet
+            industry.user = request.user         # Assign the current logged-in user
+            industry.save()                      # Now save to DB
             return redirect("admin_view_industry")
     return render(request, 'admin/add_industry.html', {'form': form})
-
 
 
 def update_industry(request,id):
@@ -156,7 +160,7 @@ def update_industry(request,id):
             form.save()
             return redirect("admin_view_industry")
 
-    return render(request, "admin/update_product.html", {'form': form})
+    return render(request, "admin/update_products.html", {'form': form})
 
 def delete_industry(request, id):
     industry = get_object_or_404(IndustryRegister, id=id)
@@ -281,18 +285,7 @@ def consumer_notifications(request):
 
 
 
-def add_notifications(request):
-    form = Notification_Form()
-    if request.method == 'POST':
-        form = Notification_Form(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("admin_view_notifications")
-    return render(request, 'admin/add_notifications.html', {'form': form})
 
-def admin_view_notifications(request):
-    data = Notification.objects.all()
-    return render(request, "admin/admin_view_notifications.html", {'data': data})
 
 
 
@@ -359,6 +352,23 @@ def update_product(request,id):
     return render(request, "industry/update_product.html", {'form': form})
 
 
+
+def update_products(request, product_id):
+    # Fetch the product using the provided ID
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == 'POST':
+        form = Product_Form(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()  # Save the updated product data
+            messages.success(request, "Product updated successfully.")  # Display success message
+            return redirect('consumer_view_products')  # Redirect to the product list page
+    else:
+        form = Product_Form(instance=product)  # Pre-fill the form with the product's current data
+
+    return render(request, 'consumer/update_products.html', {'form': form, 'product': product})
+
+
 def consumer_view_products(request):
     products = Product.objects.all()
     return render(request, 'consumer/consumer_view_products.html', {'products': products})
@@ -409,15 +419,19 @@ def profile(request, id):
 
     return render(request, "industry/profile.html", {'form': form})
 
+
 def submit_complaint(request):
     if request.method == 'POST':
         form = Complaint_Form(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            complaint = form.save(commit=False)  # Do not save to the database yet
+            complaint.user = request.user  # Set the user field with the logged-in user
+            complaint.save()  # Now save the complaint with the user information
             messages.success(request, "Complaint submitted successfully.")
             return redirect('view_complaints')
     else:
         form = Complaint_Form()
+
     return render(request, 'consumer/submit_complaint.html', {'form': form})
 
 def view_complaints(request):
@@ -425,9 +439,14 @@ def view_complaints(request):
     return render(request, 'consumer/view_complaints.html', {'complaints': complaints})
 
 def view_complaint_detail(request, complaint_id):
-    # Fetch complaint including response details
+    # Fetch the complaint and attempt to retrieve its related response
     complaint = get_object_or_404(Complaint, id=complaint_id)
-    return render(request, 'consumer/view_complaint_detail.html', {'complaint': complaint})
+    complaint_response = ComplaintResponse.objects.filter(complaint=complaint).first()  # Fetch response if it exists
+
+    return render(request, 'consumer/view_complaint_detail.html', {
+        'complaint': complaint,
+        'complaint_response': complaint_response
+    })
 
 
 def admin_view_complaints(request):
@@ -437,12 +456,32 @@ def admin_view_complaints(request):
 def admin_view_complaint_detail(request, complaint_id):
     complaint = get_object_or_404(Complaint, id=complaint_id)
 
-    if request.method == 'POST':
-        response = request.POST.get('response')
-        complaint.response = response
-        complaint.response_date = timezone.now()  # Set the response date
-        complaint.save()
-        messages.success(request, "Response submitted successfully.")
-        return redirect('admin_view_complaints')  # Redirect to admin complaints list after saving response
+    # Check if a response already exists for this complaint
+    try:
+        complaint_response = ComplaintResponse.objects.get(complaint=complaint)
+    except ComplaintResponse.DoesNotExist:
+        complaint_response = None
 
-    return render(request, 'admin/admin_view_complaint_detail.html', {'complaint': complaint})
+    if request.method == 'POST':
+        response_text = request.POST.get('response')
+
+        if complaint_response:
+            # Update the existing response
+            complaint_response.response = response_text
+            complaint_response.response_date = timezone.now()
+        else:
+            # Create a new response
+            complaint_response = ComplaintResponse(
+                complaint=complaint,
+                response=response_text,
+                response_date=timezone.now()
+            )
+
+        complaint_response.save()
+        messages.success(request, "Response submitted successfully.")
+        return redirect('admin_view_complaints')  # Redirect to the complaints list
+
+    return render(request, 'admin/admin_view_complaint_detail.html', {
+        'complaint': complaint,
+        'complaint_response': complaint_response
+    })

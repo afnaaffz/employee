@@ -59,19 +59,16 @@ class ConsumerRegister(models.Model):
         return self.name
 
 
+
 class Notification(models.Model):
-    title = models.CharField(max_length=255)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
+    is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    industries = models.ManyToManyField(IndustryRegister, related_name='notifications', blank=True)
 
     def __str__(self):
-        return self.title
+        return f"Notification for {self.user.username}: {self.message}"
 
-
-class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created_at')
-    filter_horizontal = ('industries',)
 
 
 class Feedback(models.Model):
@@ -113,9 +110,20 @@ class Order(models.Model):
 
 
 class Complaint(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # The user who submits the complaint
+
     message = models.TextField()
     image = models.ImageField(upload_to='complaints/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Complaint {self.id} - {self.message[:30]}"
+
+
+class ComplaintResponse(models.Model):
+    complaint = models.OneToOneField(Complaint, on_delete=models.CASCADE, related_name='response')
+    response = models.TextField()
+    response_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Response to Complaint {self.complaint.id}"

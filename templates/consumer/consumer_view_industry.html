@@ -1,51 +1,69 @@
 {% extends "consumer/consumer base.html" %}
 {% block content %}
 
-<div class="card" style="width: 65rem;">
-  <div class="card-body">
-    <h5 class="card-title">Industry Data</h5>
+<div class="container my-5">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title text-center">Industry Data</h5>
 
-    <!-- Search form with dropdown for name -->
-    <form method="GET" action="">
-      <div class="form-group">
-        <label for="name">Search by Name</label>
-        <select id="name" name="name" class="form-control">
-          <option value="">-- Select Name --</option>
-          {% for name in names %}
-          <option value="{{ name }}" {% if name == selected_name %}selected{% endif %}>
-            {{ name }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-      <button type="submit" class="btn btn-primary">Search</button>
-      <a href="{% url 'consumer_view_industry' %}" class="btn btn-secondary">Clear</a> <!-- Clear button -->
-    </form>
-
-    <table class="table mt-3">
-      <thead>
-        <tr>
-          <th scope="col">SL</th>
-          <th scope="col">NAME</th>
-          <th scope="col">MOBILE</th>
-          <th scope="col">EMAIL</th>
-          <th scope="col">ADDRESS</th>
-          <th scope="col">LOCATION</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for i in data %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ i.name }}</td>
-          <td>{{ i.mobile }}</td>
-          <td>{{ i.email }}</td>
-          <td>{{ i.address }}</td>
-          <td>{{ i.location }}</td>
-        </tr>
+      <!-- Notification for messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
         {% endfor %}
-      </tbody>
-    </table>
+      {% endif %}
+
+      <!-- Search form with dropdown for name -->
+      <form method="GET" action="" class="mb-4">
+        <div class="form-group">
+          <label for="name">Search by Name</label>
+          <select id="name" name="name" class="form-control">
+            <option value="">-- Select Name --</option>
+            {% for name in names %}
+              <option value="{{ name }}" {% if name == selected_name %}selected{% endif %}>
+                {{ name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary">Search</button>
+          <a href="{% url 'consumer_view_industry' %}" class="btn btn-secondary">Clear</a> <!-- Clear button -->
+        </div>
+      </form>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th scope="col">SL</th>
+              <th scope="col">Name</th>
+              <th scope="col">Mobile</th>
+              <th scope="col">Email</th>
+              <th scope="col">Address</th>
+              <th scope="col">Location</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in data %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.name }}</td>
+                <td>{{ i.mobile }}</td>
+                <td>{{ i.email }}</td>
+                <td>{{ i.address }}</td>
+                <td>{{ i.location }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 

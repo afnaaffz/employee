@@ -5,54 +5,50 @@
     <div class="card-body">
         <h5 class="card-title">Industry Approval Data</h5>
 
-        <div class="d-flex justify-content-end mb-3">
-            <a href="{% url 'add_industry' %}" class="btn btn-success">Add Industry</a>
+ <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'add_industry' %}" class="btn btn-primary">Add Industry</a>
         </div>
-
         <table class="table">
-    <thead>
-        <tr>
-            <th scope="col">SL</th>
-            <th scope="col">NAME</th>
-            <th scope="col">MOBILE</th>
-            <th scope="col">EMAIL</th>
-            <th scope="col">STATUS</th>
-            <th scope="col">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for i in data %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ i.name }}</td>
-            <td>{{ i.mobile }}</td>
-            <td>{{ i.email }}</td>
-           <td>
-    {% if i.user.is_approved %}
-        Approved
-    {% elif i.user.is_rejected %}
-        Rejected
-    {% else %}
-        Awaiting Approval
-    {% endif %}
-</td>
-
-            <td>
-                {% if not i.user.is_approved and not i.user.is_rejected %}
-                    <a href="{% url 'approve_industry' i.user.id %}" class="btn btn-success">Approve</a>
-                    <a href="{% url 'reject_industry' i.user.id %}" class="btn btn-danger">Reject</a>
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6"><center>No industries awaiting approval.</center></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-
+            <thead>
+                <tr>
+                    <th scope="col">SL</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">MOBILE</th>
+                    <th scope="col">EMAIL</th>
+                    <th scope="col">STATUS</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.mobile }}</td>
+                    <td>{{ i.email }}</td>
+                    <td>
+                        {% if i.user.is_approved %}
+                            Approved
+                        {% elif i.user.is_rejected %}
+                            Rejected
+                        {% else %}
+                            Awaiting Approval
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not i.user.is_approved and not i.user.is_rejected %}
+                            <a href="{% url 'approve_industry' i.user.id %}" class="btn btn-success">Approve</a>
+                            <a href="{% url 'reject_industry' i.user.id %}" class="btn btn-danger">Reject</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6"><center>No industries awaiting approval.</center></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 

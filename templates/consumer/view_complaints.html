@@ -1,26 +1,103 @@
-<!-- view_complaints.html -->
-
 {% extends "consumer/consumer base.html" %}
 {% block content %}
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>View Complaints</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h2 {
+            font-size: 28px;
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-bottom: 30px;
+        }
+
+        .complaints-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .complaints-list li {
+            background-color: #ecf3fa;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            font-size: 18px;
+        }
+
+        .complaints-list li:hover {
+            background-color: #d9e9f7;
+        }
+
+        .complaint-link {
+            text-decoration: none;
+            color: #3498db;
+            flex-grow: 1;
+            transition: color 0.3s ease;
+        }
+
+        .complaint-link:hover {
+            color: #2980b9;
+        }
+
+        .complaint-id {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .complaint-date {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-left: 8px;
+        }
+
+        .no-complaints {
+            text-align: center;
+            color: #e74c3c;
+            font-style: italic;
+            font-size: 18px;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
     <h2>Complaints List</h2>
-    <ul>
+
+    <ul class="complaints-list">
         {% for complaint in complaints %}
             <li>
-                <a href="{% url 'view_complaint_detail' complaint.id %}">
-                    Complaint {{ complaint.id }} - {{ complaint.created_at }}
+                <a href="{% url 'view_complaint_detail' complaint.id %}" class="complaint-link">
+                    <span class="complaint-id">Complaint {{ complaint.id }}</span>
+                    <span class="complaint-date">- {{ complaint.created_at|date:"F j, Y, g:i a" }}</span>
                 </a>
             </li>
         {% empty %}
-            <li>No complaints submitted yet.</li>
+            <li class="no-complaints">No complaints submitted yet.</li>
         {% endfor %}
     </ul>
 </div>

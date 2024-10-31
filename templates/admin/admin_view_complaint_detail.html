@@ -20,15 +20,18 @@
     <h3>Admin Response</h3>
     <form method="post">
         {% csrf_token %}
-        <textarea name="response" rows="4" placeholder="Type your response here...">{{ complaint.response }}</textarea>
+<textarea name="response" rows="4" placeholder="Type your response here...">
+    {% if complaint_response %}{{ complaint_response.response }}{% endif %}
+</textarea>
         <button type="submit">Submit Response</button>
     </form>
 
-    {% if complaint.response %}
-        <h4>Previous Response:</h4>
-        <p>{{ complaint.response }}</p>
-        <p><strong>Response Date:</strong> {{ complaint.response_date }}</p>
-    {% endif %}
+    {% if complaint_response %}
+    <h4>Previous Response:</h4>
+    <p>{{ complaint_response.response }}</p>
+    <p><strong>Response Date:</strong> {{ complaint_response.response_date }}</p>
+{% endif %}
+
 
     <a href="{% url 'admin_view_complaints' %}">Back to Complaints List</a>
 </div>
