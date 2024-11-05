@@ -3,40 +3,39 @@
 
 {% block content %}
 <div class="container my-5">
-  <h2 class="text-center mb-4">Available Products</h2>
-  <div class="row">
-    {% for product in products %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body">
-            <!-- Product Image -->
-            {% if product.image %}
-              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-            {% else %}
-              <img src="https://via.placeholder.com/200" class="card-img-top" alt="No Image" style="height: 200px; object-fit: cover;">
-            {% endif %}
+    <h2 class="text-center mb-4">Available Products</h2>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <!-- Product Image -->
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/200" class="card-img-top" alt="No Image" style="height: 200px; object-fit: cover;">
+                    {% endif %}
 
-            <!-- Product Details -->
-            <h5 class="card-title mt-3">{{ product.name }}</h5>
-            <p class="card-text">{{ product.description }}</p>
-            <p class="card-text"><strong>Price:</strong> Rs.{{ product.price }}</p>
-            <p class="card-text"><strong>Industry:</strong> {{ product.industry.name }}</p>
+                    <!-- Product Details -->
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">{{ product.description|truncatewords:20 }}</p>
+                        <p class="card-text"><strong>Price:</strong> Rs.{{ product.price }}</p>
+                        <p class="card-text"><strong>Industry:</strong> {{ product.industry.name }}</p>
+                    </div>
 
-            <!-- Action Buttons -->
-            <div class="d-flex justify-content-between mt-auto">
-              <a href="{% url 'update_products' product.id %}" class="btn btn-warning btn-sm">Update</a>
-              <a href="{% url 'purchase_product' product.id %}" class="btn btn-success btn-sm">Purchase</a>
+                    <!-- Action Buttons -->
+                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
+                        <a href="{% url 'purchase_product' product.id %}" class="btn btn-outline-success btn-sm">Purchase</a>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    {% empty %}
-      <div class="col-md-12">
-        <div class="alert alert-warning text-center" role="alert">
-          No products available.
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+        {% empty %}
+            <div class="col-md-12">
+                <div class="alert alert-warning text-center" role="alert">
+                    No products available.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

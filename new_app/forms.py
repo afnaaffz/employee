@@ -13,7 +13,7 @@ class Login_Form(UserCreationForm):
 class Industry_Register_Form(forms.ModelForm):
     class Meta:
         model = IndustryRegister
-        fields =('__all__')
+        fields = '__all__'  # Consider whether you really want to include all fields
         exclude = ('user',)
 
 class Consumer_Register_Form(forms.ModelForm):
@@ -26,9 +26,15 @@ class Consumer_Register_Form(forms.ModelForm):
 class Feedback_Form(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields =('__all__')
+        fields = ('industry', 'subject', 'description', 'rating')  # Include all necessary fields
         exclude = ('user',)
+        widgets = {
+            'rating': forms.HiddenInput(),  # Hide the rating input field
+        }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['industry'].queryset = IndustryRegister.objects.all()  # Ensure industries are fetched correctly
 
 
 class Product_Form(forms.ModelForm):
@@ -68,3 +74,6 @@ class Industry_Profile_Form(forms.ModelForm):
         model = IndustryRegister
         fields =('__all__')
         exclude = ('user',)
+
+
+

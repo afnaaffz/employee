@@ -1,16 +1,21 @@
 {% extends "industry/industry base.html" %}
-{% block content %}
 {% load crispy_forms_tags %}
+{% block content %}
 
+<div class="container my-5 d-flex justify-content-center">
+    <div class="card shadow-sm" style="width: 100%; max-width: 40rem; border-radius: 8px;">
+        <div class="card-body">
+            <h4 class="text-center text-primary mb-4" style="text-decoration: underline;">Product Add</h4>
+            <form method="post" enctype="multipart/form-data" class="px-3">
+                {% csrf_token %}
+                {{ form|crispy }} <!-- Render form with crispy-forms for enhanced styling -->
 
-<div class="col-lg-4 grid-margin stretch-card">
-    <div class="card" style="width: 40rem;"><br>
-        <h4><u><center>PRODUCT ADD</center></u></h4><br>
-  <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-        {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Add</button>
-        </form>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-block">Add Product</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
 {% endblock %}

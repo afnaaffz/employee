@@ -1,42 +1,50 @@
 {% extends "industry/industry base.html" %}
+{% load static %}
 {% block content %}
 
+<div class="container my-5">
+    <div class="card shadow-sm" style="width: 100%; max-width: 65rem; margin: auto; border-radius: 10px;">
+        <div class="card-body">
+            <h5 class="card-title mb-4 text-primary text-center">Industry Data Overview</h5>
 
-<div class="card" style="width: 65rem;">
-  <div class="card-body">
-    <h5 class="card-title">Industry Data</h5>
-        <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">SL</th>
-      <th scope="col">NAME</th>
-      <th scope="col">MOBILE</th>
-      <th scope="col">EMAIL</th>
-      <th scope="col">ADDRESS</th>
-      <th scope="col">LOCATION</th>
-    </tr>
-  </thead>
-  <tbody>
-      {% for i in data %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td>{{i.name}}</td>
-         <td>{{i.mobile}}</td>
-      <td>{{i.email}}</td>
-      <td>{{i.address}}</td>
-      <td>{{i.location}}</td>
-
-
-    </tr>
-{% endfor %}
-  </tbody>
-  </table>
-
-
-
-{% endblock %}
-
-
-  </div>
+            {% if error %}
+                <div class="alert alert-warning text-center" role="alert">
+                    {{ error }}
+                </div>
+            {% elif data %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Mobile</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in data %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.name }}</td>
+                                    <td>{{ i.mobile }}</td>
+                                    <td>{{ i.email }}</td>
+                                    <td>{{ i.address }}</td>
+                                    <td>{{ i.location }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center" role="alert">
+                    No data available to display.
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
+{% endblock %}

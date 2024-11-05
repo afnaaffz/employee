@@ -1,46 +1,49 @@
 {% extends "industry/industry base.html" %}
+{% load static %}
+
 {% block content %}
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title text-center text-primary mb-4">Feedback Data</h5>
 
-
-<div class="card" style="width: 65rem;">
-  <div class="card-body">
-    <h5 class="card-title">Feedback Data</h5>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">SL</th>
-      <th scope="col">USER</th>
-      <th scope="col">SUBJECT</th>
-      <th scope="col">DESCRIPTION</th>
-      <th scope="col">RATING</th>
-    </tr>
-  </thead>
-  <tbody>
-      {% for n in feedbacks %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td>{{n.user}}</td>
-        <td>{{n.subject}}</td>
-         <td>{{n.description}}</td>
-           <td>{{ n.rating }}</td>
-       <td>
-        {% if n.reply == None %}
-           <a href = "{% url 'reply_feedback' n.id %}">Reply Now</a>
-        {% else %}
-        {{n.reply}}
-        {% endif %}
-      </td>
-    {% empty %}
-    </tr>
-      <tr>
-        <td colspan="7"><h3>No Results Found</h3></td>
-      </tr>
-{% endfor %}
-  </tbody>
-  </table>
-
-
-{% endblock %}
-  </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">SL</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Industry</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for n in feedbacks %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ n.user }}</td>
+                            <td>{{ n.industry }}</td>
+                            <td>{{ n.subject }}</td>
+                            <td>{{ n.description }}</td>
+                            <td>
+                                <div class="star-rating">
+                                    {% for i in "12345" %}
+                                        <i class="fa-star fa-lg {% if forloop.counter0 < n.rating %}fas{% else %}far{% endif %} text-warning"></i>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No feedback data available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock %}

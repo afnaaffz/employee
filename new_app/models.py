@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import AbstractUser, User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Login(AbstractUser):
@@ -12,7 +14,7 @@ class Login(AbstractUser):
     has_logged_in = models.BooleanField(default=False)  # New field to track login status
 
 class IndustryRegister(models.Model):
-    user = models.OneToOneField(Login, on_delete=models.CASCADE)
+    user = models.ForeignKey(Login, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     mobile = models.CharField(max_length=10)
     email = models.EmailField()
@@ -21,6 +23,15 @@ class IndustryRegister(models.Model):
 
     def __str__(self):
         return self.name
+
+class ApprovedIndustryByAdmin(models.Model):
+    industry = models.OneToOneField(IndustryRegister, on_delete=models.CASCADE)
+    approved_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when approval occurred
+
+    def __str__(self):
+        return self.industry.name
+
+
 
 class IndustryProfile(models.Model):
     user = models.OneToOneField(Login, on_delete=models.CASCADE)
@@ -73,10 +84,11 @@ class Notification(models.Model):
 
 class Feedback(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    industry = models.ForeignKey(IndustryRegister, on_delete=models.CASCADE, related_name="feedbacks")
+
     subject = models.CharField(max_length=100)
     description = models.TextField()
     rating = models.IntegerField()
-    reply = models.TextField(null=True, blank=True)  # Add this field
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

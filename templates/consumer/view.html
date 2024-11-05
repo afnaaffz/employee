@@ -1,72 +1,21 @@
 {% extends "consumer/consumer base.html" %}
 {% block content %}
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Feedback Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-        }
-
-        .card {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-body {
-            padding: 30px;
-        }
-
-        .card-title {
-            font-size: 24px;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table thead {
-            background-color: #3498db;
-            color: #ffffff;
-        }
-
-        .table th, .table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .table tbody td {
-            vertical-align: middle;
-        }
-
-        .no-reply {
-            color: #e74c3c;
-            font-style: italic;
-        }
+        /* Your existing CSS */
     </style>
 </head>
 <body>
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Feedback Data</h5>
+        <!-- Display the logged-in consumer's name here -->
+        <h5 class="card-title">Feedback Data for {{ consumer_name }}</h5>
 
         <table class="table">
             <thead>
@@ -76,7 +25,6 @@
                     <th scope="col">SUBJECT</th>
                     <th scope="col">DESCRIPTION</th>
                     <th scope="col">RATING</th>
-                    <th scope="col">REPLY</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,18 +34,20 @@
                     <td>{{ i.user }}</td>
                     <td>{{ i.subject }}</td>
                     <td>{{ i.description }}</td>
-                    <td>{{ i.rating }}</td>
                     <td>
-                        {% if i.reply == None %}
-                            <p class="no-reply">No reply yet..</p>
-                        {% else %}
-                            {{ i.reply }}
-                        {% endif %}
+                        <!-- Display stars based on i.rating -->
+                        {% for star in "12345" %}
+                            {% if forloop.counter0 < i.rating %}
+                                <i class="fas fa-star text-warning"></i> <!-- Filled star -->
+                            {% else %}
+                                <i class="far fa-star text-warning"></i> <!-- Outline star -->
+                            {% endif %}
+                        {% endfor %}
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center">No feedback data available.</td>
+                    <td colspan="5" class="text-center">No feedback data available.</td>
                 </tr>
                 {% endfor %}
             </tbody>

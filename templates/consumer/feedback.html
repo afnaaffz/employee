@@ -1,77 +1,63 @@
 {% extends "consumer/consumer base.html" %}
-{% block content %}
 {% load crispy_forms_filters %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Feedback Form</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-        }
+{% block title %}Feedback Form{% endblock %}
 
-        .card {
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: #ffffff;
-            padding: 30px 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .card h4 {
-            font-size: 24px;
-            color: #2c3e50;
-            text-align: center;
-            text-decoration: underline;
-            margin-bottom: 25px;
-        }
-
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        form {
-            width: 100%;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            width: 100%;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            transform: scale(1.02);
-        }
-    </style>
-</head>
-<body>
-
+{% block content %}
 <div class="card">
     <h4>FEEDBACK</h4>
     <div class="form-container">
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ field.label }}: {{ error }}</li>  <!-- Display field label with error -->
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
         <form method="POST">
             {% csrf_token %}
-            {{ form|crispy }}
+            {{ form.industry|as_crispy_field }}  <!-- Render the industry field -->
+            {{ form.subject|as_crispy_field }}  <!-- Render subject field -->
+            {{ form.description|as_crispy_field }}  <!-- Render description field -->
+            {{ form.rating }} <!-- Ensure this hidden field is included for submission -->
+
+            <label for="id_rating">Rating:</label>
+            <div class="star-rating">
+                {% for i in "12345" %}
+                    <i class="fa-star fa-lg far" data-value="{{ i }}" onclick="setRating({{ i }})"></i>
+                {% endfor %}
+            </div>
+
             <button type="submit" class="btn btn-primary">Add</button>
         </form>
     </div>
 </div>
 
-</body>
-</html>
+<script>
+    function setRating(value) {
+        document.getElementById("id_rating").value = value;  // Set the value of the hidden input
+
+        const stars = document.querySelectorAll(".star-rating .fa-star");
+        stars.forEach((star, index) => {
+            if (index < value) {
+                star.classList.add("fas");  // filled star
+                star.classList.remove("far");  // empty star
+            } else {
+                star.classList.add("far");
+                star.classList.remove("fas");
+            }
+        });
+    }
+
+    // Initialize with no stars selected
+    setRating(0);
+</script>
 {% endblock %}

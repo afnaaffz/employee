@@ -32,15 +32,14 @@ urlpatterns = [
     path("update_industry/<int:id>/", views.update_industry, name="update_industry"),
     path('delete_industry/<int:id>/', views.delete_industry, name='delete_industry'),
 
-    path('approve_industry/<int:user_id>/', views.approve_industry, name='approve_industry'),
-    path('reject_industry/<int:user_id>/', views.reject_industry, name='reject_industry'),
+    path("approve_industry/<int:user_id>/", views.approve_industry, name="approve_industry"),
+    path("reject_industry/<int:user_id>/", views.reject_industry, name="reject_industry"),
 
     path('admin_view_industry/', views.admin_view_industry, name='admin_view_industry'),
     path('admin_view_consumers/', views.admin_view_consumer, name='admin_view_consumer'),
 
 
 
-    path('industry_notifications/', views.industry_notifications, name='industry_notifications'),
     path('consumer_notifications/', views.consumer_notifications, name='consumer_notifications'),
 
     path("feedback", views.feedback, name="feedback"),
@@ -49,10 +48,11 @@ urlpatterns = [
     path("reply_feedback/<int:id>/", views.reply_feedback, name="reply_feedback"),
     path('add_product', views.add_product, name='add_product'),
 
-    path('profile/<int:id>', views.profile, name='profile'),
+    path("industry_profile/", views.industry_profile, name="industry_profile"),
     path('product_list', views.product_list, name='product_list'),
     path("update_product/<int:id>/", views.update_product, name="update_product"),
     path('update_products/<int:product_id>/', views.update_products, name='update_products'),
+
 
 ]
 if settings.DEBUG:

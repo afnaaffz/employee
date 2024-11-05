@@ -5,6 +5,22 @@
 <div class="col-lg-4 grid-margin stretch-card">
     <div class="card" style="width: 20rem;"><br>
         <h4><u><center>INDUSTRY ADD</center></u></h4><br>
+
+        <!-- Render messages if any -->
+ {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
+
         <form method="POST">
             {% csrf_token %}
             {{ form|crispy }}

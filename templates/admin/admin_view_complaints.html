@@ -1,27 +1,38 @@
 {% extends "admin/admin base.html" %}
+{% load static %}
 {% block content %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Admin View Complaints</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        /* Your existing styles */
+    </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Admin - Complaints List</h2>
-    <ul>
+    <h2 class="mb-4">Admin - Complaints List</h2>
+    <ul class="list-group">
         {% for complaint in complaints %}
-            <li>
-                <a href="{% url 'admin_view_complaint_detail' complaint.id %}">
-                    Complaint {{ complaint.id }} - {{ complaint.created_at }}
-                </a>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'admin_view_complaint_detail' complaint.id %}" class="text-decoration-none">
+                        Complaint #{{ complaint.id }} - {{ complaint.created_at|date:"F j, Y, g:i a" }}
+                    </a>
+                    <p><small>Submitted by: {{ complaint.user }}</small></p>
+                </div>
             </li>
         {% empty %}
-            <li>No complaints submitted yet.</li>
+            <li class="list-group-item no-complaints">No complaints submitted yet.</li>
         {% endfor %}
     </ul>
+
 </div>
 
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
 {% endblock %}

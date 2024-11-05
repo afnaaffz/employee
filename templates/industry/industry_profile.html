@@ -1,18 +1,18 @@
-{% extends "admin/admin base.html" %}
+{% extends "industry/industry base.html" %}
 {% load crispy_forms_filters %}
 
 {% block content %}
 <div class="container my-5">
     <div class="card shadow-lg border-0">
         <div class="card-header bg-primary text-white text-center">
-            <h3 class="mb-0">Update Industry Information</h3>
+            <h3 class="mb-0">Update Industry Profile </h3>
         </div>
         <div class="card-body">
             <form method="POST" class="px-3">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-success btn-lg">Update Industry</button>
+                    <button type="submit" class="btn btn-success btn-lg">Update Industry Profile</button>
                 </div>
             </form>
         </div>

@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -21,9 +23,18 @@ def indexx(request):
     return render(request,"indexx.html")
 
 
-def auth_login(request, user):
-    pass
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
+
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import redirect, render
+from django.contrib import messages
+
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import redirect, render
 
 def login(request):
     if request.method == "POST":
@@ -32,20 +43,29 @@ def login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            # Check if the user is an industry user and approved
+            if user.is_industry and not user.is_approved:
+                messages.error(request, "Your account is awaiting approval. Please try again later.")
+                return redirect("login")  # Redirect back to login page if not approved
+
+            # If user is an approved industry user logging in for the first time
             if user.is_industry and user.is_approved and not user.has_logged_in:
                 user.has_logged_in = True
                 user.save()  # Update the user’s `has_logged_in` field
 
+            # Log the user in
             auth_login(request, user)
 
+            # Redirect based on user type
             if user.is_staff:
                 return redirect("adminbase")
             elif user.is_consumer:
                 return redirect("consumerbase")
             elif user.is_industry:
-                return redirect("industrybase")
+                return redirect("industrybase")  # Redirect to industry profile view
         else:
             messages.error(request, "Invalid credentials")
+
     return render(request, "login.html")
 
 #admin
@@ -59,9 +79,6 @@ def admin_view_consumer(request):
 
 
 
-def admin_view_industry(request):
-    data = IndustryRegister.objects.select_related('user').all()
-    return render(request, "admin/admin_view_industry.html", {'data': data})
 
 
 
@@ -102,18 +119,9 @@ def industry_registration(request):
 
 
 def view_industry(request):
-    # Ensure that the user is an approved industry user
-    if request.user.is_industry and request.user.is_approved:
-        try:
-            # Filter the data to show only the current logged-in user's industry details
-            data = IndustryRegister.objects.filter(user=request.user)
-            return render(request, "industry/view_industry.html", {'data': data})
-        except IndustryRegister.DoesNotExist:
-            # If no IndustryRegister entry is found, you can handle it here (e.g., show a message)
-            return render(request, "industry/view_industry.html", {'error': 'No industry record found.'})
-    else:
-        # Redirect or show a message if the user is not authorized or approved
-        return render(request, "industry/view_industry.html", {'error': 'You are not authorized to view this page.'})
+    data = IndustryRegister.objects.all()  # Fetch all industry data
+    return render(request, "industry/view_industry.html", {'data': data})  # Pass data to the template
+
 
 
 def consumer_view_industry(request):
@@ -138,16 +146,65 @@ def consumer_view_industry(request):
     })
 
 
+from django.db import IntegrityError
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from .forms import Industry_Register_Form
+from .models import IndustryRegister
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db import IntegrityError
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db import IntegrityError
+from .forms import Industry_Register_Form  # Adjust import based on your file structure
+
 def add_industry(request):
-    form = Industry_Register_Form()
     if request.method == 'POST':
         form = Industry_Register_Form(request.POST)
+
         if form.is_valid():
-            industry = form.save(commit=False)  # Don't save to DB yet
-            industry.user = request.user         # Assign the current logged-in user
-            industry.save()                      # Now save to DB
-            return redirect("admin_view_industry")
+            try:
+                industry = form.save(commit=False)
+                industry.user = request.user  # Assign the current logged-in user
+                industry.is_approved = False  # Set as pending approval
+                industry.is_rejected = False
+                industry.save()
+
+                messages.success(request, 'Industry added successfully and is pending approval.')
+                return redirect("admin_view_industry")
+
+            except IntegrityError:
+                messages.error(request, "An error occurred while trying to add the industry. Please try again.")
+        else:
+            messages.error(request, "Form is invalid. Please check the details.")
+    else:
+        form = Industry_Register_Form()
+
     return render(request, 'admin/add_industry.html', {'form': form})
+
+
+import logging
+logger = logging.getLogger(__name__)
+
+def admin_view_industry(request):
+    data = IndustryRegister.objects.all()
+    logger.info(f"Number of industries: {data.count()}")
+    approved_industries = ApprovedIndustryByAdmin.objects.select_related('industry').all()
+
+    return render(
+        request,
+        "admin/admin_view_industry.html",
+        {
+            'data': data,
+            'approved_industries': approved_industries
+        }
+    )
+
+
 
 
 def update_industry(request,id):
@@ -169,38 +226,41 @@ def delete_industry(request, id):
 
 
 # Admin approves industry user
+from django.shortcuts import get_object_or_404, redirect
+from .models import Login, IndustryRegister, ApprovedIndustryByAdmin
+
+# Admin approves industry user
 def approve_industry(request, user_id):
-    # Fetch the user and verify they are an industry user
-    user = get_object_or_404(Login, pk=user_id, is_industry=True)
-    if not user.is_approved:
-        user.is_approved = True
-        user.is_rejected = False
-        user.save()
+    user = get_object_or_404(Login, id=user_id)
+    user.is_approved = True
+    user.is_rejected = False  # Optional: Clear any previous rejection status
+    user.save()
 
-        # Send email notification
-        send_mail(
-            'Account Approved',
-            f'Hello {user.username}, your account has been approved. You can now log in.',
-            settings.DEFAULT_FROM_EMAIL,
-            [user.email]
-        )
+    # Ensure the industry is registered in ApprovedIndustryByAdmin
+    industry = IndustryRegister.objects.get(user=user)
+    ApprovedIndustryByAdmin.objects.get_or_create(industry=industry)
 
-        messages.success(request, f'{user.username} has been approved.')
-    return redirect('admin_view_industry')
+    return redirect("admin_view_industry")
 
+
+# Admin rejects industry user
 def reject_industry(request, user_id):
-    # Fetch the user and verify they are an industry user
-    user = get_object_or_404(Login, pk=user_id, is_industry=True)
-    if not user.is_rejected:
-        user.is_rejected = True
-        user.is_approved = False
-        user.save()
-        messages.success(request, f'{user.username} has been rejected.')
-    return redirect('admin_view_industry')
+    user = get_object_or_404(Login, id=user_id)
+    user.is_approved = False
+    user.is_rejected = True  # Mark as rejected
+    user.save()
 
-def admin_view_industry(request):
-    data = IndustryRegister.objects.filter(user__is_approved=False)
-    return render(request, "admin/admin_view_industry.html", {'data': data})
+    # Remove from ApprovedIndustryByAdmin if previously approved
+    ApprovedIndustryByAdmin.objects.filter(industry__user=user).delete()
+
+    return redirect("admin_view_industry")
+
+
+from django.shortcuts import render
+from .models import IndustryRegister, ApprovedIndustryByAdmin
+
+
+
 
 #consumer
 def consumer(request):
@@ -254,19 +314,6 @@ def reject_consumer(request, user_id):
 
 
 
-def industry_notifications(request):
-    if request.user.is_authenticated:
-        if request.user.is_industry:
-            try:
-                industry_user = IndustryRegister.objects.get(user=request.user)
-                notifications = industry_user.notifications.all()
-                return render(request, 'industry/industry_notifications.html', {'notifications': notifications})
-            except IndustryRegister.DoesNotExist:
-                return render(request, 'industry/industry_notifications.html', {'error': 'No industry record found.'})
-        else:
-            return render(request, 'industry/industry_notifications.html', {'error': 'You are not authorized to view this page.'})
-    else:
-        return render(request, 'industry/industry_notifications.html', {'error': 'User is not authenticated.'})
 
 def consumer_notifications(request):
     # Check if the user is authenticated and a consumer
@@ -290,26 +337,49 @@ def consumer_notifications(request):
 
 
 def feedback(request):
-    form = Feedback_Form()
-    u = request.user
+    form = Feedback_Form()  # Initialize an empty form
+    u = request.user  # Get the logged-in user
+
     if request.method == 'POST':
-        form = Feedback_Form(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.user=u
-            obj.save()
-            return redirect("view")
-    return render(request,"consumer/feedback.html",{"form":form})
+        form = Feedback_Form(request.POST)  # Capture posted data
+        if form.is_valid():  # Validate the form
+            obj = form.save(commit=False)  # Create a Feedback instance
+            obj.user = u  # Set the user to the logged-in user
+            obj.save()  # Save the feedback instance
+            return redirect("view")  # Redirect to a view page
+        # Form is invalid, errors will be displayed in the template
+
+    return render(request, "consumer/feedback.html", {"form": form})  # Render the form
 
 def view(request):
-    data = Feedback.objects.filter(user = request.user)
-    print(data)
-    return render(request, "consumer/view.html", {"data": data})
+    # Get the logged-in user's feedback
+    data = Feedback.objects.filter(user=request.user)
+
+    # Retrieve the consumer's name associated with the logged-in user
+    try:
+        consumer = ConsumerRegister.objects.get(user=request.user)
+        consumer_name = consumer.name
+    except ConsumerRegister.DoesNotExist:
+        consumer_name = "Unknown Consumer"
+
+    # Pass the feedback data and consumer's name to the template
+    return render(request, "consumer/view.html", {"data": data, "consumer_name": consumer_name})
 
 
 def feedbacks(request):
-    feedbacks = Feedback.objects.all()
-    return render(request, 'industry/feedbacks.html', {'feedbacks': feedbacks})
+    # Get the logged-in user
+    user = request.user
+
+    # Try to get the industry registered to the user
+    try:
+        user_industry = IndustryRegister.objects.get(user=user)
+    except IndustryRegister.DoesNotExist:
+        user_industry = None  # Handle case where the user does not have an industry
+
+    # Filter feedback based on the user's industry
+    feedbacks = Feedback.objects.filter(industry=user_industry) if user_industry else Feedback.objects.none()
+
+    return render(request, 'industry/feedbacks.html', {'feedbacks': feedbacks, 'user_industry': user_industry})
 
 
 def reply_feedback(request,id):
@@ -407,17 +477,12 @@ def consumer_purchase_confirm(request, product_id):
     return render(request, 'consumer/consumer_purchase_confirm.html', {'product': product})
 
 
-def profile(request, id):
-    industry_register = IndustryRegister.objects.get(id=id)
-    form = Industry_Profile_Form(instance=industry_register)
-    if request.method == 'POST':
-        form = Industry_Profile_Form(request.POST, request.FILES, instance=industry_register)
-        if form.is_valid():
-            form.save()
-            return redirect("view_industry")
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from .models import IndustryRegister
 
 
-    return render(request, "industry/profile.html", {'form': form})
+
 
 
 def submit_complaint(request):
@@ -434,14 +499,16 @@ def submit_complaint(request):
 
     return render(request, 'consumer/submit_complaint.html', {'form': form})
 
+@login_required
 def view_complaints(request):
-    complaints = Complaint.objects.all()
+    complaints = Complaint.objects.filter(user=request.user)  # Only get complaints by logged-in user
     return render(request, 'consumer/view_complaints.html', {'complaints': complaints})
 
+@login_required
 def view_complaint_detail(request, complaint_id):
-    # Fetch the complaint and attempt to retrieve its related response
-    complaint = get_object_or_404(Complaint, id=complaint_id)
-    complaint_response = ComplaintResponse.objects.filter(complaint=complaint).first()  # Fetch response if it exists
+    # Fetch the complaint belonging to the logged-in user
+    complaint = get_object_or_404(Complaint, id=complaint_id, user=request.user)
+    complaint_response = ComplaintResponse.objects.filter(complaint=complaint).first()
 
     return render(request, 'consumer/view_complaint_detail.html', {
         'complaint': complaint,
@@ -449,29 +516,28 @@ def view_complaint_detail(request, complaint_id):
     })
 
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.utils import timezone
+from .models import Complaint, ComplaintResponse
+
 def admin_view_complaints(request):
-    complaints = Complaint.objects.all()
+    complaints = Complaint.objects.select_related('user').all()  # Use select_related to fetch user data efficiently
     return render(request, 'admin/admin_view_complaints.html', {'complaints': complaints})
 
 def admin_view_complaint_detail(request, complaint_id):
     complaint = get_object_or_404(Complaint, id=complaint_id)
 
     # Check if a response already exists for this complaint
-    try:
-        complaint_response = ComplaintResponse.objects.get(complaint=complaint)
-    except ComplaintResponse.DoesNotExist:
-        complaint_response = None
+    complaint_response = ComplaintResponse.objects.filter(complaint=complaint).first()
 
     if request.method == 'POST':
         response_text = request.POST.get('response')
-
         if complaint_response:
-            # Update the existing response
             complaint_response.response = response_text
             complaint_response.response_date = timezone.now()
         else:
-            # Create a new response
-            complaint_response = ComplaintResponse(
+            complaint_response = ComplaintResponse.objects.create(
                 complaint=complaint,
                 response=response_text,
                 response_date=timezone.now()
@@ -479,9 +545,24 @@ def admin_view_complaint_detail(request, complaint_id):
 
         complaint_response.save()
         messages.success(request, "Response submitted successfully.")
-        return redirect('admin_view_complaints')  # Redirect to the complaints list
+        return redirect('admin_view_complaints')
 
     return render(request, 'admin/admin_view_complaint_detail.html', {
         'complaint': complaint,
         'complaint_response': complaint_response
     })
+
+
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def industry_profile(request):
+    a = get_object_or_404(IndustryRegister, user=request.user)  # Get industry associated with logged-in user
+    form = Industry_Register_Form(instance=a)
+    if request.method == 'POST':
+        form = Industry_Register_Form(request.POST, instance=a)
+        if form.is_valid():
+            form.save()
+            return redirect("industrybase")
+    return render(request, "industry/industry_profile.html", {'form': form})

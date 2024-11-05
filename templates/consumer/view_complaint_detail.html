@@ -118,6 +118,10 @@
             <th>Message</th>
             <td>{{ complaint.message }}</td>
         </tr>
+         <tr>
+            <th>Submitted By</th>
+            <td>{{ complaint.user }}</td>
+        </tr>
         <tr>
             <th>Submitted At</th>
             <td>{{ complaint.created_at|date:"F j, Y, g:i a" }}</td>

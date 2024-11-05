@@ -8,6 +8,8 @@ class FeedbackAdmin(admin.ModelAdmin):
 # Register the models with the admin interface
 admin.site.register(models.Login)
 admin.site.register(models.IndustryRegister)
+admin.site.register(models.ApprovedIndustryByAdmin)
+
 admin.site.register(models.IndustryProfile)
 admin.site.register(models.ConsumerRegister)
 admin.site.register(models.Feedback, FeedbackAdmin)  # FeedbackAdmin is now defined
