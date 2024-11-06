@@ -4,8 +4,15 @@
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="card shadow-lg" style="width: 40rem; border-radius: 8px;">
         <div class="card-body text-center p-5">
-            <h5 class="card-title mb-3" style="font-size: 1.5rem; color: #343a40;">Thank You for Your Purchase!</h5>
-            <p class="card-text text-muted">You have successfully purchased <strong>{{ product.name }}</strong>. You will receive an email confirmation shortly.</p>
+            <!-- Order Placed Message with Tick Icon -->
+            <div class="mb-4">
+                <i class="fas fa-check-circle" style="font-size: 2rem; color: #28a745;"></i>
+                <h5 class="card-title mb-3" style="font-size: 1.5rem; color: #343a40;">Order Placed Successfully!</h5>
+            </div>
+
+            <!-- Thank You Message -->
+            <p class="card-text text-muted">You have successfully purchased <strong>{{ product.name }}</strong>. </p>
+
             <a href="{% url 'consumer_view_products' %}" class="btn btn-primary mt-4">Back to Products</a>
         </div>
     </div>

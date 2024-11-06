@@ -1,0 +1,101 @@
+{% extends "consumer/consumer base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container my-5">
+  <div class="card shadow-sm border-0 p-3">
+    <div class="row">
+
+      <!-- Product Image Section -->
+      <div class="col-lg-5 d-flex align-items-center justify-content-center">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" class="img-fluid rounded shadow-sm" alt="{{ product.name }}" style="max-width: 100%; max-height: 400px; object-fit: cover;">
+        {% else %}
+          <img src="{% static 'images/default_product.jpg' %}" class="img-fluid rounded shadow-sm" alt="Default image" style="max-width: 100%; max-height: 400px; object-fit: cover;">
+        {% endif %}
+      </div>
+
+      <!-- Product Details Section -->
+      <div class="col-lg-7 mt-4 mt-lg-0">
+        <div class="card-body">
+          <h3 class="card-title font-weight-bold text-primary">{{ product.name }}</h3>
+          <h5 class="card-subtitle mb-2 text-muted">{{ industry.name }}</h5>
+          <hr>
+
+          <p class="card-text"><strong>Location:</strong> {{ industry.location }}</p>
+          <p class="card-text"><strong>Mobile:</strong> {{ industry.mobile }}</p>
+          <p class="card-text"><strong>Email:</strong> {{ industry.email }}</p>
+          <p class="card-text"><strong>Address:</strong> {{ industry.address }}</p>
+
+          <p class="card-text mt-4"><strong>Description:</strong></p>
+          <p class="card-text">{{ product.description }}</p>
+
+          <p class="card-text mt-3"><strong>Price:</strong> $<span id="product-price">{{ product.price }}</span></p>
+
+          <!-- Quantity Section without input field -->
+          <div class="quantity-section mt-3">
+            <button type="button" id="decrease-quantity" class="btn btn-outline-secondary">-</button>
+            <span id="quantity" class="d-inline-block w-25 text-center">1</span> <!-- Display quantity as text -->
+            <button type="button" id="increase-quantity" class="btn btn-outline-secondary">+</button>
+          </div>
+          <p class="card-text mt-2"><strong>Total Price:</strong> $<span id="total-price">{{ product.price }}</span></p>
+
+          <!-- Purchase Button -->
+          <form method="POST" action="{% url 'purchase_product' product.id %}">
+            {% csrf_token %}
+            <input type="hidden" id="final-quantity" name="quantity" value="1">
+            <button type="submit" class="btn btn-success mt-3">Purchase</button>
+          </form>
+
+          <div class="text-right mt-4">
+            <a href="{% url 'consumer_view_industry' %}" class="btn btn-outline-primary">Back to Industry List</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Ensure the script runs only when the page is fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+  const productPrice = parseFloat("{{ product.price }}"); // Retrieve product price from Django context
+  const quantityDisplay = document.getElementById('quantity');
+  const decreaseButton = document.getElementById('decrease-quantity');
+  const increaseButton = document.getElementById('increase-quantity');
+  const totalPriceDisplay = document.getElementById('total-price');
+  const finalQuantityInput = document.getElementById('final-quantity');
+
+  let quantity = 1; // Default quantity is 1
+
+  // Function to update the total price
+  function updateTotalPrice() {
+    let totalPrice = (productPrice * quantity).toFixed(2); // Calculate total price
+    totalPriceDisplay.textContent = totalPrice; // Update total price in the UI
+    quantityDisplay.textContent = quantity; // Update displayed quantity
+    finalQuantityInput.value = quantity; // Update hidden quantity input field for form submission
+  }
+
+  // Event listener for decreasing quantity
+  decreaseButton.addEventListener('click', function () {
+    if (quantity > 1) { // Prevent the quantity from going below 1
+      quantity -= 1;
+      updateTotalPrice(); // Recalculate and update the total price
+    }
+  });
+
+  // Event listener for increasing quantity
+  increaseButton.addEventListener('click', function () {
+    quantity += 1; // Increase the quantity
+    updateTotalPrice(); // Recalculate and update the total price
+  });
+
+  // Initialize the total price when the page loads
+  updateTotalPrice();
+});
+</script>
+
+
+{% endblock %}
+

@@ -18,15 +18,15 @@
         {% endfor %}
       {% endif %}
 
-      <!-- Search form with dropdown for name -->
+      <!-- Search form with dropdown for location -->
       <form method="GET" action="" class="mb-4">
         <div class="form-group">
-          <label for="name">Search by Name</label>
-          <select id="name" name="name" class="form-control">
-            <option value="">-- Select Name --</option>
-            {% for name in names %}
-              <option value="{{ name }}" {% if name == selected_name %}selected{% endif %}>
-                {{ name }}
+          <label for="location">Search by Location</label>
+          <select id="location" name="location" class="form-control">
+            <option value="">-- Select Location --</option>
+            {% for loc in locations %}
+              <option value="{{ loc }}" {% if loc == selected_location %}selected{% endif %}>
+                {{ loc }}
               </option>
             {% endfor %}
           </select>
@@ -42,24 +42,44 @@
           <thead>
             <tr>
               <th scope="col">SL</th>
-              <th scope="col">Name</th>
+              <th scope="col">Industry Name</th> <!-- Display Industry and Product name here -->
+              <th scope="col">Product Name</th>
               <th scope="col">Mobile</th>
               <th scope="col">Email</th>
               <th scope="col">Address</th>
               <th scope="col">Location</th>
+              <th scope="col">Actions</th> <!-- New column for the "View" button -->
+
             </tr>
           </thead>
           <tbody>
-            {% for i in data %}
-              <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ i.name }}</td>
-                <td>{{ i.mobile }}</td>
-                <td>{{ i.email }}</td>
-                <td>{{ i.address }}</td>
-                <td>{{ i.location }}</td>
-              </tr>
-            {% endfor %}
+            {% for industry in industries %}
+  {% for product in industry.product_set.all %}
+    <tr>
+      <td>{{ forloop.parentloop.counter }}</td>
+      <td>{{ industry.name }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ industry.mobile }}</td>
+      <td>{{ industry.email }}</td>
+      <td>{{ industry.address }}</td>
+      <td>{{ industry.location }}</td>
+      <td>
+        <a href="{% url 'product_detail' product.id %}" class="btn btn-info btn-sm">View</a>
+      </td>
+    </tr>
+  {% empty %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ industry.name }}</td>
+      <td>-- No Products --</td>
+      <td>{{ industry.mobile }}</td>
+      <td>{{ industry.email }}</td>
+      <td>{{ industry.address }}</td>
+      <td>{{ industry.location }}</td>
+      <td>--</td>
+    </tr>
+  {% endfor %}
+{% endfor %}
           </tbody>
         </table>
       </div>

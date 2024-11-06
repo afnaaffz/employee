@@ -18,6 +18,9 @@ urlpatterns = [
     path('view_industry', views.view_industry, name='view_industry'),
     path('admin_view_industry', views.admin_view_industry, name='admin_view_industry'),
     path('consumer_view_industry/', views.consumer_view_industry, name='consumer_view_industry'),
+    path('product/<int:product_id>/', views.product_detail, name='product_detail'),
+
+
     path('consumer_view_products', views.consumer_view_products, name='consumer_view_products'),
     path('purchase/<int:product_id>/', views.purchase_product, name='purchase_product'),
     path('purchase/<int:product_id>/consumer/consumer_purchase_confirm/', views.consumer_purchase_confirm, name='consumer_purchase_confirm'),

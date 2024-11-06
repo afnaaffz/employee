@@ -36,19 +36,19 @@
 <!--        Features-->
 <!--      </div>-->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
-          aria-expanded="true" aria-controls="collapseBootstrap">
-          <i class="far fa-fw fa-window-maximize"></i>
-          <span>Industry</span>
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForm" aria-expanded="true"
+          aria-controls="collapseForm">
+          <i class="fab fa-fw fa-wpforms"></i>
+          <span>Profile</span>
         </a>
-        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+        <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href=" {% url 'view_industry' %} ">View</a>
-          </div>
+            <h6 class="collapse-header">PROFILE VIEW</h6>
+<a class="collapse-item" href="{% url 'industry_profile' %}">View</a>
+
         </div>
       </li>
-
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
           aria-expanded="true" aria-controls="collapseBootstrap">
@@ -78,19 +78,7 @@
           </div>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForm" aria-expanded="true"
-          aria-controls="collapseForm">
-          <i class="fab fa-fw fa-wpforms"></i>
-          <span>Profile</span>
-        </a>
-        <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">PROFILE VIEW</h6>
-<a class="collapse-item" href="{% url 'industry_profile' %}">View</a>
 
-        </div>
-      </li>
 <!--      <li class="nav-item">-->
 <!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable" aria-expanded="true"-->
 <!--          aria-controls="collapseTable">-->
@@ -150,10 +138,10 @@
           </button>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown no-arrow">
-              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-search fa-fw"></i>
-              </a>
+<!--              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"-->
+<!--                aria-haspopup="true" aria-expanded="false">-->
+<!--                <i class="fas fa-search fa-fw"></i>-->
+<!--              </a>-->
               <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                 aria-labelledby="searchDropdown">
                 <form class="navbar-search">
@@ -300,12 +288,22 @@
 <!--              </div>-->
 <!--            </li>-->
             <div class="topbar-divider d-none d-sm-block"></div>
-            <li class="nav-item dropdown no-arrow">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <img class="img-profile rounded-circle" src=" {% static 'static1/img/boy.png' %} " style="max-width: 60px">
-                <span class="ml-2 d-none d-lg-inline text-white small">Industry</span>
-              </a>
+           <li class="nav-item dropdown no-arrow">
+    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+       aria-haspopup="true" aria-expanded="false">
+       <img class="img-profile rounded-circle" src="{% static 'static1/img/boy.png' %}" style="max-width: 60px">
+       <span class="ml-2 d-none d-lg-inline text-white small">
+           {% if industry_name %}
+               {{ industry_name }}
+           {% else %}
+               {{ user.username }}  <!-- Fallback to username if industry_name not found -->
+           {% endif %}
+       </span>
+    </a>
+</li>
+
+
+
 <!--             <div class="dropdown-menu dropdown-menu-right shadow animated&#45;&#45;grow-in" aria-labelledby="userDropdown">-->
 <!--<a class="dropdown-item" href="#" data-toggle="modal" data-target="#profileModal">-->
 <!--    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>-->

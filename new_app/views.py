@@ -60,7 +60,7 @@ def login(request):
             if user.is_staff:
                 return redirect("adminbase")
             elif user.is_consumer:
-                return redirect("consumerbase")
+                return redirect("consumer_view_industry")
             elif user.is_industry:
                 return redirect("industrybase")  # Redirect to industry profile view
         else:
@@ -89,6 +89,12 @@ def industry(request):
     return render(request,"industry/industry.html")
 
 def industrybase(request):
+    industry_name = None
+    if request.user.is_authenticated and request.user.is_industry:
+        # Get the IndustryRegister instance associated with the logged-in user
+        industry = IndustryRegister.objects.filter(user=request.user).first()
+        if industry:
+            industry_name = industry.name
     return render(request,"industry/industry base.html")
 
 
@@ -118,47 +124,70 @@ def industry_registration(request):
     return render(request, "industry/industry.html", {'form1': form1, 'form2': form2})
 
 
+from django.shortcuts import render
+from .models import IndustryRegister, Product
+
 def view_industry(request):
-    data = IndustryRegister.objects.all()  # Fetch all industry data
-    return render(request, "industry/view_industry.html", {'data': data})  # Pass data to the template
+    # Fetch all industries with their related products
+    data = IndustryRegister.objects.prefetch_related('product_set').all()
+    return render(request, "industry/view_industry.html", {'data': data})
 
 
+from django.shortcuts import render
+from django.contrib import messages
+from .models import IndustryRegister
+
+from django.shortcuts import render
+from django.contrib import messages
+from .models import IndustryRegister
+
+from django.shortcuts import render
+from django.contrib import messages
+from .models import Product, IndustryRegister
+
+from django.shortcuts import render
+from django.contrib import messages
+from .models import Product, IndustryRegister
+
+from django.shortcuts import render
+from django.contrib import messages
+from .models import Product, IndustryRegister
 
 def consumer_view_industry(request):
-    selected_name = request.GET.get('name', '')
-    data = IndustryRegister.objects.all()
+    selected_location = request.GET.get('location', '')
 
-    # Filter by selected name if provided
-    if selected_name:
-        data = data.filter(name=selected_name)
+    # Get all industries, optionally filtering by location
+    industries = IndustryRegister.objects.all()
+    if selected_location:
+        industries = industries.filter(location=selected_location)
 
-    # Get distinct names for the dropdown menu
-    names = IndustryRegister.objects.values_list('name', flat=True).distinct()
+    # Get distinct locations for dropdown
+    locations = IndustryRegister.objects.values_list('location', flat=True).distinct()
 
     # Check for a message flag in the request
     if 'added' in request.GET:
         messages.success(request, "Product added successfully!")
 
     return render(request, "consumer/consumer_view_industry.html", {
-        'data': data,
-        'names': names,
-        'selected_name': selected_name,
+        'industries': industries,
+        'locations': locations,
+        'selected_location': selected_location,
     })
 
 
-from django.db import IntegrityError
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from .forms import Industry_Register_Form
-from .models import IndustryRegister
+from django.shortcuts import get_object_or_404, render
 
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.db import IntegrityError
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    industry = product.industry  # Assuming each product has a ForeignKey to Industry
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
+    return render(request, "consumer/product_detail.html", {
+        'product': product,
+        'industry': industry,
+    })
+
+
 from django.db import IntegrityError
 from .forms import Industry_Register_Form  # Adjust import based on your file structure
 

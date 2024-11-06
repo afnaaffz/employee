@@ -465,7 +465,7 @@
 
       <!-- ============================================-->
       <!-- <section> begin ============================-->
-     <section>
+<section>
    <div class="container">
       <div class="row justify-content-center">
          <!-- Product Listing Section -->
@@ -477,7 +477,14 @@
                   <div class="card-body">
                      <h5 class="card-title">{{ product.name }}</h5>
                      <p class="card-text">{{ product.description }}</p>
-                     <p class="card-text text-success">{{ product.price }}</p>
+                     <p class="card-text text-success">${{ product.price }}</p>
+
+                     <!-- Purchase Button -->
+                     <button
+                        class="btn btn-primary purchase-btn"
+                        onclick="handlePurchase({{ product.id }})">
+                        Purchase
+                     </button>
                   </div>
                </div>
             </div>
@@ -486,6 +493,21 @@
       </div>
    </div>
 </section>
+
+<script>
+// JavaScript function to handle the purchase button click
+function handlePurchase(productId) {
+    // Check if user is registered
+    {% if user.is_authenticated and user.is_consumer %}
+        // Redirect to purchase URL if registered
+        window.location.href = "{% url 'purchase_product' 0 %}".replace('0', productId);
+    {% else %}
+        // Show alert if not registered
+        alert("User is not registered. Please register to make a purchase.");
+    {% endif %}
+}
+</script>
+
 
       <!-- <section> close ============================-->
       <!-- ============================================-->

@@ -17,22 +17,37 @@
                         <thead class="table-dark">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Name</th>
+                                <th scope="col">Industry Name</th>
                                 <th scope="col">Mobile</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Location</th>
+                                <th scope="col">Products</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for i in data %}
+                            {% for industry in data %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ i.name }}</td>
-                                    <td>{{ i.mobile }}</td>
-                                    <td>{{ i.email }}</td>
-                                    <td>{{ i.address }}</td>
-                                    <td>{{ i.location }}</td>
+                                    <td>{{ industry.name }}</td>
+                                    <td>{{ industry.mobile }}</td>
+                                    <td>{{ industry.email }}</td>
+                                    <td>{{ industry.address }}</td>
+                                    <td>{{ industry.location }}</td>
+                                    <td>
+                                        {% if industry.product_set.all %}
+                                            <ul>
+                                                {% for product in industry.product_set.all %}
+                                                    <li>
+                                                        <strong>{{ product.name }}</strong> - ${{ product.price }}
+
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <em>No products available</em>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -48,3 +63,13 @@
 </div>
 
 {% endblock %}
+
+<script>
+function handlePurchase(productId) {
+    {% if user.is_authenticated and user.is_consumer %}
+        window.location.href = "{% url 'purchase_product' 0 %}".replace('0', productId);
+    {% else %}
+        alert("User is not registered. Please register to make a purchase.");
+    {% endif %}
+}
+</script>
