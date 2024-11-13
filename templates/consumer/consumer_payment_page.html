@@ -1,20 +1,24 @@
 {% extends "consumer/consumer base.html" %}
 {% block content %}
 <div class="container my-5">
-  <div class="card mx-auto" style="max-width: 40rem;">
+  <div class="card mx-auto shadow-lg" style="max-width: 40rem;">
     <div class="card-body">
-      <h5 class="font-weight-bold">Payments</h5>
+      <h5 class="font-weight-bold mb-4">Payments</h5>
+
+      <!-- Total Amount Display -->
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <span>Total Amount</span>
+        <span class="text-muted">Total Amount</span>
         <h3 class="text-primary">₹{{ order.total_price }}</h3>
       </div>
 
       <form method="post">
         {% csrf_token %}
-        <!-- Payment Options -->
+
+        <!-- Payment Method Selection -->
         <div class="form-group">
-          <label>Select Payment Method:</label>
-          <select name="payment_method" class="form-control">
+          <label for="payment-method">Select Payment Method:</label>
+          <select name="payment_method" id="payment-method" class="form-control" onchange="displayPaymentOptions()">
+            <option value="">Choose a method</option>
             <option value="EMI">EMI</option>
             <option value="Net Banking">Net Banking</option>
             <option value="Wallets">Wallets</option>
@@ -23,18 +27,79 @@
           </select>
         </div>
 
-        <!-- Discount -->
-        <div class="form-group">
-          <label>Apply Discount</label>
-          <input type="number" name="discount" class="form-control" placeholder="₹2000">
+        <!-- Conditional Payment Fields -->
+        <div id="net-banking-options" class="payment-option mt-3" style="display: none;">
+          <label>Select Bank:</label>
+          <select name="bank" class="form-control">
+            <option value="HDFC">HDFC Bank</option>
+            <option value="ICICI">ICICI Bank</option>
+            <option value="SBI">State Bank of India</option>
+            <option value="Axis">Axis Bank</option>
+          </select>
         </div>
 
+        <div id="emi-options" class="payment-option mt-3" style="display: none;">
+          <label>Select EMI Duration:</label>
+          <select name="emi_duration" class="form-control">
+            <option value="3">3 Months</option>
+            <option value="6">6 Months</option>
+            <option value="12">12 Months</option>
+          </select>
+        </div>
+
+        <div id="wallet-options" class="payment-option mt-3" style="display: none;">
+          <label>Select Wallet:</label>
+          <select name="wallet" class="form-control">
+            <option value="Paytm">Paytm</option>
+            <option value="PhonePe">PhonePe</option>
+            <option value="GooglePay">Google Pay</option>
+          </select>
+        </div>
+
+        <div id="card-options" class="payment-option mt-3" style="display: none;">
+          <label>Enter Card Details:</label>
+          <input type="text" name="card_number" class="form-control mb-2" placeholder="Card Number">
+          <input type="text" name="card_name" class="form-control mb-2" placeholder="Name on Card">
+          <input type="text" name="expiry_date" class="form-control mb-2" placeholder="MM/YY">
+          <input type="password" name="cvv" class="form-control mb-2" placeholder="CVV">
+        </div>
+
+        <div id="upi-options" class="payment-option mt-3" style="display: none;">
+          <label>Enter UPI ID:</label>
+          <input type="text" name="upi_id" class="form-control" placeholder="example@upi">
+        </div>
+
+
+
         <!-- Submit Payment Button -->
-        <button type="submit" class="btn btn-primary btn-lg btn-block">
+        <button type="submit" class="btn btn-primary btn-lg btn-block mt-4">
           Pay ₹{{ order.total_price }}
         </button>
       </form>
     </div>
   </div>
 </div>
+
+<!-- JavaScript for Conditional Payment Options -->
+<script>
+  function displayPaymentOptions() {
+    const paymentMethod = document.getElementById('payment-method').value;
+
+    // Hide all payment option divs
+    document.querySelectorAll('.payment-option').forEach(option => option.style.display = 'none');
+
+    // Show specific div based on selected payment method
+    if (paymentMethod === 'Net Banking') {
+      document.getElementById('net-banking-options').style.display = 'block';
+    } else if (paymentMethod === 'EMI') {
+      document.getElementById('emi-options').style.display = 'block';
+    } else if (paymentMethod === 'Wallets') {
+      document.getElementById('wallet-options').style.display = 'block';
+    } else if (paymentMethod === 'Credit/Debit Card') {
+      document.getElementById('card-options').style.display = 'block';
+    } else if (paymentMethod === 'UPI') {
+      document.getElementById('upi-options').style.display = 'block';
+    }
+  }
+</script>
 {% endblock %}

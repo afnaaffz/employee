@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db import IntegrityError
+from django.db.models import Count
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
@@ -152,9 +154,6 @@ def consumer_view_industry(request):
     })
 
 
-from django.shortcuts import redirect
-from decimal import Decimal
-from django.contrib.auth.decorators import login_required
 
 
 @login_required
@@ -352,6 +351,8 @@ def consumer_notifications(request):
         return render(request, 'consumer/consumer_notifications.html', {'error': 'User is not authenticated.'})
 
 
+
+
 def feedback(request):
     form = Feedback_Form()  # Initialize an empty form
     u = request.user  # Get the logged-in user
@@ -362,8 +363,10 @@ def feedback(request):
             obj = form.save(commit=False)  # Create a Feedback instance
             obj.user = u  # Set the user to the logged-in user
             obj.save()  # Save the feedback instance
-            return redirect("view")  # Redirect to a view page
-        # Form is invalid, errors will be displayed in the template
+            return redirect("view")  # Redirect to a feedback view page
+        else:
+            # Form is invalid, errors will be displayed in the template
+            return render(request, "consumer/feedback.html", {"form": form})
 
     return render(request, "consumer/feedback.html", {"form": form})  # Render the form
 
@@ -507,26 +510,37 @@ def payment_page(request, order_id):
 
     if request.method == 'POST':
         payment_method = request.POST.get('payment_method')
-        discount_applied = Decimal(request.POST.get('discount', '0'))  # Convert to Decimal
+        discount_applied = Decimal(request.POST.get('discount', '0'))
+
+        # Capture optional fields based on the selected payment method
+        bank = request.POST.get('bank') if payment_method == 'Net Banking' else None
+        emi_duration = request.POST.get('emi_duration') if payment_method == 'EMI' else None
+        wallet = request.POST.get('wallet') if payment_method == 'Wallets' else None
+        card_number = request.POST.get('card_number') if payment_method == 'Credit/Debit Card' else None
+        upi_id = request.POST.get('upi_id') if payment_method == 'UPI' else None
 
         # Create Payment record
         payment = Payment.objects.create(
             user=request.user,
             order=order,
             payment_method=payment_method,
-            total_amount=total_amount - discount_applied,  # Now both are Decimals
+            total_amount=total_amount - discount_applied,
             discount_applied=discount_applied,
-            payment_status="Completed"
+            payment_status="Completed",
+            bank=bank,
+            emi_duration=emi_duration,
+            wallet=wallet,
+            card_number=card_number,
+            upi_id=upi_id,
         )
 
-        # Redirect to a success or summary page after payment
+        # Redirect to a success page after payment
         return redirect('payment_success', payment_id=payment.id)
 
     return render(request, 'consumer/consumer_payment_page.html', {
         'order': order,
         'total_amount': total_amount
     })
-
 
 @login_required
 def payment_success(request, payment_id):
@@ -617,6 +631,130 @@ def industry_profile(request):
             form.save()
             return redirect("industrybase")
     return render(request, "industry/industry_profile.html", {'form': form})
+
+
+
+
+def order_history(request):
+    # Get the logged-in user's consumer register
+    try:
+        consumer = ConsumerRegister.objects.get(user=request.user)
+        orders = Order.objects.filter(user=request.user)  # Retrieve orders for the logged-in user
+    except ConsumerRegister.DoesNotExist:
+        consumer = None  # In case the consumer register doesn't exist
+
+    return render(request, 'consumer/order_history.html', {'orders': orders, 'consumer': consumer})
+
+
+def order_detail(request, order_id):
+    order = Order.objects.get(id=order_id, user=request.user)
+    return render(request, 'consumer/order_detail.html', {'order': order})
+
+def reorder(request, order_id):
+    previous_order = Order.objects.get(id=order_id, user=request.user)
+    new_order = Order.objects.create(
+        user=request.user,
+        product=previous_order.product,
+        quantity=previous_order.quantity,
+        total_price=previous_order.total_price,
+        status="Pending"
+    )
+    return redirect('order_history')
+
+
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
+from django.db.models import Avg
+from .models import Feedback
+import json
+
+def feedback_ratings_graph(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("You are not authorized to view this page.")
+
+    industry_ratings = (Feedback.objects
+                        .values('industry__name')
+                        .annotate(avg_rating=Avg('rating'))
+                        .order_by('-avg_rating'))
+
+    if not industry_ratings:
+        print("No data found for industry feedback ratings.")
+        return render(request, 'admin/no_data.html')
+
+    industry_names = [entry['industry__name'] for entry in industry_ratings]
+    avg_ratings = [entry['avg_rating'] for entry in industry_ratings]
+
+    context = {
+        'industry_names': json.dumps(industry_names),
+        'avg_ratings': json.dumps(avg_ratings),
+    }
+
+    return render(request, 'admin/feedback_ratings_graph.html', context)
+
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
+from django.db.models import Count
+from .models import Complaint
+import json
+
+def complaints_pie_chart(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("You are not authorized to view this page.")
+
+    # Query to count the complaints per user
+    complaints_count = (Complaint.objects
+                        .values('user__username')
+                        .annotate(total_complaints=Count('id'))
+                        .order_by('-total_complaints'))
+
+    if not complaints_count:
+        print("No data found for complaints.")
+        return render(request, 'admin/complaints_pie_chart.html')
+
+    # Extract user names and their corresponding complaint counts
+    user_names = [entry['user__username'] for entry in complaints_count]
+    complaint_counts = [entry['total_complaints'] for entry in complaints_count]
+
+    context = {
+        'user_names': json.dumps(user_names),
+        'complaint_counts': json.dumps(complaint_counts),
+    }
+
+    return render(request, 'admin/complaints_pie_chart.html', context)
+
+
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
+from django.db.models import Sum
+from .models import Order
+import json
+
+def products_pie_chart(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("You are not authorized to view this page.")
+
+    # Query to get total quantities ordered per product
+    product_orders = (Order.objects
+                      .values('product__name')
+                      .annotate(total_ordered=Sum('quantity'))
+                      .order_by('-total_ordered'))
+
+    if not product_orders:
+        print("No data found for product orders.")
+        return render(request, 'admin/products_pie_chart.html')
+
+    # Extract product names and their total quantities ordered
+    product_names = [entry['product__name'] for entry in product_orders]
+    order_counts = [entry['total_ordered'] for entry in product_orders]
+
+    context = {
+        'product_names': json.dumps(product_names),
+        'purchase_counts': json.dumps(order_counts),
+    }
+
+    return render(request, 'admin/products_pie_chart.html', context)
+
+
 
 def logout_view(request):
     logout(request)

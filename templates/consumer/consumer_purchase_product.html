@@ -1,53 +1,58 @@
 {% extends "consumer/consumer base.html" %}
 {% block content %}
 <div class="container my-5">
-  <div class="card mx-auto" style="max-width: 40rem;">
+  <div class="card mx-auto shadow-lg" style="max-width: 40rem;">
     <div class="card-body">
       <!-- Order Progress Steps -->
-      <div class="d-flex justify-content-between mb-4">
-        <span>Product</span>
-        <span class="font-weight-bold">Order Summary</span>
-        <span>Payment</span>
+      <div class="d-flex justify-content-between text-muted mb-4">
+        <span class="step-title">Product</span>
+        <span class="font-weight-bold step-title">Order Summary</span>
+        <span class="step-title">Payment</span>
       </div>
 
       <!-- Delivery Information -->
-      <h5>Deliver to:</h5>
-      <p>
-        {{ consumer_profile.name }}<br>
+      <h5 class="text-secondary mb-3">Delivery Information</h5>
+      <p class="text-dark">
+        <strong>{{ consumer_profile.name }}</strong><br>
         {{ consumer_profile.address }}<br>
-        {{ consumer_profile.mobile }}
+        <span>Contact: {{ consumer_profile.mobile }}</span>
       </p>
-      <a href="#" class="btn btn-link">Change</a>
+      <a href="#" class="btn btn-outline-secondary btn-sm mb-3">Edit Address</a>
 
       <!-- Product Summary -->
       <hr>
       <div class="d-flex align-items-center mb-3">
         {% if product.image %}
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-width: 80px; height: auto;">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail" style="max-width: 80px;">
         {% else %}
-          <img src="https://via.placeholder.com/80" alt="No Image" class="img-fluid">
+          <img src="https://via.placeholder.com/80" alt="No Image" class="img-thumbnail">
         {% endif %}
         <div class="ml-3">
-          <h5>{{ product.name }} ({{ product.description }})</h5>
-          <p>Price: Rs. <span id="product-price">{{ product.price }}</span></p>
-          <p>Quantity:
-            <button type="button" class="btn btn-sm btn-secondary" onclick="updateQuantity(-1)">-</button>
-            <span id="quantity">1</span>
-            <button type="button" class="btn btn-sm btn-secondary" onclick="updateQuantity(1)">+</button>
-          </p>
+          <h5 class="mb-1">{{ product.name }}</h5>
+          <p class="text-muted small">{{ product.description }}</p>
+          <p class="mb-1">Price: <span class="text-dark font-weight-bold">Rs. <span id="product-price">{{ product.price }}</span></span></p>
+          <div class="d-flex align-items-center">
+            <span>Quantity:</span>
+            <button type="button" class="btn btn-outline-secondary btn-sm mx-2" onclick="updateQuantity(-1)">-</button>
+            <span id="quantity" class="font-weight-bold">1</span>
+            <button type="button" class="btn btn-outline-secondary btn-sm mx-2" onclick="updateQuantity(1)">+</button>
+          </div>
         </div>
       </div>
 
       <!-- Price Summary -->
       <hr>
-      <h5>Total Amount: Rs. <span id="total-price">{{ product.price }}</span></h5>
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Total Amount:</h5>
+        <h5 class="text-primary font-weight-bold">Rs. <span id="total-price">{{ product.price }}</span></h5>
+      </div>
 
       <!-- Continue Button -->
-      <form method="post" action="{% url 'purchase_product' product.id %}">
+      <form method="post" action="{% url 'purchase_product' product.id %}" class="mt-4">
         {% csrf_token %}
         <input type="hidden" name="quantity" id="quantity-input" value="1">
         <input type="hidden" name="total_price" id="total-price-input" value="{{ product.price }}">
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Place Order</button>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Confirm Purchase</button>
       </form>
     </div>
   </div>
@@ -59,7 +64,7 @@
   let quantity = 1;
 
   function updateQuantity(change) {
-    quantity = Math.max(1, quantity + change);  // Ensure quantity stays at least 1
+    quantity = Math.max(1, quantity + change);
     document.getElementById('quantity').innerText = quantity;
     const totalPrice = productPrice * quantity;
 

@@ -154,12 +154,20 @@ class Payment(models.Model):
         ('UPI', 'UPI'),
         ('Credit/Debit Card', 'Credit/Debit Card'),
     ]
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Updated line
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     discount_applied = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     payment_status = models.CharField(max_length=20, default="Pending")
+
+    # Additional fields for specific payment details
+    bank = models.CharField(max_length=100, blank=True, null=True)
+    emi_duration = models.IntegerField(blank=True, null=True)
+    wallet = models.CharField(max_length=100, blank=True, null=True)
+    card_number = models.CharField(max_length=16, blank=True, null=True)
+    upi_id = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.payment_method} - {self.total_amount}"

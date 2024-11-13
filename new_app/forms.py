@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
 from new_app.models import Login, IndustryRegister, ConsumerRegister, Feedback, Product, \
-    Purchase, Order, Complaint, ComplaintResponse
+    Purchase, Order, Complaint, ComplaintResponse, Payment
 
 
 class Login_Form(UserCreationForm):
@@ -75,5 +75,10 @@ class Industry_Profile_Form(forms.ModelForm):
         fields =('__all__')
         exclude = ('user',)
 
+class Payment_Form(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields =('__all__')
+        exclude = ('user',)
 
 

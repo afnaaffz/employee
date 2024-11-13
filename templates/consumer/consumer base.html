@@ -88,6 +88,21 @@
         </div>
       </li>
 
+         <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
+          aria-expanded="true" aria-controls="collapseBootstrap">
+          <i class="far fa-fw fa-window-maximize"></i>
+          <span>Past Purchases</span>
+        </a>
+        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href=" {% url 'order_history' %} ">Order history</a>
+          </div>
+        </div>
+      </li>
+
+
+
       <hr class="sidebar-divider">
       <div class="version" id="version-ruangadmin"></div>
     </ul>
@@ -256,7 +271,9 @@
     aria-haspopup="true" aria-expanded="false">
     <img class="img-profile rounded-circle" src="{% static 'static1/img/boy.png' %}" style="max-width: 60px">
     <!-- Display user info for debugging -->
-    <span class="ml-2 d-none d-lg-inline text-white small">Consumer</span>
+<span class="ml-2 d-none d-lg-inline text-white small">
+  {{ request.user.consumerregister.name|default:request.user.username }}
+</span>
 </a>
 
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

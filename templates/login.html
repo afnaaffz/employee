@@ -255,13 +255,17 @@ form .create-account:hover {
           <h1 class="logo">PANCHAYAT COTTAGE INDUSTRY LOCATOR</h1>
           <p>Please login to your page</p>
         </div>
-          <form method = "post">
-            {% csrf_token %}
-            <input type="text" name="uname" placeholder="Username" required />
-            <input type="password" name="pass" placeholder="Password" required>
-            <button class="login">Log In</button>
-            <hr>
-          </form>
+      <form method="post">
+  {% csrf_token %}
+  <input type="text" name="uname" placeholder="Username" required />
+  <input type="password" name="pass" placeholder="Password" required />
+  <button class="login">Log In</button>
+  <hr>
+            <a href="{% url 'industry_registration' %} "> Industry Registration</a>
+            <a href="{% url 'consumer_registration' %} "> Consumer Registeration</a>
+            <a href="{% url 'consumer_registration' %} "> Consumer Registeration</a>
+</form>
+
       </div>
     </div>
   </body>

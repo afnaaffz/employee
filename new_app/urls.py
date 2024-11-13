@@ -57,6 +57,15 @@ urlpatterns = [
     path('payment/<int:order_id>/', views.payment_page, name='payment_page'),
     path('payment_success/<int:payment_id>/', views.payment_success, name='payment_success'),
 
+
+    path('order_history/', views.order_history, name='order_history'),
+    path('order_detail/<int:order_id>/', views.order_detail, name='order_detail'),
+    path('reorder/<int:order_id>/', views.reorder, name='reorder'),
+
+    path('feedback_ratings_graph/', views.feedback_ratings_graph, name='feedback_ratings_graph'),
+    path('complaints_pie_chart/', views.complaints_pie_chart, name='complaints_pie_chart'),
+    path('products_pie_chart/', views.products_pie_chart, name='products_pie_chart'),
+
     path("logout_view", views.logout_view, name="logout_view"),
 
 ]

@@ -1,0 +1,71 @@
+{% extends "admin/admin base.html" %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Selling Products Overview</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1 style="text-align: center; font-size: 24px; color: #333;">Top Selling Products Overview</h1>
+
+    <!-- Centered canvas with responsive size adjustment -->
+    <div style="width: 400px; height: 400px; margin: 0 auto;">
+        <canvas id="productsChart"></canvas>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('productsChart').getContext('2d');
+        var productNames = {{ product_names|safe }};
+        var purchaseCounts = {{ purchase_counts|safe }};
+
+        if (productNames.length === 0 || purchaseCounts.length === 0) {
+            document.getElementById('productsChart').style.display = 'none';
+            document.body.innerHTML += '<p style="text-align: center; color: #666;">No data available to display the chart.</p>';
+        } else {
+            var productsChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: productNames,
+                    datasets: [{
+                        label: 'Total Purchases',
+                        data: purchaseCounts,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#333'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+{% endblock %}
