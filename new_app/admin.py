@@ -18,4 +18,5 @@ admin.site.register(models.Purchase)
 admin.site.register(models.Order)
 admin.site.register(models.Complaint)
 admin.site.register(models.ComplaintResponse)
+admin.site.register(models.Payment)
 

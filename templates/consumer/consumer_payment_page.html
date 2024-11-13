@@ -1,0 +1,40 @@
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+<div class="container my-5">
+  <div class="card mx-auto" style="max-width: 40rem;">
+    <div class="card-body">
+      <h5 class="font-weight-bold">Payments</h5>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <span>Total Amount</span>
+        <h3 class="text-primary">₹{{ order.total_price }}</h3>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <!-- Payment Options -->
+        <div class="form-group">
+          <label>Select Payment Method:</label>
+          <select name="payment_method" class="form-control">
+            <option value="EMI">EMI</option>
+            <option value="Net Banking">Net Banking</option>
+            <option value="Wallets">Wallets</option>
+            <option value="UPI">UPI</option>
+            <option value="Credit/Debit Card">Credit/Debit Card</option>
+          </select>
+        </div>
+
+        <!-- Discount -->
+        <div class="form-group">
+          <label>Apply Discount</label>
+          <input type="number" name="discount" class="form-control" placeholder="₹2000">
+        </div>
+
+        <!-- Submit Payment Button -->
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+          Pay ₹{{ order.total_price }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

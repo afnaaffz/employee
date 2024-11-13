@@ -256,17 +256,7 @@
     aria-haspopup="true" aria-expanded="false">
     <img class="img-profile rounded-circle" src="{% static 'static1/img/boy.png' %}" style="max-width: 60px">
     <!-- Display user info for debugging -->
-    <span class="ml-2 d-none d-lg-inline text-white small">
-        {% if request.user.is_authenticated %}
-            <strong>User :</strong> {{ request.user.username }} <br> <!-- Display username -->
-            {% if request.user.consumerregister %}
-                <strong>Consumer Name:</strong> {{ request.user.consumerregister.name }}
-            {% else %}
-            {% endif %}
-        {% else %}
-            Login
-        {% endif %}
-    </span>
+    <span class="ml-2 d-none d-lg-inline text-white small">Consumer</span>
 </a>
 
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -282,12 +272,12 @@
 <!--                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>-->
 <!--                  Activity Log-->
 <!--                </a>-->
-<!--                <div class="dropdown-divider"></div>-->
-<!--                <a class="dropdown-item" href=" # " data-toggle="modal" data-target="#logoutModal">-->
-<!--                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>-->
-<!--                  Logout-->
-<!--                </a>-->
-<!--              </div>-->
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href=" {% url 'logout_view' %} " data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
             </li>
           </ul>
         </nav>
@@ -617,7 +607,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                  <a href=" # " class="btn btn-primary">Logout</a>
+                  <a href=" {% url 'logout_view' %} " class="btn btn-primary">Logout</a>
                 </div>
               </div>
             </div>

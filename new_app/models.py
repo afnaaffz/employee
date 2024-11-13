@@ -65,6 +65,11 @@ class ConsumerRegister(models.Model):
     name = models.CharField(max_length=100)
     mobile = models.CharField(max_length=10)
     email = models.EmailField()
+    address = models.TextField()  # Make sure this field exists
+    city = models.CharField(max_length=100)  # Add city field if missing
+    state = models.CharField(max_length=100)  # Add state field if missing
+    zip_code = models.CharField(max_length=10)
+
 
     def __str__(self):
         return self.name
@@ -139,3 +144,22 @@ class ComplaintResponse(models.Model):
 
     def __str__(self):
         return f"Response to Complaint {self.complaint.id}"
+
+
+class Payment(models.Model):
+    PAYMENT_CHOICES = [
+        ('EMI', 'EMI'),
+        ('Net Banking', 'Net Banking'),
+        ('Wallets', 'Wallets'),
+        ('UPI', 'UPI'),
+        ('Credit/Debit Card', 'Credit/Debit Card'),
+    ]
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Updated line
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    discount_applied = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    payment_status = models.CharField(max_length=20, default="Pending")
+
+    def __str__(self):
+        return f"{self.user.username} - {self.payment_method} - {self.total_amount}"

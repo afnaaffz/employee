@@ -50,12 +50,14 @@ urlpatterns = [
     path('feedbacks', views.feedbacks, name='feedbacks'),
     path("reply_feedback/<int:id>/", views.reply_feedback, name="reply_feedback"),
     path('add_product', views.add_product, name='add_product'),
-
     path("industry_profile/", views.industry_profile, name="industry_profile"),
     path('product_list', views.product_list, name='product_list'),
     path("update_product/<int:id>/", views.update_product, name="update_product"),
     path('update_products/<int:product_id>/', views.update_products, name='update_products'),
+    path('payment/<int:order_id>/', views.payment_page, name='payment_page'),
+    path('payment_success/<int:payment_id>/', views.payment_success, name='payment_success'),
 
+    path("logout_view", views.logout_view, name="logout_view"),
 
 ]
 if settings.DEBUG:

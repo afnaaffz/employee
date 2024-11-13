@@ -1,44 +1,74 @@
 {% extends "consumer/consumer base.html" %}
 {% block content %}
 <div class="container my-5">
-  <div class="card mx-auto" style="max-width: 65rem;">
+  <div class="card mx-auto" style="max-width: 40rem;">
     <div class="card-body">
-      <!-- Product Image -->
-      <div class="text-center mb-3">
-        {% if product.image %}
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 300px; object-fit: cover;">
-        {% else %}
-          <img src="https://via.placeholder.com/300" alt="No Image" class="img-fluid" style="max-height: 300px; object-fit: cover;">
-        {% endif %}
+      <!-- Order Progress Steps -->
+      <div class="d-flex justify-content-between mb-4">
+        <span>Product</span>
+        <span class="font-weight-bold">Order Summary</span>
+        <span>Payment</span>
       </div>
 
-      <h5 class="card-title text-center">Purchase {{ product.name }}</h5>
-      <p class="text-center">Price per item: Rs.<span id="price">{{ product.price }}</span></p>
+      <!-- Delivery Information -->
+      <h5>Deliver to:</h5>
+      <p>
+        {{ consumer_profile.name }}<br>
+        {{ consumer_profile.address }}<br>
+        {{ consumer_profile.mobile }}
+      </p>
+      <a href="#" class="btn btn-link">Change</a>
 
-      <form method="post">
+      <!-- Product Summary -->
+      <hr>
+      <div class="d-flex align-items-center mb-3">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-width: 80px; height: auto;">
+        {% else %}
+          <img src="https://via.placeholder.com/80" alt="No Image" class="img-fluid">
+        {% endif %}
+        <div class="ml-3">
+          <h5>{{ product.name }} ({{ product.description }})</h5>
+          <p>Price: Rs. <span id="product-price">{{ product.price }}</span></p>
+          <p>Quantity:
+            <button type="button" class="btn btn-sm btn-secondary" onclick="updateQuantity(-1)">-</button>
+            <span id="quantity">1</span>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="updateQuantity(1)">+</button>
+          </p>
+        </div>
+      </div>
+
+      <!-- Price Summary -->
+      <hr>
+      <h5>Total Amount: Rs. <span id="total-price">{{ product.price }}</span></h5>
+
+      <!-- Continue Button -->
+      <form method="post" action="{% url 'purchase_product' product.id %}">
         {% csrf_token %}
-        <div class="form-group">
-          <label for="quantity">Quantity</label>
-          <input type="number" id="quantity" name="quantity" class="form-control" min="1" value="1" required>
-        </div>
-
-        <p class="text-center">Total Price: Rs.<span id="total-price">{{ product.price }}</span></p>
-
-        <div class="text-center">
-          <button type="submit" class="btn btn-primary btn-lg">Confirm Purchase</button>
-        </div>
+        <input type="hidden" name="quantity" id="quantity-input" value="1">
+        <input type="hidden" name="total_price" id="total-price-input" value="{{ product.price }}">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Place Order</button>
       </form>
     </div>
   </div>
 </div>
 
+<!-- JavaScript for updating quantity and total price -->
 <script>
-  // JavaScript to update total price based on quantity
-  document.getElementById('quantity').addEventListener('input', function() {
-    let quantity = this.value;
-    let price = {{ product.price }};
-    let totalPrice = (price * quantity).toFixed(2);
-    document.getElementById('total-price').textContent = totalPrice;
-  });
+  const productPrice = parseFloat(document.getElementById('product-price').innerText);
+  let quantity = 1;
+
+  function updateQuantity(change) {
+    quantity = Math.max(1, quantity + change);  // Ensure quantity stays at least 1
+    document.getElementById('quantity').innerText = quantity;
+    const totalPrice = productPrice * quantity;
+
+    // Update the total price display
+    document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+
+    // Update hidden input fields for form submission
+    document.getElementById('quantity-input').value = quantity;
+    document.getElementById('total-price-input').value = totalPrice.toFixed(2);
+  }
 </script>
 {% endblock %}

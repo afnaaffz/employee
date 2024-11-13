@@ -1,16 +1,17 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
 from new_app.forms import Login_Form, Consumer_Register_Form, Industry_Register_Form, Feedback_Form, \
     Product_Form, Industry_Profile_Form, Complaint_Form
 from new_app.models import ConsumerRegister, IndustryRegister, Login, Feedback, Product, Purchase, Order, \
-    IndustryProfile, Complaint, ComplaintResponse
+    IndustryProfile, Complaint, ComplaintResponse, Notification, ApprovedIndustryByAdmin, Payment
 
 
 # Create your views here.
@@ -19,22 +20,17 @@ def index(request):
     products = Product.objects.all()
     return render(request, "index.html", {'products': products})
 
+@login_required(login_url = 'login')
 def indexx(request):
     return render(request,"indexx.html")
 
 
-from django.contrib.auth import authenticate, login as auth_login
-from django.shortcuts import render, redirect
-from django.contrib import messages
+def auth_login(request, user):
+    pass
 
-
-from django.contrib.auth import authenticate, login as auth_login
 from django.shortcuts import redirect, render
-from django.contrib import messages
-
-from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
-from django.shortcuts import redirect, render
+from django.contrib import messages
 
 def login(request):
     if request.method == "POST":
@@ -46,23 +42,28 @@ def login(request):
             # Check if the user is an industry user and approved
             if user.is_industry and not user.is_approved:
                 messages.error(request, "Your account is awaiting approval. Please try again later.")
-                return redirect("login")  # Redirect back to login page if not approved
+                return redirect("login")
 
             # If user is an approved industry user logging in for the first time
             if user.is_industry and user.is_approved and not user.has_logged_in:
                 user.has_logged_in = True
-                user.save()  # Update the user’s `has_logged_in` field
+                user.save()
 
             # Log the user in
             auth_login(request, user)
 
-            # Redirect based on user type
+            # Redirect to the original page if specified in the 'next' parameter
+            next_url = request.GET.get("next")
+            if next_url:
+                return redirect(next_url)
+
+            # Otherwise, redirect based on user type
             if user.is_staff:
-                return redirect("adminbase")
+                return redirect("admin_view_industry")
             elif user.is_consumer:
                 return redirect("consumer_view_industry")
             elif user.is_industry:
-                return redirect("industrybase")  # Redirect to industry profile view
+                return redirect("industry_profile")
         else:
             messages.error(request, "Invalid credentials")
 
@@ -72,19 +73,15 @@ def login(request):
 def adminbase(request):
     return render(request,"admin/admin base.html")
 
+@login_required(login_url = 'login')
 def admin_view_consumer(request):
     # Fetch all consumers (approved, rejected, or awaiting approval)
     data = ConsumerRegister.objects.select_related('user').all()
     return render(request, "admin/admin_view_consumers.html", {'data': data})
 
 
-
-
-
-
-
-
 #industry
+@login_required(login_url = 'login')
 def industry(request):
     return render(request,"industry/industry.html")
 
@@ -124,34 +121,14 @@ def industry_registration(request):
     return render(request, "industry/industry.html", {'form1': form1, 'form2': form2})
 
 
-from django.shortcuts import render
-from .models import IndustryRegister, Product
-
+@login_required(login_url = 'login')
 def view_industry(request):
     # Fetch all industries with their related products
     data = IndustryRegister.objects.prefetch_related('product_set').all()
     return render(request, "industry/view_industry.html", {'data': data})
 
 
-from django.shortcuts import render
-from django.contrib import messages
-from .models import IndustryRegister
 
-from django.shortcuts import render
-from django.contrib import messages
-from .models import IndustryRegister
-
-from django.shortcuts import render
-from django.contrib import messages
-from .models import Product, IndustryRegister
-
-from django.shortcuts import render
-from django.contrib import messages
-from .models import Product, IndustryRegister
-
-from django.shortcuts import render
-from django.contrib import messages
-from .models import Product, IndustryRegister
 
 def consumer_view_industry(request):
     selected_location = request.GET.get('location', '')
@@ -175,12 +152,27 @@ def consumer_view_industry(request):
     })
 
 
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import redirect
+from decimal import Decimal
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    industry = product.industry  # Assuming each product has a ForeignKey to Industry
+    industry = product.industry
+
+    # Check if a 'Buy Now' button was pressed
+    if request.method == 'POST':
+        # Assume quantity 1 for simplicity
+        order = Order.objects.create(
+            user=request.user,
+            product=product,
+            quantity=1,
+            total_price=Decimal(product.price),  # Set total price for the single item
+            status="Pending"
+        )
+        return redirect('payment_page', order_id=order.id)
 
     return render(request, "consumer/product_detail.html", {
         'product': product,
@@ -188,9 +180,7 @@ def product_detail(request, product_id):
     })
 
 
-from django.db import IntegrityError
-from .forms import Industry_Register_Form  # Adjust import based on your file structure
-
+@login_required(login_url = 'login')
 def add_industry(request):
     if request.method == 'POST':
         form = Industry_Register_Form(request.POST)
@@ -236,8 +226,8 @@ def admin_view_industry(request):
 
 
 
+@login_required(login_url = 'login')
 def update_industry(request,id):
-
     a = IndustryRegister.objects.get(id=id)
     form = Industry_Register_Form(instance=a)
     if request.method == 'POST':
@@ -248,17 +238,16 @@ def update_industry(request,id):
 
     return render(request, "admin/update_products.html", {'form': form})
 
+@login_required(login_url = 'login')
 def delete_industry(request, id):
     industry = get_object_or_404(IndustryRegister, id=id)
     industry.delete()
     return redirect('admin_view_industry')
 
 
-# Admin approves industry user
-from django.shortcuts import get_object_or_404, redirect
-from .models import Login, IndustryRegister, ApprovedIndustryByAdmin
 
 # Admin approves industry user
+@login_required(login_url = 'login')
 def approve_industry(request, user_id):
     user = get_object_or_404(Login, id=user_id)
     user.is_approved = True
@@ -273,6 +262,7 @@ def approve_industry(request, user_id):
 
 
 # Admin rejects industry user
+@login_required(login_url = 'login')
 def reject_industry(request, user_id):
     user = get_object_or_404(Login, id=user_id)
     user.is_approved = False
@@ -281,17 +271,15 @@ def reject_industry(request, user_id):
 
     # Remove from ApprovedIndustryByAdmin if previously approved
     ApprovedIndustryByAdmin.objects.filter(industry__user=user).delete()
-
     return redirect("admin_view_industry")
 
 
-from django.shortcuts import render
-from .models import IndustryRegister, ApprovedIndustryByAdmin
 
 
 
 
 #consumer
+@login_required(login_url = 'login')
 def consumer(request):
     return render(request,"consumer/consumer.html")
 
@@ -316,6 +304,7 @@ def consumer_registration(request):
     return render(request,"consumer/consumer.html", {'form1':form1, 'form2':form2})
 
 
+@login_required(login_url = 'login')
 def view_consumer(request):
     data = ConsumerRegister.objects.all()
     print(data)
@@ -324,6 +313,7 @@ def view_consumer(request):
 
 
 # Admin approves consumer user
+@login_required(login_url = 'login')
 def approve_consumer(request, user_id):
     user = get_object_or_404(Login, id=user_id)
     user.is_approved = True
@@ -332,6 +322,7 @@ def approve_consumer(request, user_id):
     return redirect('admin_view_consumer')
 
 # Admin rejects consumer user
+@login_required(login_url = 'login')
 def reject_consumer(request, user_id):
     user = get_object_or_404(Login, id=user_id)
     user.is_rejected = True
@@ -344,6 +335,7 @@ def reject_consumer(request, user_id):
 
 
 
+@login_required(login_url = 'login')
 def consumer_notifications(request):
     # Check if the user is authenticated and a consumer
     if request.user.is_authenticated:
@@ -358,11 +350,6 @@ def consumer_notifications(request):
             return render(request, 'consumer/consumer_notifications.html', {'error': 'User is not a consumer.'})
     else:
         return render(request, 'consumer/consumer_notifications.html', {'error': 'User is not authenticated.'})
-
-
-
-
-
 
 
 def feedback(request):
@@ -398,7 +385,6 @@ def view(request):
 def feedbacks(request):
     # Get the logged-in user
     user = request.user
-
     # Try to get the industry registered to the user
     try:
         user_industry = IndustryRegister.objects.get(user=user)
@@ -411,6 +397,7 @@ def feedbacks(request):
     return render(request, 'industry/feedbacks.html', {'feedbacks': feedbacks, 'user_industry': user_industry})
 
 
+@login_required(login_url = 'login')
 def reply_feedback(request,id):
     feedback = Feedback.objects.get(id=id)
     if request.method == 'POST':
@@ -434,12 +421,17 @@ def add_product(request):
     return render(request, 'industry/add_product.html', {'form': form})
 
 def product_list(request):
-    products = Product.objects.all()
+    try:
+        industry = IndustryRegister.objects.get(user=request.user)
+        products = Product.objects.filter(industry=industry)
+    except IndustryRegister.DoesNotExist:
+        products = Product.objects.none()
+
     return render(request, 'industry/product_list.html', {'products': products})
 
 
+@login_required(login_url = 'login')
 def update_product(request,id):
-
     a = Product.objects.get(id=id)
     form = Product_Form(instance=a)
     if request.method == 'POST':
@@ -452,6 +444,7 @@ def update_product(request,id):
 
 
 
+@login_required(login_url = 'login')
 def update_products(request, product_id):
     # Fetch the product using the provided ID
     product = get_object_or_404(Product, id=product_id)
@@ -473,22 +466,17 @@ def consumer_view_products(request):
     return render(request, 'consumer/consumer_view_products.html', {'products': products})
 
 
+
+@login_required
 def purchase_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    user = request.user
 
     if request.method == 'POST':
         quantity = int(request.POST.get('quantity', 1))
         total_price = product.price * quantity
 
-        user = request.user
-
-        # Debugging: Log the user making the purchase
-        print(f'Current User: {user.username} (ID: {user.id})')
-
-        # Create the Purchase entry
-        purchase = Purchase.objects.create(product=product, user=user, quantity=quantity)
-
-        # Create the Order entry
+        # Create Order
         order = Order.objects.create(
             user=user,
             product=product,
@@ -496,22 +484,63 @@ def purchase_product(request, product_id):
             total_price=total_price
         )
 
-        return redirect('consumer/consumer_purchase_confirm', product_id=product.id)
+        return redirect('payment_page', order_id=order.id)
 
-    return render(request, 'consumer/consumer_purchase_product.html', {'product': product})
+    # Fetch the user's consumer profile and pass to template
+    consumer_profile = ConsumerRegister.objects.get(user=user)
+
+    return render(request, 'consumer/consumer_purchase_product.html', {
+        'product': product,
+        'user': user,
+        'consumer_profile': consumer_profile
+    })
 
 
+
+
+from decimal import Decimal
+
+@login_required
+def payment_page(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    total_amount = order.total_price
+
+    if request.method == 'POST':
+        payment_method = request.POST.get('payment_method')
+        discount_applied = Decimal(request.POST.get('discount', '0'))  # Convert to Decimal
+
+        # Create Payment record
+        payment = Payment.objects.create(
+            user=request.user,
+            order=order,
+            payment_method=payment_method,
+            total_amount=total_amount - discount_applied,  # Now both are Decimals
+            discount_applied=discount_applied,
+            payment_status="Completed"
+        )
+
+        # Redirect to a success or summary page after payment
+        return redirect('payment_success', payment_id=payment.id)
+
+    return render(request, 'consumer/consumer_payment_page.html', {
+        'order': order,
+        'total_amount': total_amount
+    })
+
+
+@login_required
+def payment_success(request, payment_id):
+    payment = get_object_or_404(Payment, id=payment_id, user=request.user)
+    return render(request, 'consumer/payment_success.html', {
+        'payment': payment
+    })
+
+
+
+@login_required(login_url = 'login')
 def consumer_purchase_confirm(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'consumer/consumer_purchase_confirm.html', {'product': product})
-
-
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from .models import IndustryRegister
-
-
-
 
 
 def submit_complaint(request):
@@ -528,12 +557,11 @@ def submit_complaint(request):
 
     return render(request, 'consumer/submit_complaint.html', {'form': form})
 
-@login_required
 def view_complaints(request):
     complaints = Complaint.objects.filter(user=request.user)  # Only get complaints by logged-in user
     return render(request, 'consumer/view_complaints.html', {'complaints': complaints})
 
-@login_required
+@login_required(login_url = 'login')
 def view_complaint_detail(request, complaint_id):
     # Fetch the complaint belonging to the logged-in user
     complaint = get_object_or_404(Complaint, id=complaint_id, user=request.user)
@@ -545,15 +573,11 @@ def view_complaint_detail(request, complaint_id):
     })
 
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from django.utils import timezone
-from .models import Complaint, ComplaintResponse
-
 def admin_view_complaints(request):
     complaints = Complaint.objects.select_related('user').all()  # Use select_related to fetch user data efficiently
     return render(request, 'admin/admin_view_complaints.html', {'complaints': complaints})
 
+@login_required(login_url = 'login')
 def admin_view_complaint_detail(request, complaint_id):
     complaint = get_object_or_404(Complaint, id=complaint_id)
 
@@ -582,10 +606,8 @@ def admin_view_complaint_detail(request, complaint_id):
     })
 
 
-from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.decorators import login_required
 
-@login_required
+@login_required(login_url = 'login')
 def industry_profile(request):
     a = get_object_or_404(IndustryRegister, user=request.user)  # Get industry associated with logged-in user
     form = Industry_Register_Form(instance=a)
@@ -595,3 +617,8 @@ def industry_profile(request):
             form.save()
             return redirect("industrybase")
     return render(request, "industry/industry_profile.html", {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")
+

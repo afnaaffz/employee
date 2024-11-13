@@ -1,0 +1,32 @@
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+<div class="container my-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="text-center p-5 rounded shadow-sm" style="max-width: 500px; background-color: #f9f9f9;">
+        <!-- Success Icon -->
+        <div class="mb-3">
+            <span class="text-success" style="font-size: 3rem;">
+                <i class="fas fa-check-circle"></i>
+            </span>
+        </div>
+
+        <!-- Payment Success Message -->
+        <h2 class="text-success mb-3">Payment Successful</h2>
+        <p class="lead">Thank you, {{ payment.user.name }}! Your payment has been processed.</p>
+
+        <!-- Transaction Summary -->
+        <div class="bg-light p-3 rounded my-4">
+            <p class="mb-2">Amount Paid: <strong>₹{{ payment.total_amount }}</strong></p>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="bg-light p-3 rounded my-4">
+            <p class="mb-2">Product: <strong>{{ payment.order.product.name }}</strong></p>
+            <p class="mb-2">Description: <strong>{{ payment.order.product.description }}</strong></p>
+            <p class="mb-0">Quantity: <strong>{{ payment.order.quantity }}</strong></p>
+        </div>
+
+        <!-- Return Button -->
+        <a href="{% url 'index' %}" class="btn btn-primary btn-lg mt-3">Return to Homepage</a>
+    </div>
+</div>
+{% endblock %}
