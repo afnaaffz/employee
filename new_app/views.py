@@ -132,15 +132,25 @@ def view_industry(request):
 
 
 
+from django.db.models import Q
+
 def consumer_view_industry(request):
     selected_location = request.GET.get('location', '')
+    search_term = request.GET.get('search', '').strip()
 
     # Get all industries, optionally filtering by location
     industries = IndustryRegister.objects.all()
+
     if selected_location:
         industries = industries.filter(location=selected_location)
 
-    # Get distinct locations for dropdown
+    if search_term:
+        industries = industries.filter(
+            Q(name__icontains=search_term) |  # Filter by Industry Name
+            Q(product__name__icontains=search_term)  # Filter by Product Name
+        ).distinct()
+
+    # Get distinct locations for the location dropdown
     locations = IndustryRegister.objects.values_list('location', flat=True).distinct()
 
     # Check for a message flag in the request
@@ -152,7 +162,6 @@ def consumer_view_industry(request):
         'locations': locations,
         'selected_location': selected_location,
     })
-
 
 
 
@@ -679,7 +688,7 @@ def feedback_ratings_graph(request):
 
     if not industry_ratings:
         print("No data found for industry feedback ratings.")
-        return render(request, 'admin/no_data.html')
+        return render(request, 'admin/feedback_ratings_graph.html')
 
     industry_names = [entry['industry__name'] for entry in industry_ratings]
     avg_ratings = [entry['avg_rating'] for entry in industry_ratings]

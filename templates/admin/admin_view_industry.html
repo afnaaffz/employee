@@ -2,13 +2,11 @@
 
 {% block content %}
 
-<div class="card" style="width: 65rem;">
+<div class="card" style="width: 75rem;">
     <div class="card-body">
         <h5 class="card-title">Industry Approval Data</h5>
 
-        <div class="d-flex justify-content-end mb-3">
-            <a href="{% url 'add_industry' %}" class="btn btn-primary">Add Industry</a>
-        </div>
+
 
         <!-- Table for Pending Industries -->
         <h6>Pending Industries</h6>
@@ -33,9 +31,12 @@
                             <td>{{ i.email }}</td>
                             <td>Awaiting Approval</td>
                             <td>
-                                <a href="{% url 'approve_industry' i.user.id %}" class="btn btn-success">Approve</a>
-                                <a href="{% url 'reject_industry' i.user.id %}" class="btn btn-danger">Reject</a>
-                            </td>
+    <div class="d-flex justify-content-start">
+        <a href="{% url 'approve_industry' i.user.id %}" class="btn btn-success mr-2">Approve</a>
+        <a href="{% url 'reject_industry' i.user.id %}" class="btn btn-danger">Reject</a>
+    </div>
+</td>
+
                         </tr>
                     {% endif %}
                 {% empty %}
@@ -52,7 +53,8 @@
             <thead>
                 <tr>
                     <th scope="col">SL</th>
-                    <th scope="col">NAME</th>
+                    <th scope="col">INDUSTRY NAME</th>
+                    <th scope="col">INDUSTRY TYPE</th>
                     <th scope="col">MOBILE</th>
                     <th scope="col">EMAIL</th>
                     <th scope="col">ADDRESS</th>
@@ -65,6 +67,7 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ approved.industry.name }}</td>
+                        <td>{{ approved.industry.industry_type }}</td>
                         <td>{{ approved.industry.mobile }}</td>
                         <td>{{ approved.industry.email }}</td>
                         <td>{{ approved.industry.address }}</td>

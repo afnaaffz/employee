@@ -20,6 +20,7 @@
                         <p class="card-text">{{ product.description|truncatewords:20 }}</p>
                         <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
                         <p class="card-text"><strong>Industry:</strong> {{ product.industry.name }}</p>
+                        <p class="card-text"><strong>Status:</strong> {{ product.availability_status }}</p> <!-- Added this line to show the availability status -->
                         <div class="text-center mt-3">
                             <a href="{% url 'update_product' product.id %}" class="btn btn-warning btn-sm">Update</a>
                         </div>

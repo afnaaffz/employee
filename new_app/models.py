@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser, User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.template.defaultfilters import slugify
 
 
 class Login(AbstractUser):
@@ -11,18 +12,25 @@ class Login(AbstractUser):
     is_consumer = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     is_rejected = models.BooleanField(default=False)
-    has_logged_in = models.BooleanField(default=False)  # New field to track login status
+    has_logged_in = models.BooleanField(default=False)
+
 
 class IndustryRegister(models.Model):
     user = models.ForeignKey(Login, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    industry_type = models.CharField(max_length=100)  # Type of industry
     mobile = models.CharField(max_length=10)
     email = models.EmailField()
     address = models.TextField()
-    location = models.CharField(max_length=100)  # Add location field
+    location = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.industry_type})"
+
+
+
+
 
 class ApprovedIndustryByAdmin(models.Model):
     industry = models.OneToOneField(IndustryRegister, on_delete=models.CASCADE)
@@ -46,15 +54,28 @@ class IndustryProfile(models.Model):
 
 
 class Product(models.Model):
-    industry = models.ForeignKey(IndustryRegister,on_delete=models.CASCADE)
+    industry = models.ForeignKey(IndustryRegister, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    price = models.DecimalField(max_digits=10 ,decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.FileField(upload_to='products/')
+    availability_status = models.CharField(
+        max_length=20, choices=[('Available', 'Available'), ('Out of Stock', 'Out of Stock'), ('Discontinued', 'Discontinued')],
+        default='Available'
+    )
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)  # Discount field
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+
+    @property
+    def discounted_price(self):
+        return self.price - (self.price * self.discount_percentage / 100)
 
     def __str__(self):
         return self.name
-
 
 
 
@@ -69,6 +90,8 @@ class ConsumerRegister(models.Model):
     city = models.CharField(max_length=100)  # Add city field if missing
     state = models.CharField(max_length=100)  # Add state field if missing
     zip_code = models.CharField(max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)  # New field for registration timestamp
+
 
 
     def __str__(self):
@@ -81,10 +104,11 @@ class Notification(models.Model):
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    notification_type = models.CharField(max_length=50, choices=[('info', 'Information'), ('warning', 'Warning'), ('error', 'Error')], default='info')
+    priority = models.IntegerField(default=1)  # Priority for sorting: 1 - Low, 2 - Medium, 3 - High
 
     def __str__(self):
         return f"Notification for {self.user.username}: {self.message}"
-
 
 
 class Feedback(models.Model):
@@ -127,9 +151,10 @@ class Order(models.Model):
 
 
 class Complaint(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # The user who submits the complaint
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
+    complaint_type = models.CharField(max_length=100, choices=[('Product Quality', 'Product Quality'), ('Delivery Issue', 'Delivery Issue'), ('Customer Service', 'Customer Service')], default='Product Quality')  # Complaint type
+    status = models.CharField(max_length=50, choices=[('Pending', 'Pending'), ('Resolved', 'Resolved')], default='Pending')
     image = models.ImageField(upload_to='complaints/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -161,8 +186,7 @@ class Payment(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     discount_applied = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     payment_status = models.CharField(max_length=20, default="Pending")
-
-    # Additional fields for specific payment details
+    payment_date = models.DateTimeField(auto_now_add=True)  # Payment date
     bank = models.CharField(max_length=100, blank=True, null=True)
     emi_duration = models.IntegerField(blank=True, null=True)
     wallet = models.CharField(max_length=100, blank=True, null=True)
@@ -170,4 +194,4 @@ class Payment(models.Model):
     upi_id = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.payment_method} - {self.total_amount}"
+        return f"{self.user.username} "
