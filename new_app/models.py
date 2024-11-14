@@ -2,9 +2,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import AbstractUser, User
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.template.defaultfilters import slugify
 
 
 class Login(AbstractUser):
@@ -41,16 +38,6 @@ class ApprovedIndustryByAdmin(models.Model):
 
 
 
-class IndustryProfile(models.Model):
-    user = models.OneToOneField(Login, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    mobile = models.CharField(max_length=10)
-    email = models.EmailField()
-    address = models.TextField()
-    location = models.CharField(max_length=100)  # Add location field
-
-    def __str__(self):
-        return self.name
 
 
 class Product(models.Model):
@@ -124,14 +111,6 @@ class Feedback(models.Model):
         return self.subject
 
 
-class Purchase(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Updated this line
-    purchase_date = models.DateTimeField(auto_now_add=True)
-    quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f'{self.user.username} purchased {self.product.name} on {self.purchase_date}'
 
 
 class Order(models.Model):
@@ -195,3 +174,22 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.user.username} "
+
+
+class Meeting(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    location = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+    admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+class RSVP(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    status = models.CharField(choices=[('attending','Attending'),('not_attending', 'Not Attending')],max_length=50)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.meeting.title}"

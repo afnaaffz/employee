@@ -66,6 +66,21 @@ urlpatterns = [
     path('complaints_pie_chart/', views.complaints_pie_chart, name='complaints_pie_chart'),
     path('products_pie_chart/', views.products_pie_chart, name='products_pie_chart'),
 
+    path('update_order_status/<int:order_id>/', views.update_order_status, name='update_order_status'),
+    path('track_order/', views.track_order, name='track_order'),
+    path('order_list/', views.order_list, name='order_list'),
+
+    path('consumer_dashboard/', views.consumer_dashboard, name='consumer_dashboard'),
+
+    path('admin_meeting_list/', views.admin_meeting_list, name='admin_meeting_list'),
+    path('view_meeting_list/', views.view_meeting_list, name='view_meeting_list'),
+
+    path('meeting_detail/<int:meeting_id>/', views.meeting_detail, name='meeting_detail'),
+    path('user_rsvp/', views.user_rsvp, name='user_rsvp'),
+    path('admin/rsvps/', views.admin_rsvp_list, name='admin_rsvp_list'),
+
+    path('add_meeting/', views.add_meeting, name='add_meeting'),
+
     path("logout_view", views.logout_view, name="logout_view"),
 
 ]

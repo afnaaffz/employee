@@ -9,14 +9,15 @@ class FeedbackAdmin(admin.ModelAdmin):
 admin.site.register(models.Login)
 admin.site.register(models.IndustryRegister)
 admin.site.register(models.ApprovedIndustryByAdmin)
-
-admin.site.register(models.IndustryProfile)
 admin.site.register(models.ConsumerRegister)
 admin.site.register(models.Feedback, FeedbackAdmin)  # FeedbackAdmin is now defined
 admin.site.register(models.Product)
-admin.site.register(models.Purchase)
 admin.site.register(models.Order)
 admin.site.register(models.Complaint)
 admin.site.register(models.ComplaintResponse)
 admin.site.register(models.Payment)
+
+admin.site.register(models.Meeting)
+admin.site.register(models.RSVP)
+
 

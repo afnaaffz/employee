@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from new_app.models import Login, IndustryRegister, ConsumerRegister, Feedback, Product, \
-    Purchase, Order, Complaint, ComplaintResponse, Payment
+from new_app.models import Login, IndustryRegister, ConsumerRegister, Feedback, Product, Order, Complaint, \
+    ComplaintResponse, Payment, Meeting, RSVP
 
 
 class Login_Form(UserCreationForm):
@@ -43,11 +43,6 @@ class Product_Form(forms.ModelForm):
         fields =('__all__')
         exclude = ('user',)
 
-class Purchase_Form(forms.ModelForm):
-    class Meta:
-        model = Purchase
-        fields =('__all__')
-        exclude = ('user',)
 
 
 class Order_Form(forms.ModelForm):
@@ -68,16 +63,23 @@ class Complaint_Response_Form(forms.ModelForm):
         fields =('__all__')
         exclude = ('user',)
 
-
-class Industry_Profile_Form(forms.ModelForm):
+class Complaint_Response_Form(forms.ModelForm):
     class Meta:
-        model = IndustryRegister
+        model = ComplaintResponse
         fields =('__all__')
         exclude = ('user',)
 
-class Payment_Form(forms.ModelForm):
+
+class Meeting_Form(forms.ModelForm):
     class Meta:
-        model = Payment
+        model = Meeting
+        fields =('__all__')
+        exclude = ('user',)
+
+
+class RSVP_Form(forms.ModelForm):
+    class Meta:
+        model = RSVP
         fields =('__all__')
         exclude = ('user',)
 

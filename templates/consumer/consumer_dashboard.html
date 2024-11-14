@@ -1,0 +1,34 @@
+{% extends "consumer/consumer base.html" %}
+{% block content %}
+
+<div class="container-fluid">
+    <h2 class="text-dark mb-4">Welcome, {{ consumer.name }}</h2>
+
+    <!-- Recommended Products Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Recommended Products for You</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for product in recommended_products %}
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+                            <p><strong>₹{{ product.discounted_price }}</strong></p>
+                            <a href="{% url 'purchase_product' product.id %}" class="btn btn-primary">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+   
+    </div>
+</div>
+{% endblock %}

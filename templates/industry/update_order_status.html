@@ -1,0 +1,33 @@
+{% extends "industry/industry base.html" %}
+{% block content %}
+
+<div class="container my-5">
+  <div class="card">
+    <div class="card-body">
+      <h2 class="text-center mb-4">Update Order Status</h2>
+
+      <!-- Update Order Status Form -->
+      <form method="post">
+        {% csrf_token %}
+
+        <!-- Status Field -->
+        <div class="form-group">
+          <label for="status" class="form-label">Order Status</label>
+          <select name="status" id="status" class="form-control">
+            <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
+            <option value="Processing" {% if order.status == "Processing" %}selected{% endif %}>Processing</option>
+            <option value="Shipped" {% if order.status == "Shipped" %}selected{% endif %}>Shipped</option>
+            <option value="Delivered" {% if order.status == "Delivered" %}selected{% endif %}>Delivered</option>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-center mt-4">
+          <button type="submit" class="btn btn-primary btn-lg">Update Status</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

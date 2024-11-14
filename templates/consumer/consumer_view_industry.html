@@ -24,9 +24,6 @@
               </select>
             </div>
           </div>
-
-          <!-- Unified Search Filter (Industry and Product) -->
-
         </div>
 
         <!-- Buttons for Search and Clear -->
@@ -42,36 +39,43 @@
           <thead>
             <tr>
               <th scope="col">SL</th>
-              <th scope="col">Industry Name</th> <!-- Display Industry and Product name here -->
+              <th scope="col">Industry Name</th>
               <th scope="col">Product Name</th>
               <th scope="col">Mobile</th>
               <th scope="col">Email</th>
               <th scope="col">Address</th>
               <th scope="col">Location</th>
-              <th scope="col">Actions</th> <!-- New column for the "View" button -->
+              <th scope="col">Actions</th> <!-- Column for the "View" button -->
             </tr>
           </thead>
           <tbody>
-            {% for industry in industries %}
-              {% for product in industry.product_set.all %}
-                <tr>
-                  <td>{{ forloop.parentloop.counter }}</td>
-                  <td>{{ industry.name }}</td>
-                  <td>{{ product.name }}</td>
-                  <td>{{ industry.mobile }}</td>
-                  <td>{{ industry.email }}</td>
-                  <td>{{ industry.address }}</td>
-                  <td>{{ industry.location }}</td>
-                  <td>
-                    <a href="{% url 'product_detail' product.id %}" class="btn btn-info btn-sm">View</a>
-                  </td>
-                </tr>
-              {% empty %}
-
+            {% if industries %}
+              {% for industry in industries %}
+                {% if industry.product_set.exists %}
+                  {% for product in industry.product_set.all %}
+                    <tr>
+                      <td>{{ forloop.parentloop.counter }}</td>
+                      <td>{{ industry.name }}</td>
+                      <td>{{ product.name }}</td>
+                      <td>{{ industry.mobile }}</td>
+                      <td>{{ industry.email }}</td>
+                      <td>{{ industry.address }}</td>
+                      <td>{{ industry.location }}</td>
+                      <td>
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-info btn-sm">View</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                   <tr>
+                <td colspan="8" class="text-center">No records present for the selected filters.</td>
+              </tr>
+                {% endif %}
               {% endfor %}
-            {% empty %}
+            {% else %}
+              <!-- Display this row if no industries were found for the selected filters -->
 
-            {% endfor %}
+            {% endif %}
           </tbody>
         </table>
       </div>

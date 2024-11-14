@@ -11,9 +11,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
 from new_app.forms import Login_Form, Consumer_Register_Form, Industry_Register_Form, Feedback_Form, \
-    Product_Form, Industry_Profile_Form, Complaint_Form
-from new_app.models import ConsumerRegister, IndustryRegister, Login, Feedback, Product, Purchase, Order, \
-    IndustryProfile, Complaint, ComplaintResponse, Notification, ApprovedIndustryByAdmin, Payment
+    Product_Form, Complaint_Form
+from new_app.models import ConsumerRegister, IndustryRegister, Login, Feedback, Product, Order,  Complaint, ComplaintResponse, Notification, ApprovedIndustryByAdmin, Payment
 
 
 # Create your views here.
@@ -762,6 +761,158 @@ def products_pie_chart(request):
     }
 
     return render(request, 'admin/products_pie_chart.html', context)
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Order
+
+# Industry: Update order status
+@login_required
+def update_order_status(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        order.status = new_status
+        order.save()
+        return redirect('order_list')  # Redirect to a relevant page
+    return render(request, 'industry/update_order_status.html', {'order': order})
+
+# Consumer: Track order status
+@login_required
+def track_order(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'consumer/track_order.html', {'orders': orders})
+
+
+@login_required
+def order_list(request):
+    try:
+        # Retrieve the IndustryRegister for the logged-in user
+        industry = IndustryRegister.objects.get(user=request.user)
+        # Filter orders by the industry of the logged-in user
+        orders = Order.objects.filter(product__industry=industry)
+    except IndustryRegister.DoesNotExist:
+        # If no industry is registered, handle appropriately (e.g., no orders found)
+        orders = Order.objects.none()  # No orders if industry doesn't exist
+
+    return render(request, 'industry/order_list.html', {'orders': orders})
+
+
+from django.shortcuts import render
+from .models import Product, Order, ConsumerRegister
+
+
+def consumer_dashboard(request):
+    # Get consumer data
+    consumer = ConsumerRegister.objects.get(user=request.user)
+
+    # Example: Fetch recommended products (you can refine this as discussed earlier)
+    recommended_products = Product.objects.filter(availability_status='Available')[:5]  # Recommend top 5 products
+
+    # Example: Fetch order history
+    order_history = Order.objects.filter(user=request.user)
+
+    context = {
+        'consumer': consumer,
+        'recommended_products': recommended_products,
+        'order_history': order_history,
+    }
+    return render(request, 'consumer/consumer_dashboard.html', context)
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Meeting, RSVP
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+# List of all meetings (for all users)
+from django.shortcuts import render
+from .models import Meeting, RSVP
+from django.contrib.auth.decorators import login_required
+
+# Admin view to list all meetings with RSVP details
+from django.shortcuts import render
+from .models import Meeting, RSVP
+from django.contrib.auth.decorators import login_required
+
+# Admin view to list all meetings with RSVP details
+@login_required
+def admin_meeting_list(request):
+    meetings = Meeting.objects.all()
+    meetings_with_rsvps = []
+
+    # For each meeting, fetch the RSVPs and pair them with the meeting
+    for meeting in meetings:
+        rsvps = RSVP.objects.filter(meeting=meeting)
+        meetings_with_rsvps.append((meeting, rsvps))
+
+    return render(request, 'admin/admin_meeting_list.html', {'meetings_with_rsvps': meetings_with_rsvps})
+
+
+@login_required
+def view_meeting_list(request):
+    meetings = Meeting.objects.all()
+    return render(request, 'consumer/view_meeting_list.html', {'meetings': meetings})
+
+from django.shortcuts import render
+from .models import Meeting, RSVP
+from django.contrib.auth.decorators import login_required
+
+# View for the admin to see all RSVPs for each meeting
+@login_required
+def admin_rsvp_list(request):
+    # Fetching all meetings and their corresponding RSVPs
+    meetings = Meeting.objects.all()
+    rsvps = {}
+
+    for meeting in meetings:
+        rsvps[meeting] = RSVP.objects.filter(meeting=meeting)
+
+    return render(request, 'admin/admin_rsvp_list.html', {'rsvps': rsvps, 'meetings': meetings})
+
+
+@login_required
+def meeting_detail(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id)
+    if request.method == 'POST':
+        rsvp_status = request.POST['status']
+        rsvp, created = RSVP.objects.get_or_create(user=request.user, meeting=meeting)
+        rsvp.status = rsvp_status
+        rsvp.save()
+        messages.success(request, "Your RSVP status has been updated.")
+        # Remove `args=[meeting.id]` since `user_rsvp` does not need any arguments
+        return HttpResponseRedirect(reverse('user_rsvp'))
+    return render(request, 'consumer/meeting_detail.html', {'meeting': meeting})
+
+# View for users to see their RSVPs
+@login_required
+def user_rsvp(request):
+    rsvps = RSVP.objects.filter(user=request.user)
+    return render(request, 'consumer/user_rsvp.html', {'rsvps': rsvps})
+
+# View for admin to add a new meeting
+@login_required
+def add_meeting(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        description = request.POST['description']
+        location = request.POST['location']
+        date = request.POST['date']
+        meeting = Meeting.objects.create(
+            title=title,
+            description=description,
+            location=location,
+            date=date,
+            admin=request.user
+        )
+        messages.success(request, "Meeting created successfully!")
+        return HttpResponseRedirect(reverse('admin_meeting_list'))
+    return render(request, 'admin/add_meeting.html')
 
 
 
