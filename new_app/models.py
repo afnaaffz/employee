@@ -176,12 +176,27 @@ class Payment(models.Model):
         return f"{self.user.username} "
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Meeting(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     location = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add=True)
-    admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    industry = models.ForeignKey(IndustryRegister, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -193,3 +208,62 @@ class RSVP(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.meeting.title}"
+
+
+class JobListing(models.Model):
+    industry = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='job_listings')  # Assuming Industry is a User
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    location = models.CharField(max_length=100)
+    posted_date = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+
+    def get_applications(self):
+        return self.applications.all()  # Retrieve all applications for this job
+
+class JobApplication(models.Model):
+    PENDING = 'pending'
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+
+    APPLICATION_STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+    ]
+    job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
+    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='applications')  # Assuming applicant is a consumer User
+    application_date = models.DateTimeField(auto_now_add=True)
+    cover_letter = models.TextField(blank=True)
+    application_status = models.CharField(
+        max_length=10,
+        choices=APPLICATION_STATUS_CHOICES,
+        default=PENDING,
+    )
+    notified = models.BooleanField(default=False)  # New field
+
+
+    def approve(self):
+        self.application_status = self.APPROVED
+        self.save()
+
+    def reject(self):
+        self.application_status = self.REJECTED
+        self.save()
+
+    def __str__(self):
+        return f"Application for {self.job.title} by {self.applicant}"
+
+class VideoTutorial(models.Model):
+    industry = models.ForeignKey(IndustryRegister, on_delete=models.CASCADE)  # Link to the industry user
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='tutorials')  # Link to the product
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    video_file = models.FileField(upload_to='videos/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

@@ -4,6 +4,16 @@
 {% block content %}
 <div class="container my-5">
     <h5 class="text-center text-primary mb-4">Product List</h5>
+
+    <!-- Notification Bar -->
+    {% if messages %}
+    <div id="notification-bar" class="alert alert-success" role="alert" style="display: none;">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="row">
         {% for product in products %}
             <div class="col-md-4 mb-4">
@@ -20,7 +30,7 @@
                         <p class="card-text">{{ product.description|truncatewords:20 }}</p>
                         <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
                         <p class="card-text"><strong>Industry:</strong> {{ product.industry.name }}</p>
-                        <p class="card-text"><strong>Status:</strong> {{ product.availability_status }}</p> <!-- Added this line to show the availability status -->
+                        <p class="card-text"><strong>Status:</strong> {{ product.availability_status }}</p>
                         <div class="text-center mt-3">
                             <a href="{% url 'update_product' product.id %}" class="btn btn-warning btn-sm">Update</a>
                         </div>
@@ -37,4 +47,17 @@
         <a href="{% url 'add_product' %}" class="btn btn-primary">Add New Product</a>
     </div>
 </div>
+
+<script>
+    // Display notification bar if messages are available
+    document.addEventListener('DOMContentLoaded', function () {
+        const notificationBar = document.getElementById('notification-bar');
+        if (notificationBar) {
+            notificationBar.style.display = 'block';
+            setTimeout(() => {
+                notificationBar.style.display = 'none';
+            }, 3000); // Hide after 3 seconds
+        }
+    });
+</script>
 {% endblock %}

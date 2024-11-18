@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
 from new_app.models import Login, IndustryRegister, ConsumerRegister, Feedback, Product, Order, Complaint, \
-    ComplaintResponse, Payment, Meeting, RSVP
+    ComplaintResponse, Payment, Meeting, RSVP, JobListing, JobApplication, VideoTutorial
 
 
 class Login_Form(UserCreationForm):
@@ -84,3 +84,29 @@ class RSVP_Form(forms.ModelForm):
         exclude = ('user',)
 
 
+from django import forms
+from .models import JobListing
+
+class Job_Listing_Form(forms.ModelForm):
+    class Meta:
+        model = JobListing
+        fields = ['title', 'description', 'location']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        # You can add additional custom validation if needed.
+        return cleaned_data
+
+class Job_Application_Form(forms.ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = ['cover_letter']
+        widgets = {
+            'cover_letter': forms.Textarea(attrs={'placeholder': 'Write your cover letter here...'}),
+        }
+
+
+class Video_Tutorial_Form(forms.ModelForm):
+    class Meta:
+        model = VideoTutorial
+        fields = ['product', 'title', 'description', 'video_file']

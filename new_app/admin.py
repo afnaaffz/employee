@@ -20,4 +20,8 @@ admin.site.register(models.Payment)
 admin.site.register(models.Meeting)
 admin.site.register(models.RSVP)
 
+admin.site.register(models.JobListing)
+admin.site.register(models.JobApplication)
 
+
+admin.site.register(models.VideoTutorial)

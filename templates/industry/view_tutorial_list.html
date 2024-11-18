@@ -1,0 +1,21 @@
+{% extends "industry/industry base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">Video Tutorials</h1>
+    <div class="video-list">
+        {% for video in videos %}
+            <div class="video-item mb-5">
+                <h2 class="h4 text-primary">{{ video.title }}</h2>
+                <p class="text-muted">{{ video.description }}</p>
+                <video width="50%" height="250" controls>
+                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        {% empty %}
+            <p class="text-center text-secondary">No video tutorials available at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

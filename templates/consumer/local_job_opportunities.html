@@ -1,0 +1,49 @@
+{% extends "consumer/consumer base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">Local Job Opportunities</h2>
+
+    {% if job_listings %}
+        <div class="row">
+            {% for job in job_listings %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ job.title }}</h4>
+                            <p><strong>Industry:</strong> {{ job.industry.username }}</p>
+                            <p><strong>Location:</strong> {{ job.location }}</p>
+                            <p><strong>Description:</strong> {{ job.description|truncatewords:20 }}</p>
+                            <p><strong>Posted on:</strong> {{ job.posted_date|date:"M d, Y" }}</p>
+
+                            {% if user.is_authenticated and user.is_consumer %}
+                                {% if job.applied %}
+                                    <div class="alert alert-info mt-3">
+                                        <strong>Your Application Status:</strong> {{ job.application_status }}
+                                    </div>
+                                {% else %}
+                                    <form action="{% url 'apply_for_job' job.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <textarea name="cover_letter" class="form-control" placeholder="Write your cover letter here..." rows="3" required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Apply</button>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <div class="alert alert-warning mt-3">
+                                    Log in as a consumer to apply for this job.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            No job opportunities available at the moment.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

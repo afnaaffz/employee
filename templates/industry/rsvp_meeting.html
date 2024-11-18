@@ -1,0 +1,20 @@
+{% extends 'indexx.html' %}
+{% block content %}
+  <h2>RSVP List for {{ meeting.title }}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rsvp in rsvps %}
+        <tr>
+          <td>{{ rsvp.user.username }}</td>
+          <td>{{ rsvp.get_status_display }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

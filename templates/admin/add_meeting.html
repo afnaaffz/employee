@@ -1,34 +1,94 @@
 {% extends "admin/admin base.html" %}
 
 {% block content %}
-<div class="create-meeting-container">
-    <h2 class="page-title">Create a New Meeting</h2>
-    <form method="post" class="meeting-form">
-        {% csrf_token %}
 
-        <div class="form-group">
-            <label for="title" class="form-label">Meeting Title:</label>
-            <input type="text" name="title" id="title" class="form-control" required>
-        </div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Meeting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
 
-        <div class="form-group">
-            <label for="description" class="form-label">Description:</label>
-            <textarea name="description" id="description" class="form-control" rows="4"  required></textarea>
-        </div>
+        .form-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-        <div class="form-group">
-            <label for="location" class="form-label">Location:</label>
-            <input type="text" name="location" id="location" class="form-control"  required>
-        </div>
+        h1 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+        }
 
-        <div class="form-group">
-            <label for="date" class="form-label">Meeting Date & Time:</label>
-            <input type="datetime-local" name="date" id="date" class="form-control" required>
-        </div>
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555555;
+        }
 
-        <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary">Create Meeting</button>
-        </div>
-    </form>
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1>Add Meeting</h1>
+   <form method="POST">
+    {% csrf_token %}
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" placeholder="Enter meeting title" required>
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description" placeholder="Enter meeting description" required></textarea>
+
+    <label for="location">Location</label>
+    <input type="text" id="location" name="location" placeholder="Enter meeting location" required>
+
+    <button type="submit">Add Meeting</button>
+</form>
+
 </div>
+</body>
+</html>
+
 {% endblock %}

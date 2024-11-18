@@ -1,0 +1,105 @@
+{% extends "admin/admin base.html" %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Details - {{ meeting.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table thead {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        table th,
+        table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #dddddd;
+        }
+
+        table th {
+            font-weight: bold;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #888888;
+            font-style: italic;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>RSVPs for "{{ meeting.title }}"</h2>
+    {% if rsvps %}
+    <table>
+        <thead>
+            <tr>
+                <th>Industry</th>
+                <th>RSVP Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rsvp in rsvps %}
+            <tr>
+                <td>{{ rsvp.user.username }}</td>
+                <td>
+                    {% if rsvp.status == 'attending' %}
+                        <span style="color: green; font-weight: bold;">Attending</span>
+                    {% elif rsvp.status == 'not_attending' %}
+                        <span style="color: red; font-weight: bold;">Not Attending</span>
+                    {% else %}
+                        <span style="color: gray;">Unknown</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-message">No RSVP records found for this meeting.</div>
+    {% endif %}
+</div>
+</body>
+</html>
+{% endblock %}
+

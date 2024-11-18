@@ -1,0 +1,30 @@
+{% extends "consumer/consumer base.html" %}
+
+{% block content %}
+<div class="container my-7">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title text-center">Tutorials for {{ product.name }}</h5>
+
+      {% if videos %}
+        <div class="list-group">
+          {% for video in videos %}
+            <div class="list-group-item">
+              <h6>{{ video.title }}</h6>
+              <p>{{ video.description }}</p>
+              <div class="video-container">
+                <video controls width="100%" height="auto" style="max-width: 600px; max-height: 400px;">
+                  <source src="{{ video.video_file.url }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No tutorials available for this product.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

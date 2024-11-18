@@ -6,13 +6,15 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.db.models import Count
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
 
 from new_app.forms import Login_Form, Consumer_Register_Form, Industry_Register_Form, Feedback_Form, \
-    Product_Form, Complaint_Form
-from new_app.models import ConsumerRegister, IndustryRegister, Login, Feedback, Product, Order,  Complaint, ComplaintResponse, Notification, ApprovedIndustryByAdmin, Payment
+    Product_Form, Complaint_Form, Job_Listing_Form, Video_Tutorial_Form, Meeting_Form, RSVP_Form, Job_Application_Form
+from new_app.models import ConsumerRegister, IndustryRegister, Login, Feedback, Product, Order, Complaint, \
+    ComplaintResponse, Notification, ApprovedIndustryByAdmin, Payment, JobListing
 
 
 # Create your views here.
@@ -420,16 +422,26 @@ def reply_feedback(request,id):
     return render(request, 'industry/reply_feedback.html',{'feedback':feedback})
 
 
+from django.shortcuts import redirect
+from django.contrib import messages
+
 def add_product(request):
     if request.method == 'POST':
+        # Handle form submission
         form = Product_Form(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            product = form.save(commit=False)
+            product.industry = IndustryRegister.objects.get(user=request.user)
+            product.save()
+            # Add success message to session
+            request.session['success_message'] = "Product added successfully!"
             return redirect('product_list')
     else:
         form = Product_Form()
 
     return render(request, 'industry/add_product.html', {'form': form})
+
+from django.contrib import messages
 
 def product_list(request):
     try:
@@ -437,6 +449,10 @@ def product_list(request):
         products = Product.objects.filter(industry=industry)
     except IndustryRegister.DoesNotExist:
         products = Product.objects.none()
+
+    # Check for success message in session
+    if 'success_message' in request.session:
+        messages.success(request, request.session.pop('success_message'))
 
     return render(request, 'industry/product_list.html', {'products': products})
 
@@ -472,9 +488,19 @@ def update_products(request, product_id):
     return render(request, 'consumer/update_products.html', {'form': form, 'product': product})
 
 
+from django.db.models import Q
+
 def consumer_view_products(request):
-    products = Product.objects.all()
-    return render(request, 'consumer/consumer_view_products.html', {'products': products})
+    industry_type = request.GET.get('industry_type', None)
+    industries = IndustryRegister.objects.values('industry_type').distinct()
+    if industry_type:
+        products = Product.objects.filter(industry__industry_type=industry_type)
+    else:
+        products = Product.objects.all()
+    return render(request, 'consumer/consumer_view_products.html', {
+        'products': products,
+        'industries': industries
+    })
 
 
 
@@ -823,97 +849,290 @@ def consumer_dashboard(request):
 
 
 
-from django.shortcuts import render, get_object_or_404
-from .models import Meeting, RSVP
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+
+
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import JobApplication
+
+
+
+
+
+from django.shortcuts import render, redirect
+from .models import VideoTutorial, Product, IndustryRegister
+
+from django.shortcuts import render, redirect
+from .models import VideoTutorial, Product, IndustryRegister
+
+def add_video_tutorial(request):
+    if request.user.is_authenticated and request.user.is_industry:
+        # Get the industry associated with the logged-in user
+        industry = IndustryRegister.objects.get(user=request.user)
+
+        if request.method == 'POST':
+            form = Video_Tutorial_Form(request.POST, request.FILES)
+            if form.is_valid():
+                # Create a new video tutorial and assign the industry
+                video_tutorial = form.save(commit=False)
+                video_tutorial.industry = industry  # Assign the industry (not the user)
+                video_tutorial.save()
+                return redirect('view_tutorial_list')  # Redirect after saving
+        else:
+            form = Video_Tutorial_Form()
+
+        return render(request, 'industry/add_video_tutorial.html', {'form': form})
+    else:
+        # Redirect if the user is not authenticated or not an industry user
+        return redirect('login')
+
+
+
+from django.shortcuts import render
+from .models import VideoTutorial, IndustryRegister
+
+
+from django.shortcuts import render
+from .models import VideoTutorial, IndustryRegister
+
+def view_tutorial_list(request):
+    # Check if the user is authenticated and is an industry user
+    if request.user.is_authenticated and request.user.is_industry:
+        # Retrieve the IndustryRegister instance for the logged-in user
+        try:
+            industry = IndustryRegister.objects.get(user=request.user)
+            # Retrieve tutorials associated with this industry
+            videos = VideoTutorial.objects.filter(industry=industry)
+        except IndustryRegister.DoesNotExist:
+            videos = []  # No IndustryRegister found, handle as needed
+    else:
+        videos = []  # Not authenticated or not an industry user
+
+    return render(request, 'industry/view_tutorial_list.html', {'videos': videos})
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import VideoTutorial, Product
+
+def view_tutorials_for_product(request, product_id):
+    # Get the product object
+    product = get_object_or_404(Product, id=product_id)
+
+    # Fetch tutorials related to this specific product
+    videos = VideoTutorial.objects.filter(product=product)
+
+    # If there are no tutorials, log a message
+    if not videos:
+        print(f"No tutorials found for the product: {product.name}")  # Debugging line to check if tutorials exist
+
+    return render(request, 'consumer/view_tutorials_for_product.html', {
+        'product': product,
+        'videos': videos  # Pass the videos to the template
+    })
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Meeting, RSVP
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 
-# List of all meetings (for all users)
-from django.shortcuts import render
-from .models import Meeting, RSVP
-from django.contrib.auth.decorators import login_required
+# Admin: Add Meeting View
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from .models import IndustryRegister, Meeting
 
-# Admin view to list all meetings with RSVP details
-from django.shortcuts import render
-from .models import Meeting, RSVP
-from django.contrib.auth.decorators import login_required
 
-# Admin view to list all meetings with RSVP details
-@login_required
-def admin_meeting_list(request):
+@staff_member_required
+def add_meeting(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        location = request.POST.get('location')
+
+        # Set the industry automatically (replace with appropriate logic)
+        try:
+            # Assuming you have a specific industry to assign, e.g., industry ID = 1
+            industry = IndustryRegister.objects.get(id=1)  # Replace with dynamic logic as needed
+
+            meeting = Meeting.objects.create(
+                title=title,
+                description=description,
+                location=location,
+                industry=industry
+            )
+            return redirect('meeting_list')  # Replace with your meeting list URL name
+        except IndustryRegister.DoesNotExist:
+            messages.error(request, "Industry does not exist.")
+        except Exception as e:
+            messages.error(request, f"Error: {str(e)}")
+
+        return redirect('add_meeting')
+
+    return render(request, 'admin/add_meeting.html')
+
+
+# Admin: View Meetings and Attendance
+@staff_member_required
+def meeting_list(request):
     meetings = Meeting.objects.all()
-    meetings_with_rsvps = []
-
-    # For each meeting, fetch the RSVPs and pair them with the meeting
-    for meeting in meetings:
-        rsvps = RSVP.objects.filter(meeting=meeting)
-        meetings_with_rsvps.append((meeting, rsvps))
-
-    return render(request, 'admin/admin_meeting_list.html', {'meetings_with_rsvps': meetings_with_rsvps})
-
+    return render(request, 'admin/meeting_list.html', {'meetings': meetings})
 
 @login_required
 def view_meeting_list(request):
     meetings = Meeting.objects.all()
-    return render(request, 'consumer/view_meeting_list.html', {'meetings': meetings})
+    return render(request, 'industry/view_meeting_list.html', {'meetings': meetings})
+
+
+
+# Industry: View Meeting and RSVP
+from django.contrib import messages
+
+@login_required
+def meeting_detail(request, pk):
+    meeting = get_object_or_404(Meeting, pk=pk)
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        RSVP.objects.update_or_create(
+            user=request.user, meeting=meeting, defaults={'status': status}
+        )
+        messages.success(request, "RSVP updated successfully!")  # Add success message
+        return redirect('meeting_detail', pk=meeting.pk)
+
+    user_rsvp = RSVP.objects.filter(user=request.user, meeting=meeting).first()
+    return render(request, 'industry/meeting_detail.html', {'meeting': meeting, 'user_rsvp': user_rsvp})
+
+
+# Admin: Check RSVPs
+@staff_member_required
+def rsvp_list(request, pk):
+    meeting = get_object_or_404(Meeting, pk=pk)
+    rsvps = RSVP.objects.filter(meeting=meeting)
+    return render(request, 'admin/rsvp_list.html', {'meeting': meeting, 'rsvps': rsvps})
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import JobListing, JobApplication
+
+# Create a job post
+@login_required
+def create_job_post(request):
+    if request.method == "POST":
+        form = Job_Listing_Form(request.POST)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.industry = request.user
+            job.is_approved = True  # Automatically approve
+            job.save()
+            return redirect('industry_job_list')
+    else:
+        form = Job_Listing_Form()
+    return render(request, 'industry/create_job.html', {'form': form})
+
+from django.contrib import messages
+
+@login_required
+def consumer_job_list(request):
+    # Check for approved applications where the user has not been notified
+    approved_applications = JobApplication.objects.filter(
+        applicant=request.user,
+        application_status=JobApplication.APPROVED,
+        notified=False
+    )
+
+    # Generate a message for each approved application
+    for application in approved_applications:
+        messages.success(
+            request,
+            f"Congrats! You have been approved by {application.job.industry.username} for the job '{application.job.title}'."
+        )
+        # Mark as notified
+        application.notified = True
+        application.save()
+
+    jobs = JobListing.objects.filter(is_approved=True).order_by('-posted_date')
+    return render(request, 'consumer/consumer_job_list.html', {'jobs': jobs})
+
+
+
+def industry_job_list(request):
+    jobs = JobListing.objects.filter(industry=request.user).order_by('-posted_date')
+    return render(request, 'industry/industry_job_list.html', {'jobs': jobs})
+
+
+# View applications for a specific job
+@login_required
+def view_job_applications(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id, industry=request.user)
+    applications = job.get_applications()
+    return render(request, 'industry/view_applications.html', {'job': job, 'applications': applications})
+
+# Approve or reject a job application
+from django.contrib import messages
+
+@login_required
+def manage_application(request, application_id, action):
+    application = get_object_or_404(JobApplication, id=application_id, job__industry=request.user)
+    if action == 'approve':
+        application.approve()
+        messages.success(request, f"Application from {application.applicant.username} has been approved!")
+    elif action == 'reject':
+        application.reject()
+        messages.warning(request, f"Application from {application.applicant.username} has been rejected.")
+    return redirect('view_job_applications', job_id=application.job.id)
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import JobListing, JobApplication
+
+# Consumer Job List
 
 from django.shortcuts import render
-from .models import Meeting, RSVP
+from .models import JobListing
+
+@login_required
+def consumer_job_list(request):
+    jobs = JobListing.objects.filter(is_approved=True).order_by('-posted_date')
+    return render(request, 'consumer/consumer_job_list.html', {'jobs': jobs})
+
+# Job Details with Application
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import JobListing
 
-# View for the admin to see all RSVPs for each meeting
-@login_required
-def admin_rsvp_list(request):
-    # Fetching all meetings and their corresponding RSVPs
-    meetings = Meeting.objects.all()
-    rsvps = {}
+@login_required  # Ensure the user is logged in
+def job_detail_and_apply(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id)
+    submitted = False
 
-    for meeting in meetings:
-        rsvps[meeting] = RSVP.objects.filter(meeting=meeting)
+    if request.method == "POST":
+        form = Job_Application_Form(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.job = job
+            application.applicant = request.user  # Assign the logged-in user
+            application.save()
+            submitted = True
+            messages.success(request, "Your application has been submitted successfully.")
+        else:
+            messages.error(request, "There was an error in your application.")
+    else:
+        form = Job_Application_Form()
 
-    return render(request, 'admin/admin_rsvp_list.html', {'rsvps': rsvps, 'meetings': meetings})
-
-
-@login_required
-def meeting_detail(request, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id)
-    if request.method == 'POST':
-        rsvp_status = request.POST['status']
-        rsvp, created = RSVP.objects.get_or_create(user=request.user, meeting=meeting)
-        rsvp.status = rsvp_status
-        rsvp.save()
-        messages.success(request, "Your RSVP status has been updated.")
-        # Remove `args=[meeting.id]` since `user_rsvp` does not need any arguments
-        return HttpResponseRedirect(reverse('user_rsvp'))
-    return render(request, 'consumer/meeting_detail.html', {'meeting': meeting})
-
-# View for users to see their RSVPs
-@login_required
-def user_rsvp(request):
-    rsvps = RSVP.objects.filter(user=request.user)
-    return render(request, 'consumer/user_rsvp.html', {'rsvps': rsvps})
-
-# View for admin to add a new meeting
-@login_required
-def add_meeting(request):
-    if request.method == 'POST':
-        title = request.POST['title']
-        description = request.POST['description']
-        location = request.POST['location']
-        date = request.POST['date']
-        meeting = Meeting.objects.create(
-            title=title,
-            description=description,
-            location=location,
-            date=date,
-            admin=request.user
-        )
-        messages.success(request, "Meeting created successfully!")
-        return HttpResponseRedirect(reverse('admin_meeting_list'))
-    return render(request, 'admin/add_meeting.html')
-
+    return render(request, 'consumer/job_detail.html', {
+        'job': job,
+        'form': form,
+        'submitted': submitted,
+    })
 
 
 def logout_view(request):

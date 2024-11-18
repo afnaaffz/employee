@@ -1,0 +1,149 @@
+{% extends "industry/industry base.html" %}
+
+{% block content %}
+<div class="meeting-detail-container">
+    <h2 class="meeting-title">{{ meeting.title }}</h2>
+    <p class="meeting-description">{{ meeting.description }}</p>
+    <p><strong>Location:</strong> {{ meeting.location }}</p>
+    <p><strong>Date:</strong> {{ meeting.date }}</p>
+
+    <!-- Inline Styling -->
+    <style>
+        .meeting-detail-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .meeting-title {
+            font-size: 24px;
+            color: #333333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .meeting-description {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .notification {
+            position: fixed;
+            top: -50px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #f0f8ff;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: 300px;
+            font-size: 16px;
+            text-align: center;
+            color: #333;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .notification p {
+            margin: 0;
+        }
+
+        .notification.success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .notification.error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .notification.show {
+            top: 20px;
+        }
+    </style>
+
+    <!-- Notification Messages -->
+    {% if messages %}
+    <div id="notification" class="notification">
+        {% for message in messages %}
+        <p class="{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- RSVP Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <label for="status">RSVP:</label>
+        <select name="status" id="status" required>
+            <option value="attending" {% if user_rsvp and user_rsvp.status == 'attending' %}selected{% endif %}>
+                Attending
+            </option>
+            <option value="not_attending" {% if user_rsvp and user_rsvp.status == 'not_attending' %}selected{% endif %}>
+                Not Attending
+            </option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<!-- JavaScript for Notification -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000); // Hide after 3 seconds
+        }
+    });
+</script>
+{% endblock %}

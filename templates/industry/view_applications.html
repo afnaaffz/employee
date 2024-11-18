@@ -1,0 +1,133 @@
+{% extends "industry/industry base.html" %}
+{% load static %}
+
+{% block title %}Applications for {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title text-center text-primary mb-4">Applications for <span class="text-dark">{{ job.title }}</span></h5>
+            {% if applications %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Applicant</th>
+                            <th scope="col">Cover Letter</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for application in applications %}
+                        <tr>
+                            <td>{{ application.applicant.username }}</td>
+                            <td>{{ application.cover_letter }}</td>
+                            <td>
+                                {% if application.application_status == 'approved' %}
+                                    <span class="badge bg-success">Approved</span>
+                                {% elif application.application_status == 'rejected' %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if application.application_status == 'pending' %}
+                                    <a href="{% url 'manage_application' application.id 'approve' %}" class="btn btn-success btn-sm">Approve</a>
+                                    <a href="{% url 'manage_application' application.id 'reject' %}" class="btn btn-danger btn-sm">Reject</a>
+                                {% else %}
+                                    <span class="text-muted">Action Completed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-center text-muted">No applications found for this job.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 900px;
+        margin: 20px auto;
+    }
+
+    .card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #dee2e6;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .thead-light th {
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    .badge {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+        border-radius: 4px;
+    }
+
+    .badge.bg-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge.bg-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .badge.bg-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem;
+        padding: 5px 10px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+</style>
+{% endblock %}

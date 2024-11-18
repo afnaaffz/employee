@@ -72,14 +72,31 @@ urlpatterns = [
 
     path('consumer_dashboard/', views.consumer_dashboard, name='consumer_dashboard'),
 
-    path('admin_meeting_list/', views.admin_meeting_list, name='admin_meeting_list'),
-    path('view_meeting_list/', views.view_meeting_list, name='view_meeting_list'),
+    path('create_job_post/', views.create_job_post, name='create_job_post'),
+    path('industry_job_list/', views.industry_job_list, name='industry_job_list'),
 
-    path('meeting_detail/<int:meeting_id>/', views.meeting_detail, name='meeting_detail'),
-    path('user_rsvp/', views.user_rsvp, name='user_rsvp'),
-    path('admin/rsvps/', views.admin_rsvp_list, name='admin_rsvp_list'),
+    path('job/<int:job_id>/applications/', views.view_job_applications, name='view_job_applications'),
+    path('application/<int:application_id>/<str:action>/', views.manage_application, name='manage_application'),
+
+    path('consumer_job_list/', views.consumer_job_list, name='consumer_job_list'),
+    path('jobs/<int:job_id>/apply/', views.job_detail_and_apply, name='job_detail_and_apply'),
+
+
+    path('add_video_tutorial', views.add_video_tutorial, name='add_video_tutorial'),
+    path('view_tutorial_list', views.view_tutorial_list, name='view_tutorial_list'),
+
+    path('product/<int:product_id>/view-tutorials/', views.view_tutorials_for_product, name='view_tutorials_for_product'),
 
     path('add_meeting/', views.add_meeting, name='add_meeting'),
+    path('meeting_list', views.meeting_list, name='meeting_list'),
+    path('view_meeting_list', views.view_meeting_list, name='view_meeting_list'),
+
+    path('rsvp_list<int:pk>/rsvps/', views.rsvp_list, name='rsvp_list'),
+    path('meeting_detail<int:pk>/', views.meeting_detail, name='meeting_detail'),
+
+
+
+
 
     path("logout_view", views.logout_view, name="logout_view"),
 
