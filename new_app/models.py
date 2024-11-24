@@ -76,7 +76,7 @@ class ConsumerRegister(models.Model):
     address = models.TextField()  # Make sure this field exists
     city = models.CharField(max_length=100)  # Add city field if missing
     state = models.CharField(max_length=100)  # Add state field if missing
-    zip_code = models.CharField(max_length=10)
+    zip_code = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)  # New field for registration timestamp
 
 
@@ -131,6 +131,7 @@ class Order(models.Model):
 
 class Complaint(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)  # Link to Product model
     message = models.TextField()
     complaint_type = models.CharField(max_length=100, choices=[('Product Quality', 'Product Quality'), ('Delivery Issue', 'Delivery Issue'), ('Customer Service', 'Customer Service')], default='Product Quality')  # Complaint type
     status = models.CharField(max_length=50, choices=[('Pending', 'Pending'), ('Resolved', 'Resolved')], default='Pending')

@@ -5,30 +5,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Complaint Analysis</title>
+    <title>Product Complaint Analysis</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1 style="text-align: center; font-size: 24px; color: #333;">User Complaint Analysis</h1>
+    <h1 style="text-align: center; font-size: 24px; color: #333;">Product Complaint Analysis</h1>
 
-    <!-- Centered canvas with responsive size adjustment -->
-    <div style="width: 400px; height: 400px; margin: 0 auto;">
-        <canvas id="complaintsChart"></canvas>
-    </div>
+    {% if no_data %}
+        <p style="text-align: center; color: #666;">No complaint data available to display the chart.</p>
+    {% else %}
+        <div style="width: 400px; height: 400px; margin: 0 auto;">
+            <canvas id="complaintsChart"></canvas>
+        </div>
 
-    <script>
-        var ctx = document.getElementById('complaintsChart').getContext('2d');
-        var userNames = {{ user_names|safe }};
-        var complaintCounts = {{ complaint_counts|safe }};
+        <script>
+            var productNames = {{ product_names|safe }};
+            var complaintCounts = {{ complaint_counts|safe }};
 
-        if (userNames.length === 0 || complaintCounts.length === 0) {
-            document.getElementById('complaintsChart').style.display = 'none';
-            document.body.innerHTML += '<p style="text-align: center; color: #666;">No data available to display the chart.</p>';
-        } else {
+            var ctx = document.getElementById('complaintsChart').getContext('2d');
             var complaintsChart = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: userNames,
+                    labels: productNames,
                     datasets: [{
                         label: 'Total Complaints',
                         data: complaintCounts,
@@ -53,19 +51,15 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
                             position: 'top',
-                            labels: {
-                                color: '#333'
-                            }
                         }
                     }
                 }
             });
-        }
-    </script>
+        </script>
+    {% endif %}
 </body>
 </html>
 {% endblock %}

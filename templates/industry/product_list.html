@@ -48,16 +48,5 @@
     </div>
 </div>
 
-<script>
-    // Display notification bar if messages are available
-    document.addEventListener('DOMContentLoaded', function () {
-        const notificationBar = document.getElementById('notification-bar');
-        if (notificationBar) {
-            notificationBar.style.display = 'block';
-            setTimeout(() => {
-                notificationBar.style.display = 'none';
-            }, 3000); // Hide after 3 seconds
-        }
-    });
-</script>
+
 {% endblock %}

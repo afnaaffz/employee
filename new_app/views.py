@@ -382,7 +382,7 @@ def feedback(request):
 
 def view(request):
     # Get the logged-in user's feedback
-    data = Feedback.objects.filter(user=request.user)
+    data = Feedback.objects.all()
 
     # Retrieve the consumer's name associated with the logged-in user
     try:
@@ -451,8 +451,7 @@ def product_list(request):
         products = Product.objects.none()
 
     # Check for success message in session
-    if 'success_message' in request.session:
-        messages.success(request, request.session.pop('success_message'))
+
 
     return render(request, 'industry/product_list.html', {'products': products})
 
@@ -663,7 +662,7 @@ def industry_profile(request):
         form = Industry_Register_Form(request.POST, instance=a)
         if form.is_valid():
             form.save()
-            return redirect("industrybase")
+            return redirect("industry_profile")
     return render(request, "industry/industry_profile.html", {'form': form})
 
 
@@ -731,26 +730,42 @@ from django.db.models import Count
 from .models import Complaint
 import json
 
+from django.db.models import Count
+from django.http import HttpResponseForbidden
+from django.shortcuts import render
+import json
+
+from django.db.models import Count
+from django.http import HttpResponseForbidden
+from django.shortcuts import render
+import json
+
+from django.db.models import Count
+from django.shortcuts import render
+import json
+
 def complaints_pie_chart(request):
     if not request.user.is_staff:
         return HttpResponseForbidden("You are not authorized to view this page.")
 
-    # Query to count the complaints per user
-    complaints_count = (Complaint.objects
-                        .values('user__username')
-                        .annotate(total_complaints=Count('id'))
-                        .order_by('-total_complaints'))
+    # Fetch all complaints grouped by product
+    complaints_count = (
+        Complaint.objects
+        .values('product__name')
+        .annotate(total_complaints=Count('id'))
+        .order_by('-total_complaints')
+    )
 
-    if not complaints_count:
-        print("No data found for complaints.")
-        return render(request, 'admin/complaints_pie_chart.html')
+    # Check if complaints data is available
+    if not complaints_count.exists():
+        return render(request, 'admin/complaints_pie_chart.html', {'no_data': True})
 
-    # Extract user names and their corresponding complaint counts
-    user_names = [entry['user__username'] for entry in complaints_count]
+    # Extract product names and complaint counts
+    product_names = [entry['product__name'] for entry in complaints_count]
     complaint_counts = [entry['total_complaints'] for entry in complaints_count]
 
     context = {
-        'user_names': json.dumps(user_names),
+        'product_names': json.dumps(product_names),
         'complaint_counts': json.dumps(complaint_counts),
     }
 

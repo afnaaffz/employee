@@ -19,6 +19,9 @@
         <p><strong>Complaint ID:</strong> {{ complaint.id }}</p>
         <p><strong>Submitted by:</strong> {{ complaint.user }}</p>
         <p><strong>Message:</strong> {{ complaint.message }}</p>
+        <p><strong>Product:</strong> {{ complaint.product }}</p>
+        <p><strong>Industry:</strong> {{ complaint.product.industry.name }}</p>
+
         <p><strong>Submitted At:</strong> {{ complaint.created_at }}</p>
         {% if complaint.image %}
             <p><strong>Uploaded Image:</strong></p>
