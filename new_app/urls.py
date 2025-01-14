@@ -82,10 +82,7 @@ urlpatterns = [
     path('jobs/<int:job_id>/apply/', views.job_detail_and_apply, name='job_detail_and_apply'),
 
 
-    path('add_video_tutorial', views.add_video_tutorial, name='add_video_tutorial'),
-    path('view_tutorial_list', views.view_tutorial_list, name='view_tutorial_list'),
 
-    path('product/<int:product_id>/view-tutorials/', views.view_tutorials_for_product, name='view_tutorials_for_product'),
 
     path('add_meeting/', views.add_meeting, name='add_meeting'),
     path('meeting_list', views.meeting_list, name='meeting_list'),

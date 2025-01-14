@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from new_app.forms import Login_Form, Consumer_Register_Form, Industry_Register_Form, Feedback_Form, \
-    Product_Form, Complaint_Form, Job_Listing_Form, Video_Tutorial_Form, Meeting_Form, RSVP_Form, Job_Application_Form
+    Product_Form, Complaint_Form, Job_Listing_Form, Meeting_Form, RSVP_Form, Job_Application_Form
 from new_app.models import ConsumerRegister, IndustryRegister, Login, Feedback, Product, Order, Complaint, \
     ComplaintResponse, Notification, ApprovedIndustryByAdmin, Payment, JobListing
 
@@ -878,75 +878,21 @@ from .models import JobApplication
 
 
 from django.shortcuts import render, redirect
-from .models import VideoTutorial, Product, IndustryRegister
 
 from django.shortcuts import render, redirect
-from .models import VideoTutorial, Product, IndustryRegister
 
-def add_video_tutorial(request):
-    if request.user.is_authenticated and request.user.is_industry:
-        # Get the industry associated with the logged-in user
-        industry = IndustryRegister.objects.get(user=request.user)
-
-        if request.method == 'POST':
-            form = Video_Tutorial_Form(request.POST, request.FILES)
-            if form.is_valid():
-                # Create a new video tutorial and assign the industry
-                video_tutorial = form.save(commit=False)
-                video_tutorial.industry = industry  # Assign the industry (not the user)
-                video_tutorial.save()
-                return redirect('view_tutorial_list')  # Redirect after saving
-        else:
-            form = Video_Tutorial_Form()
-
-        return render(request, 'industry/add_video_tutorial.html', {'form': form})
-    else:
-        # Redirect if the user is not authenticated or not an industry user
-        return redirect('login')
 
 
 
 from django.shortcuts import render
-from .models import VideoTutorial, IndustryRegister
 
 
 from django.shortcuts import render
-from .models import VideoTutorial, IndustryRegister
 
-def view_tutorial_list(request):
-    # Check if the user is authenticated and is an industry user
-    if request.user.is_authenticated and request.user.is_industry:
-        # Retrieve the IndustryRegister instance for the logged-in user
-        try:
-            industry = IndustryRegister.objects.get(user=request.user)
-            # Retrieve tutorials associated with this industry
-            videos = VideoTutorial.objects.filter(industry=industry)
-        except IndustryRegister.DoesNotExist:
-            videos = []  # No IndustryRegister found, handle as needed
-    else:
-        videos = []  # Not authenticated or not an industry user
-
-    return render(request, 'industry/view_tutorial_list.html', {'videos': videos})
 
 
 from django.shortcuts import render, get_object_or_404
-from .models import VideoTutorial, Product
 
-def view_tutorials_for_product(request, product_id):
-    # Get the product object
-    product = get_object_or_404(Product, id=product_id)
-
-    # Fetch tutorials related to this specific product
-    videos = VideoTutorial.objects.filter(product=product)
-
-    # If there are no tutorials, log a message
-    if not videos:
-        print(f"No tutorials found for the product: {product.name}")  # Debugging line to check if tutorials exist
-
-    return render(request, 'consumer/view_tutorials_for_product.html', {
-        'product': product,
-        'videos': videos  # Pass the videos to the template
-    })
 
 
 from django.shortcuts import render, get_object_or_404, redirect

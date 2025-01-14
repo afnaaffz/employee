@@ -258,13 +258,3 @@ class JobApplication(models.Model):
     def __str__(self):
         return f"Application for {self.job.title} by {self.applicant}"
 
-class VideoTutorial(models.Model):
-    industry = models.ForeignKey(IndustryRegister, on_delete=models.CASCADE)  # Link to the industry user
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='tutorials')  # Link to the product
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    video_file = models.FileField(upload_to='videos/')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title

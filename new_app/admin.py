@@ -24,4 +24,3 @@ admin.site.register(models.JobListing)
 admin.site.register(models.JobApplication)
 
 
-admin.site.register(models.VideoTutorial)

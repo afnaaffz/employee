@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
 from new_app.models import Login, IndustryRegister, ConsumerRegister, Feedback, Product, Order, Complaint, \
-    ComplaintResponse, Payment, Meeting, RSVP, JobListing, JobApplication, VideoTutorial
+    ComplaintResponse, Payment, Meeting, RSVP, JobListing, JobApplication
 
 
 class Login_Form(UserCreationForm):
@@ -106,7 +106,3 @@ class Job_Application_Form(forms.ModelForm):
         }
 
 
-class Video_Tutorial_Form(forms.ModelForm):
-    class Meta:
-        model = VideoTutorial
-        fields = ['product', 'title', 'description', 'video_file']
